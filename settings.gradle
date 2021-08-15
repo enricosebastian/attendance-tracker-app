@@ -1,0 +1,2 @@
+rootProject.name = "Attendance Tracker - Teacher"
+include ':app'
