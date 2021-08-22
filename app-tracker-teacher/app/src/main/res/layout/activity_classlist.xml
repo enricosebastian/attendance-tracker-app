@@ -17,12 +17,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         >
 
-        <!--improve this sizing problem later-->
+        <!--improve ImageView sizing problem later
+            TODO:
+            - sir hates fixed values (fix layout width and height and make it fixed)
+            - how tf do you make rounded corners for images??
+        -->
+
         <ImageView
             android:padding="10dp"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/img_tempAvatar"
+            android:src="@drawable/img_tempimage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -36,7 +41,7 @@
             app:layout_constraintStart_toEndOf="@id/img_profilePic"
             app:layout_constraintTop_toTopOf="@id/img_profilePic"
             app:layout_constraintBottom_toBottomOf="@id/img_profilePic"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
             >
 
             <TextView
@@ -63,11 +68,11 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/recyclerView"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="100dp"/>
+        android:layout_marginTop="20dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
