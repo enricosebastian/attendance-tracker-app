@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +38,12 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
         holder.setTxtStudentsPresent(data.get(position).getStudentsPresent());
         String dateString = data.get(position).getMonth() +" "+data.get(position).getDayNumber()+", "+data.get(position).getYear()+" | "+data.get(position).getDayName();
         holder.setTxtDate(dateString);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "going to class: "+dateString, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

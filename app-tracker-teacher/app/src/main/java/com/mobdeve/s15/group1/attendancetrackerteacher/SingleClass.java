@@ -44,6 +44,10 @@ public class SingleClass extends AppCompatActivity {
 
     void populate_data(){
         this.meetings.add(new Meeting("January", 21,1969, "M", 69));
+        this.meetings.add(new Meeting("February", 69,2032, "T", 169));
+        this.meetings.add(new Meeting("Febuary", 31,2021, "F", 629));
+        this.meetings.add(new Meeting("September", 31,1950, "G", 691));
+        this.meetings.add(new Meeting("January", 11,1961, "A", 699));
     }
 
     void setupRecyclerView() {
