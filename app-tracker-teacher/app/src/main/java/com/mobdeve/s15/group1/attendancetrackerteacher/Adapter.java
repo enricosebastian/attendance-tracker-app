@@ -1,5 +1,6 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,8 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
             @Override
             public void onClick(View v) {
                 Toast.makeText(holder.itemView.getContext(), "entering: "+data.get(position).getClassCode()+" "+data.get(position).getSectionCode(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(holder.itemView.getContext(), SingleClass.class);
+                holder.itemView.getContext().startActivity(intent);
             }
         });
     }
