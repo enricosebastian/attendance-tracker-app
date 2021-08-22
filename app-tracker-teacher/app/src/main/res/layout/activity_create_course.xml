@@ -21,22 +21,21 @@
 
     <Button
         android:id="@+id/btnCancelCreate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="98dp"
+        android:layout_height="48dp"
         android:layout_marginTop="20dp"
-        android:text="Cancel"
+        android:text="@string/btnCancelCreate"
         app:layout_constraintTop_toBottomOf="@+id/btn_createCourse"
-        tools:layout_editor_absoluteX="209dp" />
+        tools:layout_editor_absoluteX="206dp" />
 
     <Button
         android:id="@+id/btn_createCourse"
-        android:layout_width="90dp"
-        android:layout_height="40dp"
+        android:layout_width="98dp"
+        android:layout_height="48dp"
         android:layout_marginTop="20dp"
-        android:background="@android:color/white"
-        android:text="Create"
+        android:text="@string/btnCreateCourse"
         app:layout_constraintTop_toBottomOf="@+id/etCourseSection"
-        tools:layout_editor_absoluteX="211dp" />
+        tools:layout_editor_absoluteX="206dp" />
 
     <EditText
         android:id="@+id/etCourseSection"
@@ -53,5 +52,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etCourseName"
         app:layout_constraintVertical_bias="0.011" />
+
+    <TextView
+        android:id="@+id/tvCreateCourseHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="126dp"
+        android:layout_marginTop="119dp"
+        android:layout_marginEnd="126dp"
+        android:layout_marginBottom="30dp"
+        android:text="@string/tvCreateCourseHeader"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/etCourseName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
