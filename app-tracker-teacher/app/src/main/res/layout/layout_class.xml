@@ -4,9 +4,11 @@
     android:id="@+id/layoutbox"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/holo_orange_light"
+    android:background="@drawable/template_rounded_corner"
     android:layout_margin="10dp"
-    android:padding="20dp">
+    android:paddingTop="30dp"
+    android:paddingBottom="30dp"
+    >
 
     <TextView
         android:id="@+id/txtClassCode"
