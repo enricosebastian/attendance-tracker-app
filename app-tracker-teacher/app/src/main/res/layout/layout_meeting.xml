@@ -10,7 +10,7 @@
     android:layout_marginBottom="20dp">
 
     <TextView
-        android:id="@+id/txtStudentsPresent"
+        android:id="@+id/ivDisplayPicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="69"
@@ -22,11 +22,11 @@
         />
 
     <TextView
-        app:layout_constraintStart_toEndOf="@id/txtStudentsPresent"
+        app:layout_constraintStart_toEndOf="@id/ivDisplayPicture"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginStart="50dp"
-        android:id="@+id/txtDate"
+        android:id="@+id/tvStudentName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="JULY 69, 1969 | M"

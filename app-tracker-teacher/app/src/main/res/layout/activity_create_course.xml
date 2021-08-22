@@ -15,27 +15,34 @@
         android:minHeight="48dp"
         android:hint="Course Name"
         app:layout_constraintEnd_toEndOf="parent"
+        android:textAlignment="center"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnCancelCreate"
-        android:layout_width="98dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/btnCancelCreate"
-        app:layout_constraintTop_toBottomOf="@+id/btn_createCourse"
-        tools:layout_editor_absoluteX="206dp" />
-
-    <Button
         android:id="@+id/btn_createCourse"
         android:layout_width="98dp"
         android:layout_height="48dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="157dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="157dp"
         android:text="@string/btnCreateCourse"
-        app:layout_constraintTop_toBottomOf="@+id/etCourseSection"
-        tools:layout_editor_absoluteX="206dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etCourseSection" />
+
+    <Button
+        android:id="@+id/btnCancelCreate"
+        android:layout_width="98dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="157dp"
+        android:text="@string/btnCancelCreate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_createCourse" />
 
     <EditText
         android:id="@+id/etCourseSection"
@@ -46,6 +53,7 @@
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:hint="Section"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
