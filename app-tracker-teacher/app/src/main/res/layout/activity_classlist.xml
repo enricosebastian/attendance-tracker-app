@@ -19,6 +19,7 @@
 
         <!--improve this sizing problem later-->
         <ImageView
+            android:padding="10dp"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/img_tempAvatar"
