@@ -5,12 +5,15 @@
       <map>
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/drawable/ic_launcher_background.xml" value="0.35052083333333334" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_accept_students.xml" value="0.334375" />
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_classlist.xml" value="0.25885416666666666" />
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_create_course.xml" value="0.5" />
-        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_main.xml" value="0.16236068895643363" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_create_course_temp.xml" value="0.47171197648787655" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_single_class.xml" value="0.16236068895643363" />
-        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/layout_class.xml" value="0.16236068895643363" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/layout_class.xml" value="0.25" />
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/layout_meeting.xml" value="0.16236068895643363" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/layout_student_requests.xml" value="0.334375" />
       </map>
     </option>
   </component>
