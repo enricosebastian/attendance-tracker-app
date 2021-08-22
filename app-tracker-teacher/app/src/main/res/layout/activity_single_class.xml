@@ -43,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/topBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="5dp">
+        android:padding="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -53,7 +53,12 @@
             android:textStyle="bold"
             android:padding="10dp"
             android:background="@drawable/template_rounded_corner"
-            android:backgroundTint="@color/gray"/>
+            android:backgroundTint="@color/gray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -65,8 +70,18 @@
             android:background="@drawable/template_rounded_corner"
             android:backgroundTint="@color/gray"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/SingleClassRecyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/infoBar"
+        android:layout_marginTop="10dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
