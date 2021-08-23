@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AttendanceTrackerTeacher">
         <activity
+            android:name=".SingleMeetingView"
+            android:exported="true" />
+        <activity
             android:name=".AcceptStudents"
             android:exported="true" />
         <activity
