@@ -17,11 +17,6 @@ public class ClassModel {
         isPublished = published;
     }
 
-    public ClassModel(String classCode, String sectionCode) {
-        this.classCode = classCode;
-        this.sectionCode = sectionCode;
-    }
-
     public ClassModel(String _id, String classCode, String sectionCode, String className, boolean isPublished) {
         this._id = _id;
         this.classCode = classCode;

@@ -47,7 +47,7 @@ public class ClassDataHelper {
                 "EK17",
                 "LOGIC CIRCUITS",
                 true
-        ));.
+        ));
         data.add(new ClassModel(
                 "0007",
                 "THSEC1A",

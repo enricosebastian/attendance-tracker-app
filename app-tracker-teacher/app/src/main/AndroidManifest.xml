@@ -21,7 +21,7 @@
         <activity
             android:name=".SingleClass"
             android:exported="true" />
-        <activity android:name=".Classlist" />
+        <activity android:name=".ClasslistView" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

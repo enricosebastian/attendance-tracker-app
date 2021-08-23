@@ -9,7 +9,7 @@ import android.os.Bundle;
 
 import java.util.ArrayList;
 
-public class Classlist extends AppCompatActivity {
+public class ClasslistView extends AppCompatActivity {
 
     private ArrayList<ClassModel> classModels = new ArrayList<>();
 
@@ -27,15 +27,7 @@ public class Classlist extends AppCompatActivity {
     }
 
     void populate_data(){
-//        this.classModels.add(new ClassModel("MOBDEVE", "S12"));
-//        this.classModels.add(new ClassModel("CCAPDEV", "S13"));
-//        this.classModels.add(new ClassModel("GERPHIS", "S69"));
-//        this.classModels.add(new ClassModel("MOBDEVE", "S14"));
-//        this.classModels.add(new ClassModel("CCAPDEV", "S11"));
-//        this.classModels.add(new ClassModel("GERPHIS", "S61"));
-//        this.classModels.add(new ClassModel("MOBDEVE", "S52"));
-//        this.classModels.add(new ClassModel("CCAPDEV", "S23"));
-//        this.classModels.add(new ClassModel("GERPHIS", "S49"));
+        this.classModels = new ClassDataHelper().initializeData();
     }
 
     void setupRecyclerView() {
