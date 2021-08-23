@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Classlist extends AppCompatActivity {
 
-    private ArrayList<Class> classes = new ArrayList<>();
+    private ArrayList<ClassModel> classModels = new ArrayList<>();
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -27,15 +27,15 @@ public class Classlist extends AppCompatActivity {
     }
 
     void populate_data(){
-        this.classes.add(new Class("MOBDEVE", "S12"));
-        this.classes.add(new Class("CCAPDEV", "S13"));
-        this.classes.add(new Class("GERPHIS", "S69"));
-        this.classes.add(new Class("MOBDEVE", "S14"));
-        this.classes.add(new Class("CCAPDEV", "S11"));
-        this.classes.add(new Class("GERPHIS", "S61"));
-        this.classes.add(new Class("MOBDEVE", "S52"));
-        this.classes.add(new Class("CCAPDEV", "S23"));
-        this.classes.add(new Class("GERPHIS", "S49"));
+//        this.classModels.add(new ClassModel("MOBDEVE", "S12"));
+//        this.classModels.add(new ClassModel("CCAPDEV", "S13"));
+//        this.classModels.add(new ClassModel("GERPHIS", "S69"));
+//        this.classModels.add(new ClassModel("MOBDEVE", "S14"));
+//        this.classModels.add(new ClassModel("CCAPDEV", "S11"));
+//        this.classModels.add(new ClassModel("GERPHIS", "S61"));
+//        this.classModels.add(new ClassModel("MOBDEVE", "S52"));
+//        this.classModels.add(new ClassModel("CCAPDEV", "S23"));
+//        this.classModels.add(new ClassModel("GERPHIS", "S49"));
     }
 
     void setupRecyclerView() {
@@ -44,7 +44,7 @@ public class Classlist extends AppCompatActivity {
         this.layoutManager = new LinearLayoutManager(this);
         this.recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
 
-        this.adapter = new Adapter(this.classes);
+        this.adapter = new Adapter(this.classModels);
         this.recyclerView.setAdapter(this.adapter);
     }
 

@@ -16,7 +16,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
     private static final String TAG = "Class Adapter";
 
     //store data here
-    private ArrayList<Class> data;
+    private ArrayList<ClassModel> data;
 
     public Adapter(ArrayList data) {
         this.data = data;
