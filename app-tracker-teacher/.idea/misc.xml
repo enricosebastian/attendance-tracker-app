@@ -3,6 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Enrico Sebastian/OneDrive - De La Salle University - Manila/Documents/01 EDUCATION/01 CLASSES/MOBDEVE/MOBDEVE project/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_accept_students.xml" value="0.240625" />
+        <entry key="..\:/Users/Enrico Sebastian/OneDrive - De La Salle University - Manila/Documents/01 EDUCATION/01 CLASSES/MOBDEVE/MOBDEVE project/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_classlist.xml" value="0.240625" />
+        <entry key="..\:/Users/Enrico Sebastian/OneDrive - De La Salle University - Manila/Documents/01 EDUCATION/01 CLASSES/MOBDEVE/MOBDEVE project/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_create_course.xml" value="0.240625" />
+        <entry key="..\:/Users/Enrico Sebastian/OneDrive - De La Salle University - Manila/Documents/01 EDUCATION/01 CLASSES/MOBDEVE/MOBDEVE project/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_main.xml" value="0.240625" />
+        <entry key="..\:/Users/Enrico Sebastian/OneDrive - De La Salle University - Manila/Documents/01 EDUCATION/01 CLASSES/MOBDEVE/MOBDEVE project/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_single_class.xml" value="0.240625" />
+        <entry key="..\:/Users/Enrico Sebastian/OneDrive - De La Salle University - Manila/Documents/01 EDUCATION/01 CLASSES/MOBDEVE/MOBDEVE project/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_single_meeting_view.xml" value="0.1" />
+        <entry key="..\:/Users/Enrico Sebastian/OneDrive - De La Salle University - Manila/Documents/01 EDUCATION/01 CLASSES/MOBDEVE/MOBDEVE project/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/layout_class.xml" value="0.240625" />
+        <entry key="..\:/Users/Enrico Sebastian/OneDrive - De La Salle University - Manila/Documents/01 EDUCATION/01 CLASSES/MOBDEVE/MOBDEVE project/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/layout_meeting.xml" value="0.240625" />
+        <entry key="..\:/Users/Enrico Sebastian/OneDrive - De La Salle University - Manila/Documents/01 EDUCATION/01 CLASSES/MOBDEVE/MOBDEVE project/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/layout_student_requests.xml" value="0.240625" />
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/drawable/ic_launcher_background.xml" value="0.35052083333333334" />
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_accept_students.xml" value="0.334375" />

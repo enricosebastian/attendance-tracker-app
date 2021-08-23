@@ -1,5 +1,6 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,8 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
             @Override
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), "going to meeting date: "+dateString, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(holder.itemView.getContext(), SingleMeetingView.class);
+                holder.itemView.getContext().startActivity(intent);
             }
         });
     }
