@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AttendanceTrackerTeacher">
         <activity
+            android:name=".AcceptStudents"
+            android:exported="true" />
+        <activity
+            android:name=".CreateCourse"
+            android:exported="true" />
+        <activity
             android:name=".SingleClass"
             android:exported="true" />
         <activity android:name=".Classlist" />
