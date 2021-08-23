@@ -41,7 +41,7 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "going to class: "+dateString, Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "going to meeting date: "+dateString, Toast.LENGTH_SHORT).show();
             }
         });
     }
