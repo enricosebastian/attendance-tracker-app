@@ -19,7 +19,7 @@
             android:name=".CreateCourse"
             android:exported="true" />
         <activity
-            android:name=".SingleClass"
+            android:name=".SingleClassView"
             android:exported="true" />
         <activity android:name=".ClasslistView" />
         <activity android:name=".MainActivity">

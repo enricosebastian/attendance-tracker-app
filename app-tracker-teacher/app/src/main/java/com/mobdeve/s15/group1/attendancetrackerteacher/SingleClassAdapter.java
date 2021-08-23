@@ -16,7 +16,7 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
     private static final String TAG = "Class Adapter";
 
     //store data here
-    private ArrayList<Meeting> data;
+    private ArrayList<MeetingModel> data;
 
     public SingleClassAdapter(ArrayList data) {
         this.data = data;

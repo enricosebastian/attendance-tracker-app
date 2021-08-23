@@ -15,19 +15,15 @@ public class ClasslistView extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private Adapter adapter;
+    private ClasslistAdapter classlistAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classlist);
 
-        populate_data();
-        setupRecyclerView();
-    }
-
-    void populate_data(){
         this.classModels = new ClassDataHelper().initializeData();
+        setupRecyclerView();
     }
 
     void setupRecyclerView() {
@@ -36,9 +32,8 @@ public class ClasslistView extends AppCompatActivity {
         this.layoutManager = new LinearLayoutManager(this);
         this.recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
 
-        this.adapter = new Adapter(this.classModels);
-        this.recyclerView.setAdapter(this.adapter);
+        this.classlistAdapter = new ClasslistAdapter(this.classModels);
+        this.recyclerView.setAdapter(this.classlistAdapter);
     }
-
 
 }

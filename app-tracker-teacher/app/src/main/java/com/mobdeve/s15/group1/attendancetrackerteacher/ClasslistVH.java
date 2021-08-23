@@ -7,12 +7,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ViewHolder extends RecyclerView.ViewHolder {
+public class ClasslistVH extends RecyclerView.ViewHolder {
     private static final String TAG = "Class ViewHolder";
     private TextView txtClassCode, txtSectionCode;
     private ImageView imgContactPhoto;
 
-    public ViewHolder(@NonNull View itemView) {
+    public ClasslistVH(@NonNull View itemView) {
         super(itemView);
         this.txtClassCode = itemView.findViewById(R.id.txtClassCode);
         this.txtSectionCode = itemView.findViewById(R.id.txtSectionCode);

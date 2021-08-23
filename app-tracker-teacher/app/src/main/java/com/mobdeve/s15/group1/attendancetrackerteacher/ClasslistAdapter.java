@@ -12,38 +12,41 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class Adapter extends RecyclerView.Adapter<ViewHolder> {
+public class ClasslistAdapter extends RecyclerView.Adapter<ClasslistVH> {
     private static final String TAG = "Class Adapter";
 
     //store data here
     private ArrayList<ClassModel> data;
 
-    public Adapter(ArrayList data) {
+    public ClasslistAdapter(ArrayList data) {
         this.data = data;
         Log.d(TAG, "Adapter: initialized");
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ClasslistVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.layout_class, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        ClasslistVH classlistVH = new ClasslistVH(view);
+        return classlistVH;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ClasslistVH holder, int position) {
         holder.setTxtClassCode(data.get(position).getClassCode());
         holder.setTxtSectionCode(data.get(position).getSectionCode());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(holder.itemView.getContext(), "entering: "+data.get(position).getClassCode()+" "+data.get(position).getSectionCode(), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(holder.itemView.getContext(), SingleClass.class);
+                Intent intent = new Intent(holder.itemView.getContext(), SingleClassView.class);
+
+                intent.putExtra("_ID",data.get(position).get_id());
+                intent.putExtra("CLASSCODE",data.get(position).getClassCode());
+                intent.putExtra("SECTIONCODE",data.get(position).getSectionCode());
                 holder.itemView.getContext().startActivity(intent);
             }
         });

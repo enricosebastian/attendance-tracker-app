@@ -1,12 +1,12 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
-public class Meeting {
+public class MeetingModel {
     String month, dayName;
     int dayNumber, year, studentsPresent;
 
     //TODO: add meeting code
 
-    public Meeting(String month, int dayNumber, int year, String dayName, int studentsPresent) {
+    public MeetingModel(String month, int dayNumber, int year, String dayName, int studentsPresent) {
         this.month = month;
         this.dayName = dayName;
         this.dayNumber = dayNumber;
