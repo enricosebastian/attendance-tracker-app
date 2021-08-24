@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btn_createCourse"
+        android:id="@+id/btnCreateCourse"
         android:layout_width="98dp"
         android:layout_height="48dp"
         android:layout_marginStart="14dp"
