@@ -11,7 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class SingleClassView extends AppCompatActivity {
 
@@ -45,15 +47,9 @@ public class SingleClassView extends AppCompatActivity {
             }
         });
 
-        populate_data();
+        this.meetingModels = new MeetingDataHelper().initializeData();
         setupRecyclerView();
 
-    }
-
-    void populate_data(){
-        this.meetingModels.add(new MeetingModel("0001", new Date(69696969),42));
-        this.meetingModels.add(new MeetingModel("0001", new Date(69696969),35));
-        this.meetingModels.add(new MeetingModel("0001", new Date(100000000),25));
     }
 
     void setupRecyclerView() {
