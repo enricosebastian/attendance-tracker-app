@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class SingleClassView extends AppCompatActivity {
 
@@ -50,11 +51,9 @@ public class SingleClassView extends AppCompatActivity {
     }
 
     void populate_data(){
-        this.meetingModels.add(new MeetingModel("January", 21,1969, "M", 69));
-        this.meetingModels.add(new MeetingModel("February", 69,2032, "T", 169));
-        this.meetingModels.add(new MeetingModel("Febuary", 31,2021, "F", 629));
-        this.meetingModels.add(new MeetingModel("September", 31,1950, "G", 691));
-        this.meetingModels.add(new MeetingModel("January", 11,1961, "A", 699));
+        this.meetingModels.add(new MeetingModel("0001", new Date(69696969),42));
+        this.meetingModels.add(new MeetingModel("0001", new Date(69696969),35));
+        this.meetingModels.add(new MeetingModel("0001", new Date(100000000),25));
     }
 
     void setupRecyclerView() {

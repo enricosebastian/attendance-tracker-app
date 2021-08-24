@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
@@ -37,12 +38,13 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
     @Override
     public void onBindViewHolder(@NonNull SingleClassVH holder, int position) {
         holder.setTxtStudentsPresent(data.get(position).getStudentsPresent());
-        String dateString = data.get(position).getMonth() +" "+data.get(position).getDayNumber()+", "+data.get(position).getYear()+" | "+data.get(position).getDayName();
-        holder.setTxtDate(dateString);
+
+        SimpleDateFormat stringDate = new SimpleDateFormat("MMM dd yyyy | E");
+
+        holder.setTxtDate(stringDate.format(data.get(position).getDate()));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "going to meeting date: "+dateString, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(holder.itemView.getContext(), SingleMeetingView.class);
                 holder.itemView.getContext().startActivity(intent);
             }
