@@ -24,25 +24,24 @@
         android:id="@+id/btn_createCourse"
         android:layout_width="98dp"
         android:layout_height="48dp"
-        android:layout_marginStart="157dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="157dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="100dp"
         android:text="@string/btnCreateCourse"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnCancelCreate"
         app:layout_constraintTop_toBottomOf="@+id/etCourseSection" />
 
     <Button
         android:id="@+id/btnCancelCreate"
         android:layout_width="98dp"
         android:layout_height="48dp"
-        android:layout_marginStart="156dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="157dp"
+        android:layout_marginStart="101dp"
+        android:layout_marginTop="38dp"
+        android:backgroundTint="@color/gray"
         android:text="@string/btnCancelCreate"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_createCourse" />
+        app:layout_constraintTop_toBottomOf="@+id/etCourseSection" />
 
     <EditText
         android:id="@+id/etCourseSection"
