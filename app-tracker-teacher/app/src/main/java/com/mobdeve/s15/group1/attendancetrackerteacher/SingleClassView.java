@@ -40,10 +40,14 @@ public class SingleClassView extends AppCompatActivity {
         txtClassTitle.setText(classCode+" - "+sectionCode);
 
         this.txtAddClass = findViewById(R.id.txtAddClass);
+
+        // Clicking the create button brings the user to the create class activity
         txtAddClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), "adding class...", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SingleClassView.this, CreateCourse.class);
+                startActivity(intent);
             }
         });
 
