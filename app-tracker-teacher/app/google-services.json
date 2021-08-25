@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "388842028687",
+    "project_id": "attendance-tracker-11488",
+    "storage_bucket": "attendance-tracker-11488.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388842028687:android:58563d7222c5947071fafa",
+        "android_client_info": {
+          "package_name": "com.mobdeve.s15.group1.attendancetrackerteacher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388842028687-79blegbfic4r89in6j4shgurof4h8i1h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOmQcFM8TArBMCUZ_m8vtTywMaY6oDNYs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "388842028687-79blegbfic4r89in6j4shgurof4h8i1h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
