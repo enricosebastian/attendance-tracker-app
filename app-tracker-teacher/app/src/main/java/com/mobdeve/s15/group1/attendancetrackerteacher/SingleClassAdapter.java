@@ -1,5 +1,6 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -43,7 +44,7 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SingleClassVH holder, int position) {
+    public void onBindViewHolder(@NonNull SingleClassVH holder, @SuppressLint("RecyclerView") int position) {
 
         SimpleDateFormat stringDate = new SimpleDateFormat("MMM dd yyyy | E");
 
@@ -56,11 +57,7 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
                 Intent intent = new Intent(holder.itemView.getContext(), SingleMeetingView.class);
                 intent.putExtra("DATE_KEY", stringDate.format(data.get(position).getDate()));
                 intent.putExtra("STUDENTSPRESENT_KEY", data.get(position).getStudentsPresent());
-                TextView txtClassTitle = v.findViewById(R.id.txtClassTitle);
 
-                //Toast.makeText(v.getContext(), "this: "+txtClassTitle.getText(), Toast.LENGTH_SHORT).show();
-
-                //intent.putExtra("TXTCLASSTITLE_KEY",txtClassTitle.getText().toString());
                 holder.itemView.getContext().startActivity(intent);
             }
         });
