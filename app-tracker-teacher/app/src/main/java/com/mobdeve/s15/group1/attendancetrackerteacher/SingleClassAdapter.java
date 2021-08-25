@@ -32,6 +32,10 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
         View view = inflater.inflate(R.layout.layout_meeting, parent, false);
 
         SingleClassVH viewHolder = new SingleClassVH(view);
+
+        int pos = viewHolder.getAdapterPosition();
+        //if(data.get(pos).getClassKey() == data.get(pos).
+
         return viewHolder;
     }
 
