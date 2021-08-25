@@ -23,13 +23,13 @@ public class AcceptStudents extends AppCompatActivity {
         setContentView(R.layout.activity_accept_students);
     }
 
-    void setupRecyclerView () {
-        this.recyclerView = findViewById(R.id.recyclerView);
-
-        this.layoutManager = new LinearLayoutManager(this);
-        this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        this.acceptStudentsAdapter = new AcceptStudentsAdapter(this.students);
-        this.recyclerView.setAdapter(this.acceptStudentsAdapter);
-    }
+//    void setupRecyclerView () {
+//        this.recyclerView = findViewById(R.id.recyclerView);
+//
+//        this.layoutManager = new LinearLayoutManager(this);
+//        this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//
+//        this.acceptStudentsAdapter = new AcceptStudentsAdapter(this.students);
+//        this.recyclerView.setAdapter(this.acceptStudentsAdapter);
+//    }
 }

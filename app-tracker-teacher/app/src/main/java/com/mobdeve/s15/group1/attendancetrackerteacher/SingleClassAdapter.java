@@ -1,10 +1,13 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,15 +44,23 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
 
     @Override
     public void onBindViewHolder(@NonNull SingleClassVH holder, int position) {
-        holder.setTxtStudentsPresent(data.get(position).getStudentsPresent());
 
         SimpleDateFormat stringDate = new SimpleDateFormat("MMM dd yyyy | E");
 
+        holder.setTxtStudentsPresent(data.get(position).getStudentsPresent());
         holder.setTxtDate(stringDate.format(data.get(position).getDate()));
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(holder.itemView.getContext(), SingleMeetingView.class);
+                intent.putExtra("DATE_KEY", stringDate.format(data.get(position).getDate()));
+                intent.putExtra("STUDENTSPRESENT_KEY", data.get(position).getStudentsPresent());
+                TextView txtClassTitle = v.findViewById(R.id.txtClassTitle);
+
+                //Toast.makeText(v.getContext(), "this: "+txtClassTitle.getText(), Toast.LENGTH_SHORT).show();
+
+                //intent.putExtra("TXTCLASSTITLE_KEY",txtClassTitle.getText().toString());
                 holder.itemView.getContext().startActivity(intent);
             }
         });

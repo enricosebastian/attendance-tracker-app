@@ -19,8 +19,8 @@ public class AcceptStudentsVH extends RecyclerView.ViewHolder {
         super(itemView);
         this.ivDisplayPicture = itemView.findViewById(R.id.ivDisplayPicture);
         this.tvStudentName = itemView.findViewById(R.id.tvStudentName);
-        this.btnConfirm = itemView.findViewById(R.id.tvStudentName);
-        this.btnDelete = itemView.findViewById(R.id.btnDelete);
+        //this.btnConfirm = itemView.findViewById(R.id.tvStudentName);
+        //this.btnDelete = itemView.findViewById(R.id.btnDelete);
     }
 
     /**
