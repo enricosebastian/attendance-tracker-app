@@ -11,6 +11,7 @@ public class ClassDataHelper {
                 "MOBDEVE",
                 "S12",
                 "MOBILE DEVELOPMENT",
+                32,
                 true
         ));
         data.add(new ClassModel(
@@ -18,6 +19,7 @@ public class ClassDataHelper {
                 "CCAPDEV",
                 "S13",
                 "WEB DEVELOPMENT",
+                34,
                 true
         ));
         data.add(new ClassModel(
@@ -25,6 +27,7 @@ public class ClassDataHelper {
                 "MACHLRN",
                 "S14",
                 "INTRO TO MACHINE LEARNING",
+                50,
                 true
         ));
         data.add(new ClassModel(
@@ -32,6 +35,7 @@ public class ClassDataHelper {
                 "GELITPH",
                 "Y15",
                 "LITERATURE IN THE PHILIPPINES",
+                28,
                 true
         ));
         data.add(new ClassModel(
@@ -39,6 +43,7 @@ public class ClassDataHelper {
                 "COCIMIC",
                 "EK16",
                 "MICROPROCESSORS",
+                38,
                 true
         ));
         data.add(new ClassModel(
@@ -46,6 +51,7 @@ public class ClassDataHelper {
                 "CIRLOGI",
                 "EK17",
                 "LOGIC CIRCUITS",
+                35,
                 true
         ));
         data.add(new ClassModel(
@@ -53,6 +59,7 @@ public class ClassDataHelper {
                 "THSEC1A",
                 "EK18",
                 "THESIS 1",
+                36,
                 true
         ));
         return data;

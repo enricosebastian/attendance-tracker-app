@@ -11,6 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class SingleClassView extends AppCompatActivity {
 
@@ -37,24 +40,20 @@ public class SingleClassView extends AppCompatActivity {
         txtClassTitle.setText(classCode+" - "+sectionCode);
 
         this.txtAddClass = findViewById(R.id.txtAddClass);
+
+        // Clicking the create button brings the user to the create class activity
         txtAddClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), "adding class...", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SingleClassView.this, CreateCourse.class);
+                startActivity(intent);
             }
         });
 
-        populate_data();
+        this.meetingModels = new MeetingDataHelper().initializeData();
         setupRecyclerView();
 
-    }
-
-    void populate_data(){
-        this.meetingModels.add(new MeetingModel("January", 21,1969, "M", 69));
-        this.meetingModels.add(new MeetingModel("February", 69,2032, "T", 169));
-        this.meetingModels.add(new MeetingModel("Febuary", 31,2021, "F", 629));
-        this.meetingModels.add(new MeetingModel("September", 31,1950, "G", 691));
-        this.meetingModels.add(new MeetingModel("January", 11,1961, "A", 699));
     }
 
     void setupRecyclerView() {

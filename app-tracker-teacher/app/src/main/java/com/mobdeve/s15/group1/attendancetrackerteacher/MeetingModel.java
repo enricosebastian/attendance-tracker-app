@@ -1,49 +1,42 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
+import java.util.Date;
+
 public class MeetingModel {
-    String month, dayName;
-    int dayNumber, year, studentsPresent;
+    String _id, classKey; //keys could be int? or long?
+    Date date;
+    int studentsPresent;
 
-    //TODO: add meeting code
 
-    public MeetingModel(String month, int dayNumber, int year, String dayName, int studentsPresent) {
-        this.month = month;
-        this.dayName = dayName;
-        this.dayNumber = dayNumber;
-        this.year = year;
+    public MeetingModel(String _id, String classKey, Date date, int studentsPresent) {
+        this._id = _id;
+        this.classKey = classKey;
+        this.date = date;
         this.studentsPresent = studentsPresent;
     }
 
-    public String getMonth() {
-        return month;
+    public String getClassKey() {
+        return classKey;
     }
 
-    public void setMonth(String month) {
-        this.month = month;
+    public void setClassKey(String classKey) {
+        this.classKey = classKey;
     }
 
-    public String getDayName() {
-        return dayName;
+    public String get_id() {
+        return _id;
     }
 
-    public void setDayName(String dayName) {
-        this.dayName = dayName;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
-    public int getDayNumber() {
-        return dayNumber;
+    public Date getDate() {
+        return date;
     }
 
-    public void setDayNumber(int dayNumber) {
-        this.dayNumber = dayNumber;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public int getStudentsPresent() {

@@ -8,6 +8,7 @@ public class ClassModel {
 
     private String _id, classCode, sectionCode, className;
     private boolean isPublished;
+    private int studentCount;
 
     public boolean isPublished() {
         return isPublished;
@@ -17,12 +18,21 @@ public class ClassModel {
         isPublished = published;
     }
 
-    public ClassModel(String _id, String classCode, String sectionCode, String className, boolean isPublished) {
+    public ClassModel(String _id, String classCode, String sectionCode, String className, int studentCount, boolean isPublished) {
         this._id = _id;
         this.classCode = classCode;
         this.sectionCode = sectionCode;
         this.className = className;
+        this.studentCount = studentCount;
         this.isPublished = isPublished;
+    }
+
+    public int getStudentCount() {
+        return studentCount;
+    }
+
+    public void setStudentCount(int studentCount) {
+        this.studentCount = studentCount;
     }
 
     public String getClassName() {
