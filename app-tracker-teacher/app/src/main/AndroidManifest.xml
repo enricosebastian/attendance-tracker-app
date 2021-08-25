@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AttendanceTrackerTeacher">
         <activity
+            android:name=".RegisterFormActivity"
+            android:exported="true" />
+        <activity
+            android:name=".RegisterTeacherActivity"
+            android:exported="true" />
+        <activity
             android:name=".SingleMeetingView"
             android:exported="true" />
         <activity
