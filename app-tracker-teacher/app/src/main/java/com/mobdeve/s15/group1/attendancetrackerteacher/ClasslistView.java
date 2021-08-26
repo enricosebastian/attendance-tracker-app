@@ -60,51 +60,49 @@ public class ClasslistView extends AppCompatActivity {
 
         this.txtName = findViewById(R.id.txtName);
 
-        CollectionReference collectionRef = db.collection(FirestoreReferences.USERS_COLLECTION);
-        Query query = collectionRef.whereEqualTo(FirestoreReferences.EMAIL_FIELD, email);
+        FirestoreReferences.getUsersCollectionReference().
+                whereEqualTo(FirestoreReferences.EMAIL_FIELD, email)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        List<DocumentSnapshot> result = querySnapshot.getDocuments();
+                        String fullName =
+                                result.get(0).get(FirestoreReferences.FIRSTNAME_FIELD).toString() + " " +
+                                result.get(0).get(FirestoreReferences.FIRSTNAME_FIELD).toString();
+                        txtName.setText(fullName);
+                    }
+                });
 
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                QuerySnapshot querySnapshot = task.getResult();
-                List<DocumentSnapshot> result = querySnapshot.getDocuments();
-                Log.d("GOT THIS: ",result.get(0).get(FirestoreReferences.USERTYPE_FIELD).toString());
-                String fullName =
-                        result.get(0).get(FirestoreReferences.FIRSTNAME_FIELD).toString() + " " +
-                        result.get(0).get(FirestoreReferences.FIRSTNAME_FIELD).toString();
-                txtName.setText(fullName);
-            }
-        });
+        FirestoreReferences.getCoursesCollectionReference().
+                whereEqualTo(FirestoreReferences.HANDLEDBY_FIELD, username)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        List<DocumentSnapshot> result = querySnapshot.getDocuments();
+                        for(DocumentSnapshot ds:result) {
+                            //TO REMEMBER: public ClassModel(String _id, String classCode, String sectionCode, String className, int studentCount, boolean isPublished)
+                            classModels.add(new ClassModel(
+                                    "0000",
+                                    ds.get("courseCode").toString(),
+                                    ds.get("sectionCode").toString(),
+                                    ds.get("courseName").toString(),
+                                    Integer.parseInt(ds.get("studentCount").toString()),
+                                    Boolean.parseBoolean( ds.get("isPublished").toString() )));
+                            //sets up the necessary courses
 
-        CollectionReference meetingRef = db.collection(FirestoreReferences.COURSES_COLLECTION);
-        query = meetingRef.whereEqualTo(FirestoreReferences.HANDLEDBY_FIELD, username);
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                QuerySnapshot querySnapshot = task.getResult();
-                List<DocumentSnapshot> result = querySnapshot.getDocuments();
-                for(DocumentSnapshot ds:result) {
-                    //TO REMEMBER: public ClassModel(String _id, String classCode, String sectionCode, String className, int studentCount, boolean isPublished)
-                    classModels.add(new ClassModel(
-                            "0000",
-                            ds.get("courseCode").toString(),
-                            ds.get("sectionCode").toString(),
-                            ds.get("courseName").toString(),
-                            Integer.parseInt(ds.get("studentCount").toString()),
-                            Boolean.parseBoolean( ds.get("isPublished").toString() )));
-                    //sets up the necessary courses
+                            recyclerView = findViewById(R.id.recyclerView);
 
-                    recyclerView = findViewById(R.id.recyclerView);
+                            layoutManager = new LinearLayoutManager(getApplicationContext());
+                            recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
 
-                    layoutManager = new LinearLayoutManager(getApplicationContext());
-                    recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
+                            classlistAdapter = new ClasslistAdapter(classModels);
+                            recyclerView.setAdapter(classlistAdapter);
 
-                    classlistAdapter = new ClasslistAdapter(classModels);
-                    recyclerView.setAdapter(classlistAdapter);
-
-                }
-            }
-        });
+                        }
+                    }
+                });
 
 
         //to be used once sir replies to our email inquiry
