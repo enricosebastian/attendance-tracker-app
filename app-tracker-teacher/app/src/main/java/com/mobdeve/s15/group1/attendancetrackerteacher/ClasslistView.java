@@ -84,7 +84,7 @@ public class ClasslistView extends AppCompatActivity {
                 QuerySnapshot querySnapshot = task.getResult();
                 List<DocumentSnapshot> result = querySnapshot.getDocuments();
                 for(DocumentSnapshot ds:result) {
-                    //public ClassModel(String _id, String classCode, String sectionCode, String className, int studentCount, boolean isPublished)
+                    //TO REMEMBER: public ClassModel(String _id, String classCode, String sectionCode, String className, int studentCount, boolean isPublished)
                     classModels.add(new ClassModel(
                             "0000",
                             ds.get("courseCode").toString(),
@@ -107,10 +107,13 @@ public class ClasslistView extends AppCompatActivity {
         });
 
 
+        //to be used once sir replies to our email inquiry
+
         //this.classModels = new ClassDataHelper().initializeData();
         //setupRecyclerView();
     }
 
+    //to be used once sir replies to our email inquiry
     void setupRecyclerView() {
         this.recyclerView = findViewById(R.id.recyclerView);
 
