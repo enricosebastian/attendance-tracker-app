@@ -29,6 +29,7 @@ import java.io.Console;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 public class ClasslistView extends AppCompatActivity {
 
@@ -74,6 +75,28 @@ public class ClasslistView extends AppCompatActivity {
                     }
                 });
 
+        //other method:
+//        Task<QuerySnapshot> q2 = FirestoreReferences.getUserQuery("ben@dlsu.edu.ph");
+//        q2.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                List<DocumentSnapshot> result = task.getResult().getDocuments();
+//
+//            }
+//        });
+
+//        debugging database helper
+        //DocumentSnapshot ds = FirestoreReferences.getSingleUserData("ben@dlsu.edu.ph");
+
+//        Log.d("in classlist view", "test:"+ds);
+//        String username1 = ds.get("username").toString();
+//        if(username1 == null) {
+//            Log.d("classlist view","hatdog");
+//        } else {
+//            Log.d("classlist view else","not null");
+//        }
+//
+
         FirestoreReferences.getCoursesCollectionReference().
                 whereEqualTo(FirestoreReferences.HANDLEDBY_FIELD, username)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -103,7 +126,6 @@ public class ClasslistView extends AppCompatActivity {
                         }
                     }
                 });
-
 
         //to be used once sir replies to our email inquiry
 

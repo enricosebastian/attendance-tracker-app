@@ -58,12 +58,13 @@ public class SingleClassView extends AppCompatActivity {
 
                         //Log.d("yeet yeet", result.get(0).get("meetingEnd").toString());
                         for(DocumentSnapshot ds:result) {
-                            //MeetingModel(String _id, String classKey, Date date, int studentsPresent)
+                            //MeetingModel(String courseCode, String sectionCode, String meetingCode, Date date, int studentsPresent)
                             if(ds.get("sectionCode").toString().equals(sectionCode)) {
                                 meetingModels.add(new MeetingModel(
-                                        "0000", //temporary
+                                        ds.get("courseCode").toString(),
+                                        ds.get("sectionCode").toString(),
                                         ds.get("meetingCode").toString(),
-                                        new Date(10000000),
+                                        new Date(2018, 15, 24, 10, 33, 30), //how to convert timestamp to Date?
                                         Integer.parseInt(ds.get("studentCount").toString())));
                             }
                         }

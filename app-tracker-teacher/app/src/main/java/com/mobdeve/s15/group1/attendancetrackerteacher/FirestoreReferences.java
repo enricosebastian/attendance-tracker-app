@@ -1,5 +1,7 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -8,6 +10,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -92,9 +95,15 @@ public class FirestoreReferences {
         .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                QuerySnapshot querySnapshot = task.getResult();
-                List<DocumentSnapshot> result = querySnapshot.getDocuments();
-                userInfo = result.get(0);
+                if(task.isSuccessful()) {
+                    QuerySnapshot querySnapshot = task.getResult();
+                    List<DocumentSnapshot> result = querySnapshot.getDocuments();
+                    Log.d("inside void", "result is: "+result);
+                    userInfo = result.get(0);
+                    Log.d("inside void", userInfo.get("username").toString());
+                } else {
+                    Log.d("inside void", "rip booiiiii");
+                }
             }
         });
         return userInfo; //returns null as of now
@@ -113,6 +122,10 @@ public class FirestoreReferences {
             }
         });
         return classInfo; //returns null as of now
+    }
+
+    public static Task<QuerySnapshot> getUserQuery(String emailRef) {
+        return getUsersCollectionReference().whereEqualTo(EMAIL_FIELD, emailRef).get();
     }
 
 

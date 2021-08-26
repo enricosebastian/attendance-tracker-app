@@ -3,32 +3,41 @@ package com.mobdeve.s15.group1.attendancetrackerteacher;
 import java.util.Date;
 
 public class MeetingModel {
-    String _id, classKey; //keys could be int? or long?
+    String courseCode, sectionCode, meetingCode; //keys could be int? or long?
     Date date;
     int studentsPresent;
 
 
-    public MeetingModel(String _id, String classKey, Date date, int studentsPresent) {
-        this._id = _id;
-        this.classKey = classKey;
+    public MeetingModel(String courseCode, String sectionCode, String meetingCode, Date date, int studentsPresent) {
+        this.courseCode = courseCode;
+        this.sectionCode = sectionCode;
+        this.meetingCode = meetingCode;
         this.date = date;
         this.studentsPresent = studentsPresent;
     }
 
-    public String getClassKey() {
-        return classKey;
+    public String getCourseCode() {
+        return courseCode;
     }
 
-    public void setClassKey(String classKey) {
-        this.classKey = classKey;
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
     }
 
-    public String get_id() {
-        return _id;
+    public String getSectionCode() {
+        return sectionCode;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setSectionCode(String sectionCode) {
+        this.sectionCode = sectionCode;
+    }
+
+    public String getMeetingCode() {
+        return meetingCode;
+    }
+
+    public void setMeetingCode(String meetingCode) {
+        this.meetingCode = meetingCode;
     }
 
     public Date getDate() {

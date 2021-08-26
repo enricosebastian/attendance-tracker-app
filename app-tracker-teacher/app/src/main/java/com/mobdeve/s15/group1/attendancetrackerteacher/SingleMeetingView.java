@@ -26,7 +26,12 @@ public class SingleMeetingView extends AppCompatActivity {
         this.txtDate = findViewById(R.id.txtDate);
         txtDate.setText(intent.getStringExtra("DATE_KEY"));
 
+        String courseCode = intent.getStringExtra("COURSECODE_KEY");
+        String sectionCode = intent.getStringExtra("SECTIONCODE_KEY");
+
         this.txtClassTitle = findViewById(R.id.txtClassTitle);
+        txtClassTitle.setText(courseCode +" - "+sectionCode);
+
         //txtClassTitle.setText(intent.getStringExtra("TXTCLASSTITLE_KEY").toString());
         
         this.txtStatus = findViewById(R.id.txtStatus);
