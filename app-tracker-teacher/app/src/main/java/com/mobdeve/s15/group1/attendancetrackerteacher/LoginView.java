@@ -29,6 +29,7 @@ public class LoginView extends AppCompatActivity {
     private final String TAG = "LoginView.java";
 
     private static String SP_FILE_NAME = "LoginPreferences";
+    private static String USERNAME_STATE_KEY = "USERNAME_KEY";
     private static String EMAIL_STATE_KEY = "EMAIL_KEY";
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
@@ -59,38 +60,39 @@ public class LoginView extends AppCompatActivity {
                 String email = inputEmail.getText().toString();
                 String password = inputPassword.getText().toString();
 
-                CollectionReference collectionRef = db.collection(FirestoreReferences.USERS_COLLECTION);
-
-                Query query = collectionRef.whereEqualTo(FirestoreReferences.EMAIL_FIELD, email);
-                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()) {
-                            if(task.getResult().isEmpty()) {
-                                Toast.makeText(getApplicationContext(), "dude doesnt exist lmao", Toast.LENGTH_SHORT).show();
-                            } else {
-                                QuerySnapshot querySnapshot = task.getResult();
-                                List<DocumentSnapshot> result = querySnapshot.getDocuments();
-                                if(result.get(0).get(FirestoreReferences.USERTYPE_FIELD).toString().equals("teacher")) {
-                                    if(result.get(0).get(FirestoreReferences.PASSWORD_FIELD).toString().equals(password)) {
-                                        Intent intent = new Intent(LoginView.this, ClasslistView.class);
-
-                                        intent.putExtra(EMAIL_STATE_KEY,result.get(0).get(FirestoreReferences.EMAIL_FIELD).toString());
-                                        startActivity(intent);
-
-                                        finish();
+                FirestoreReferences.getUsersCollectionReference()
+                        .whereEqualTo(FirestoreReferences.EMAIL_FIELD, email)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.isSuccessful()) {
+                                    if(task.getResult().isEmpty()) {
+                                        Toast.makeText(getApplicationContext(), "dude doesnt exist lmao", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(getApplicationContext(), "Wrong password!", Toast.LENGTH_SHORT).show();
-                                    };
+                                        QuerySnapshot querySnapshot = task.getResult();
+                                        List<DocumentSnapshot> result = querySnapshot.getDocuments();
+                                        if(result.get(0).get(FirestoreReferences.USERTYPE_FIELD).toString().equals("teacher")) {
+                                            if(result.get(0).get(FirestoreReferences.PASSWORD_FIELD).toString().equals(password)) {
+                                                Intent intent = new Intent(LoginView.this, ClasslistView.class);
+
+                                                intent.putExtra(EMAIL_STATE_KEY,result.get(0).get(FirestoreReferences.EMAIL_FIELD).toString());
+                                                intent.putExtra(USERNAME_STATE_KEY,result.get(0).get(FirestoreReferences.USERNAME_FIELD).toString());
+                                                startActivity(intent);
+
+                                                finish();
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), "Wrong password!", Toast.LENGTH_SHORT).show();
+                                            };
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "User is not a teacher", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "User is not a teacher", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG,"Error getting Users document: "+task.getException());
                                 }
                             }
-                        } else {
-                            Log.d(TAG,"Error getting Users document: "+task.getException());
-                        }
-                    }
-                });
+                        });
             }
         });
 

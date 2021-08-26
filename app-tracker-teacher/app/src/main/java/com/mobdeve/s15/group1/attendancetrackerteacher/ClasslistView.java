@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.SuccessContinuation;
@@ -33,6 +34,7 @@ public class ClasslistView extends AppCompatActivity {
     private ArrayList<ClassModel> classModels = new ArrayList<>();
 
     private static String SP_FILE_NAME = "LoginPreferences";
+    private static String USERNAME_STATE_KEY = "USERNAME_KEY";
     private static String EMAIL_STATE_KEY = "EMAIL_KEY";
 
     private RecyclerView recyclerView;
@@ -51,6 +53,7 @@ public class ClasslistView extends AppCompatActivity {
         this.db = FirebaseFirestore.getInstance();
 
         Intent passedIntent = getIntent();
+        String username = passedIntent.getStringExtra(USERNAME_STATE_KEY);
         String email = passedIntent.getStringExtra(EMAIL_STATE_KEY);
 
         this.txtName = findViewById(R.id.txtName);
@@ -70,6 +73,18 @@ public class ClasslistView extends AppCompatActivity {
                 txtName.setText(fullName);
             }
         });
+
+//        CollectionReference meetingRef = db.collection(FirestoreReferences.MEETINGS_COLLECTION);
+//        query = meetingRef.whereEqualTo(FirestoreReferences.HANDLEDBY_FIELD, "ben");
+//        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                QuerySnapshot querySnapshot = task.getResult();
+//                List<DocumentSnapshot> result = querySnapshot.getDocuments();
+//                Toast.makeText(getApplicationContext(), "size: "+result.size(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
 
         this.classModels = new ClassDataHelper().initializeData();
         setupRecyclerView();
