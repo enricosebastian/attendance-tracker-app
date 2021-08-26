@@ -82,6 +82,14 @@ public class ClasslistView extends AppCompatActivity {
                     }
                 });
 
+        Task<QuerySnapshot> test = FirestoreReferences.getUsersWithEmail("ben@dlsu.edu.ph");
+        test.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                DocumentSnapshot res = FirestoreReferences.getFirstResult(task);
+                Log.d("in void here",res.get("username").toString());
+            }
+        });
         //other method:
 //        Task<QuerySnapshot> q2 = FirestoreReferences.getUserQuery("ben@dlsu.edu.ph");
 //        q2.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

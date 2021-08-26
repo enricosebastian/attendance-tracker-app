@@ -124,10 +124,17 @@ public class FirestoreReferences {
         return classInfo; //returns null as of now
     }
 
-    public static Task<QuerySnapshot> getUserQuery(String emailRef) {
+    public static Task<QuerySnapshot> getUsersWithEmail(String emailRef) {
         return getUsersCollectionReference().whereEqualTo(EMAIL_FIELD, emailRef).get();
     }
 
-
+    public static DocumentSnapshot getFirstResult(Task<QuerySnapshot> task) {
+        if(userInfo == null) {
+            QuerySnapshot querySnapshot = task.getResult();
+            List<DocumentSnapshot> result = querySnapshot.getDocuments();
+            userInfo = result.get(0);
+        }
+        return userInfo;
+    }
 
 }
