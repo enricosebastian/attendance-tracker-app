@@ -57,6 +57,7 @@ public class FirestoreReferences {
         return storageReferenceInstance;
     }
 
+    //gets the entire user collection
     public static CollectionReference getUsersCollectionReference() {
         if(usersRef == null) {
             usersRef = getFirestoreInstance().collection(USERS_COLLECTION);
@@ -64,6 +65,15 @@ public class FirestoreReferences {
         return usersRef;
     }
 
+    //gets the entire course collection
+    public static CollectionReference getCoursesCollectionReference() {
+        if(coursesRef == null) {
+            coursesRef = getFirestoreInstance().collection(COURSES_COLLECTION);
+        }
+        return coursesRef;
+    }
+
+    //gets the entire meeting collection
     public static CollectionReference getMeetingsCollectionReference() {
         if(meetingsRef == null) {
             meetingsRef = getFirestoreInstance().collection(MEETINGS_COLLECTION);
@@ -76,6 +86,7 @@ public class FirestoreReferences {
     }
 
     //returns null as of now
+    //searches for a single user
     public static DocumentSnapshot getSingleUserData(String stringRef) {
         getUsersCollectionReference().whereEqualTo(FirestoreReferences.EMAIL_FIELD, stringRef) //this is a test
         .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -90,6 +101,7 @@ public class FirestoreReferences {
     }
 
     //returns null as of now
+    //searches for a single class
     public static DocumentSnapshot getSingleClassData(String stringRef) {
         getUsersCollectionReference().whereEqualTo(FirestoreReferences.COURSECODE_FIELD, stringRef) //this is a test
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
