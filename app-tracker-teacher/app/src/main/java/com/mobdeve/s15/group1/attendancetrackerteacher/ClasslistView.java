@@ -45,6 +45,7 @@ public class ClasslistView extends AppCompatActivity {
     private DocumentSnapshot donny;
 
     private TextView txtName;
+    private TextView txtIdNumber;
 
     private FirebaseFirestore db;
 
@@ -60,6 +61,7 @@ public class ClasslistView extends AppCompatActivity {
         String email = passedIntent.getStringExtra(EMAIL_STATE_KEY);
 
         this.txtName = findViewById(R.id.txtName);
+        this.txtIdNumber = findViewById(R.id.txtIdNumber);
 
         FirestoreReferences.getUsersCollectionReference().
                 whereEqualTo(FirestoreReferences.EMAIL_FIELD, email)
@@ -72,6 +74,7 @@ public class ClasslistView extends AppCompatActivity {
                                 result.get(0).get(FirestoreReferences.FIRSTNAME_FIELD).toString() + " " +
                                 result.get(0).get(FirestoreReferences.FIRSTNAME_FIELD).toString();
                         txtName.setText(fullName);
+                        txtIdNumber.setText(result.get(0).get(FirestoreReferences.IDNUMBER_FIELD).toString());
                     }
                 });
 
