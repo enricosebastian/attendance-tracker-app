@@ -10,7 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AttendanceTrackerTeacher">
         <activity
+<<<<<<< Updated upstream
             android:name=".RegistrationView"
+=======
+            android:name=".EditCourse"
+>>>>>>> Stashed changes
             android:exported="true" />
         <activity
             android:name=".RegisterFormActivity"
@@ -31,7 +35,13 @@
             android:name=".SingleClassView"
             android:exported="true" />
         <activity android:name=".ClasslistView" />
+<<<<<<< Updated upstream
         <activity android:name=".LoginView">
+=======
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.AttendanceTrackerTeacher.NoActionBar">
+>>>>>>> Stashed changes
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
