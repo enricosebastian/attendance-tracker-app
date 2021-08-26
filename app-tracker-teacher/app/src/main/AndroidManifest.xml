@@ -28,7 +28,7 @@
             android:name=".SingleClassView"
             android:exported="true" />
         <activity android:name=".ClasslistView" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".LoginView">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
