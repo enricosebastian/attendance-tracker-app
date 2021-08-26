@@ -1,10 +1,19 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.Collection;
+import java.util.List;
 
 public class FirestoreReferences {
 
@@ -13,6 +22,7 @@ public class FirestoreReferences {
     private static CollectionReference usersRef = null;
     private static CollectionReference coursesRef = null;
     private static CollectionReference meetingsRef = null;
+    private static DocumentSnapshot userInfo = null;
 
     public final static String
         USERS_COLLECTION        = "Users",
@@ -62,6 +72,21 @@ public class FirestoreReferences {
 
     public static DocumentReference getDocumentReference(String stringRef) {
         return getFirestoreInstance().document(stringRef);
+    }
+
+    public static DocumentSnapshot getSingleUserDate(String stringRef) {
+
+        getUsersCollectionReference().whereEqualTo(FirestoreReferences.EMAIL_FIELD, "ben@dlsu.edu.ph") //this is a test
+        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                QuerySnapshot querySnapshot = task.getResult();
+                List<DocumentSnapshot> result = querySnapshot.getDocuments();
+                userInfo = result.get(0);
+            }
+        });
+
+        return userInfo; //returns null as of now
     }
 
 }

@@ -91,8 +91,8 @@ public class LoginView extends AppCompatActivity {
                                 } else {
                                     Log.d(TAG,"Error getting Users document: "+task.getException());
                                 }
-                            }
-                        });
+                        }
+                    });
             }
         });
 

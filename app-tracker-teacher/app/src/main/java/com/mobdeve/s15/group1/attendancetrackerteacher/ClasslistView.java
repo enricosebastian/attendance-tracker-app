@@ -22,11 +22,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Document;
+import com.google.firestore.v1.Document;
 
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ClasslistView extends AppCompatActivity {
@@ -56,6 +56,8 @@ public class ClasslistView extends AppCompatActivity {
         String username = passedIntent.getStringExtra(USERNAME_STATE_KEY);
         String email = passedIntent.getStringExtra(EMAIL_STATE_KEY);
 
+        Log.d("ds is","hellooooooooooo");
+
         this.txtName = findViewById(R.id.txtName);
 
         CollectionReference collectionRef = db.collection(FirestoreReferences.USERS_COLLECTION);
@@ -73,6 +75,14 @@ public class ClasslistView extends AppCompatActivity {
                 txtName.setText(fullName);
             }
         });
+
+        DocumentSnapshot singleInfo = FirestoreReferences.getSingleUserDate("hello");
+        String em = singleInfo.get(FirestoreReferences.EMAIL_FIELD).toString();
+        //Log.d("hello ooo hello ", firstName);
+
+
+
+        DocumentSnapshot ds = db.collection(FirestoreReferences.USERS_COLLECTION).document("ben").get().getResult();
 
 //        CollectionReference meetingRef = db.collection(FirestoreReferences.MEETINGS_COLLECTION);
 //        query = meetingRef.whereEqualTo(FirestoreReferences.HANDLEDBY_FIELD, "ben");
