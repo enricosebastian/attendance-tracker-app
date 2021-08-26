@@ -76,7 +76,7 @@ public class ClasslistView extends AppCompatActivity {
             }
         });
 
-        DocumentSnapshot singleInfo = FirestoreReferences.getSingleUserDate("hello");
+        DocumentSnapshot singleInfo = FirestoreReferences.getSingleUserData("hello");
         String em = singleInfo.get(FirestoreReferences.EMAIL_FIELD).toString();
         //Log.d("hello ooo hello ", firstName);
 
