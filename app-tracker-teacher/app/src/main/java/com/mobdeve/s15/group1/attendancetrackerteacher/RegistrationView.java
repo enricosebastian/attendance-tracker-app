@@ -21,6 +21,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.w3c.dom.Document;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,40 +82,50 @@ public class RegistrationView extends AppCompatActivity {
                 } else {
 
                     FirestoreReferences.getUsersCollectionReference().
-                            whereEqualTo(FirestoreReferences.EMAIL_FIELD, email)
-                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        whereEqualTo(FirestoreReferences.EMAIL_FIELD, email)
+                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            QuerySnapshot querySnapshot = task.getResult();
-                            List<DocumentSnapshot> result = querySnapshot.getDocuments();
-                            if(result.isEmpty()) {
-
-                                Map<String, Object> input = new HashMap<>();
-                                input.put("email",email);
-                                input.put("firstName",firstName);
-                                input.put("idNumber",idNumber);
-                                input.put("lastName",lastName);
-                                input.put("password",password);
-                                input.put("usertype",usertype);
-                                input.put("username",username);
-
-                                FirestoreReferences.
-                                        getUsersCollectionReference().
-                                        add(input).
-                                        addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                            @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                                Log.d(TAG, "Input added succesfully");
-                                                Intent intent = new Intent(RegistrationView.this, ClasslistView.class);
-                                                intent.putExtra(EMAIL_STATE_KEY,email);
-                                                intent.putExtra(USERNAME_STATE_KEY,username);
-                                                startActivity(intent);
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
+                            QuerySnapshot emailQuery = task.getResult();
+                            List<DocumentSnapshot> emailResult = emailQuery.getDocuments();
+                            if(emailResult.isEmpty()) {
+                                FirestoreReferences.getUsersCollectionReference().
+                                    whereEqualTo(FirestoreReferences.IDNUMBER_FIELD, idNumber).
+                                    get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        String error = e.getMessage();
-                                        Log.d(TAG, "error is "+error);
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        QuerySnapshot idNumberQuery = task.getResult();
+                                        List<DocumentSnapshot> idNumberResult = idNumberQuery.getDocuments();
+                                        if(idNumberResult.isEmpty()) {
+
+                                            Map<String, Object> input = new HashMap<>();
+                                            input.put("email",email);
+                                            input.put("firstName",firstName);
+                                            input.put("idNumber",idNumber);
+                                            input.put("lastName",lastName);
+                                            input.put("password",password);
+                                            input.put("usertype",usertype);
+                                            input.put("username",username);
+                                            FirestoreReferences.
+                                                getUsersCollectionReference().
+                                                add(input).
+                                                addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        Log.d(TAG, "Input added succesfully");
+                                                        Intent intent = new Intent(RegistrationView.this, ClasslistView.class);
+                                                        intent.putExtra(EMAIL_STATE_KEY,email);
+                                                        intent.putExtra(USERNAME_STATE_KEY,username);
+                                                        startActivity(intent);
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                String error = e.getMessage();
+                                                Log.d(TAG, "error is "+error);
+                                            }
+                                        });
+                                        }
                                     }
                                 });
                             } else {
