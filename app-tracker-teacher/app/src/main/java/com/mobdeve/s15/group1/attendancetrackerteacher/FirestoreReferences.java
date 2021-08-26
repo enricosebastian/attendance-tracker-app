@@ -74,8 +74,8 @@ public class FirestoreReferences {
         return getFirestoreInstance().document(stringRef);
     }
 
+    //returns null as of now
     public static DocumentSnapshot getSingleUserData(String stringRef) {
-
         getUsersCollectionReference().whereEqualTo(FirestoreReferences.EMAIL_FIELD, stringRef) //this is a test
         .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -85,7 +85,6 @@ public class FirestoreReferences {
                 userInfo = result.get(0);
             }
         });
-
         return userInfo; //returns null as of now
     }
 

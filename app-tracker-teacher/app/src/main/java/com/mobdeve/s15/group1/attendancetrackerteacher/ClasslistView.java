@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseIntArray;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ public class ClasslistView extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ClasslistAdapter classlistAdapter;
+    private DocumentSnapshot donny;
 
     private TextView txtName;
 
@@ -55,8 +57,6 @@ public class ClasslistView extends AppCompatActivity {
         Intent passedIntent = getIntent();
         String username = passedIntent.getStringExtra(USERNAME_STATE_KEY);
         String email = passedIntent.getStringExtra(EMAIL_STATE_KEY);
-
-        Log.d("ds is","hellooooooooooo");
 
         this.txtName = findViewById(R.id.txtName);
 
@@ -76,28 +76,39 @@ public class ClasslistView extends AppCompatActivity {
             }
         });
 
-        DocumentSnapshot singleInfo = FirestoreReferences.getSingleUserData("hello");
-        String em = singleInfo.get(FirestoreReferences.EMAIL_FIELD).toString();
-        //Log.d("hello ooo hello ", firstName);
+        CollectionReference meetingRef = db.collection(FirestoreReferences.COURSES_COLLECTION);
+        query = meetingRef.whereEqualTo(FirestoreReferences.HANDLEDBY_FIELD, username);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                QuerySnapshot querySnapshot = task.getResult();
+                List<DocumentSnapshot> result = querySnapshot.getDocuments();
+                for(DocumentSnapshot ds:result) {
+                    //public ClassModel(String _id, String classCode, String sectionCode, String className, int studentCount, boolean isPublished)
+                    classModels.add(new ClassModel(
+                            "0000",
+                            ds.get("courseCode").toString(),
+                            ds.get("sectionCode").toString(),
+                            ds.get("courseName").toString(),
+                            Integer.parseInt(ds.get("studentCount").toString()),
+                            Boolean.parseBoolean( ds.get("isPublished").toString() )));
+                    //sets up the necessary courses
+
+                    recyclerView = findViewById(R.id.recyclerView);
+
+                    layoutManager = new LinearLayoutManager(getApplicationContext());
+                    recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
+
+                    classlistAdapter = new ClasslistAdapter(classModels);
+                    recyclerView.setAdapter(classlistAdapter);
+
+                }
+            }
+        });
 
 
-
-        DocumentSnapshot ds = db.collection(FirestoreReferences.USERS_COLLECTION).document("ben").get().getResult();
-
-//        CollectionReference meetingRef = db.collection(FirestoreReferences.MEETINGS_COLLECTION);
-//        query = meetingRef.whereEqualTo(FirestoreReferences.HANDLEDBY_FIELD, "ben");
-//        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                QuerySnapshot querySnapshot = task.getResult();
-//                List<DocumentSnapshot> result = querySnapshot.getDocuments();
-//                Toast.makeText(getApplicationContext(), "size: "+result.size(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-
-        this.classModels = new ClassDataHelper().initializeData();
-        setupRecyclerView();
+        //this.classModels = new ClassDataHelper().initializeData();
+        //setupRecyclerView();
     }
 
     void setupRecyclerView() {
