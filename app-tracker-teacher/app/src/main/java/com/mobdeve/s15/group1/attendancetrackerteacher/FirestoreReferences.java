@@ -23,6 +23,7 @@ public class FirestoreReferences {
     private static CollectionReference coursesRef = null;
     private static CollectionReference meetingsRef = null;
     private static DocumentSnapshot userInfo = null;
+    private static DocumentSnapshot classInfo = null;
 
     public final static String
         USERS_COLLECTION        = "Users",
@@ -87,5 +88,20 @@ public class FirestoreReferences {
         });
         return userInfo; //returns null as of now
     }
+
+    //returns null as of now
+    public static DocumentSnapshot getSingleClassData(String stringRef) {
+        getUsersCollectionReference().whereEqualTo(FirestoreReferences.COURSECODE_FIELD, stringRef) //this is a test
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                QuerySnapshot querySnapshot = task.getResult();
+                List<DocumentSnapshot> result = querySnapshot.getDocuments();
+                classInfo = result.get(0);
+            }
+        });
+        return classInfo; //returns null as of now
+    }
+
 
 }
