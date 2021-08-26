@@ -2,6 +2,7 @@ package com.mobdeve.s15.group1.attendancetrackerteacher;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -148,6 +149,14 @@ public class ClasslistView extends AppCompatActivity {
         this.classModels = new ClassDataHelper().initializeData();
         setupRecyclerView();
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+
+    }
+
 >>>>>>> Stashed changes
     void setupRecyclerView() {
         this.recyclerView = findViewById(R.id.recyclerView);
