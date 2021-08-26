@@ -1,10 +1,14 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
 import android.content.Intent;
+import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -12,8 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class ClasslistAdapter extends RecyclerView.Adapter<ClasslistVH> {
+public class ClasslistAdapter extends RecyclerView.Adapter<ClasslistVH> implements View.OnClickListener, PopupMenu.OnMenuItemClickListener{
     private static final String TAG = "Class Adapter";
+
+    private ClasslistVH vh;
 
     //store data here
     private ArrayList<ClassModel> data;
@@ -30,6 +36,7 @@ public class ClasslistAdapter extends RecyclerView.Adapter<ClasslistVH> {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.layout_class, parent, false);
 
+
         ClasslistVH classlistVH = new ClasslistVH(view);
         return classlistVH;
     }
@@ -38,6 +45,8 @@ public class ClasslistAdapter extends RecyclerView.Adapter<ClasslistVH> {
     public void onBindViewHolder(@NonNull ClasslistVH holder, int position) {
         holder.setTxtClassCode(data.get(position).getClassCode());
         holder.setTxtSectionCode(data.get(position).getSectionCode());
+        ImageButton btnMoreOptions =  holder.itemView.findViewById(R.id.btnMoreOptions);
+        this.vh = holder;
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,10 +59,50 @@ public class ClasslistAdapter extends RecyclerView.Adapter<ClasslistVH> {
                 holder.itemView.getContext().startActivity(intent);
             }
         });
+        Intent intent = new Intent(vh.itemView.getContext(), EditCourse.class);
+        vh.itemView.getContext().startActivity(intent);
+
+        
+//        btnMoreOptions.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "POG");
+//            }
+//        });
+
     }
 
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    @Override
+    public void onClick(View v) {
+        Log.d(TAG, "onCLick: ");
+        showPopupMenu(v);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.editCourse:
+                Log.d(TAG, "Action edit course ");
+                return true;
+            case R.id.deleteCourse:
+                Log.d(TAG, "Action delete course ");
+                return true;
+            default:
+                return false;
+        }
+
+    }
+
+    //  Attribution: https://youtu.be/hKyjb4b19YM
+    private void showPopupMenu(View view)  {
+        PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
+        popupMenu.inflate(R.menu.course_menu);
+        popupMenu.setOnMenuItemClickListener(this);
+        popupMenu.show();
     }
 }

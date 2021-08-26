@@ -21,4 +21,6 @@
     <string name="btnDelete">Delete</string>
     <string name="tvCreateCourseHeader">CREATE A COURSE</string>
 
+    <string name="itemEditCourse">Edit course</string>
+    <string name="itemDeleteCourse">Delete course</string>
 </resources>

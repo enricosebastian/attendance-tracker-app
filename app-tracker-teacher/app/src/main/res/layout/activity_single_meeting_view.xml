@@ -17,35 +17,38 @@
         android:padding="5dp">
 
         <TextView
+            android:id="@+id/txtClassTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtClassTitle"
             android:text="CLASSNAME - SECTION"
+            android:textColor="#004D40"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:textSize="20sp"/>
+            tools:layout_editor_absoluteX="5dp"
+            tools:layout_editor_absoluteY="5dp" />
+
         <View
             android:id="@+id/dividerLine"
             android:layout_width="match_parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtClassTitle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_height="1dp"
             android:background="@color/black"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtClassTitle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
+        android:id="@+id/txtDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/txtDate"
-        android:text="JULY 31, 2021 | M"
-        android:textStyle="bold"
-        android:textSize="25sp"
-        app:layout_constraintTop_toBottomOf="@+id/topBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="20dp"
-        />
+        android:text="JULY 31, 2021 | M"
+        android:textColor="#004D40"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topBar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
@@ -58,29 +61,29 @@
         >
 
         <TextView
+            android:id="@+id/txtStatusText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtStatusText"
             android:text="STATUS: "
+            android:textColor="#004D40"
             android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/txtStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtStatus"
-            android:text="CLOSED"
-            app:layout_constraintStart_toEndOf="@id/txtStatusText"
-            app:layout_constraintTop_toTopOf="@id/txtStatusText"
-            app:layout_constraintBottom_toBottomOf="@id/txtStatusText"
             android:layout_marginLeft="5dp"
             android:background="@drawable/template_rounded_corner"
+            android:padding="5dp"
+            android:text="CLOSED"
+            android:textColor="#FFFFFF"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:padding="5dp"
-            />
+            app:layout_constraintBottom_toBottomOf="@id/txtStatusText"
+            app:layout_constraintStart_toEndOf="@id/txtStatusText"
+            app:layout_constraintTop_toTopOf="@id/txtStatusText" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
