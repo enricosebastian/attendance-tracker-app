@@ -21,8 +21,8 @@ public class ClasslistVH extends RecyclerView.ViewHolder implements View.OnClick
         super(itemView);
         this.txtClassCode = itemView.findViewById(R.id.txtClassCode);
         this.txtSectionCode = itemView.findViewById(R.id.txtSectionCode);
-        this.btnMoreOptions = itemView.findViewById(R.id.btnMoreOptions);
-        this.btnMoreOptions.setOnClickListener(this);
+        //this.btnMoreOptions = itemView.findViewById(R.id.btnMoreOptions);
+        //this.btnMoreOptions.setOnClickListener(this);
     }
 
     public void setTxtClassCode(String txtClassCode) {

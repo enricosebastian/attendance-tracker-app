@@ -64,8 +64,8 @@ public class ClasslistView extends AppCompatActivity {
         String username = passedIntent.getStringExtra(USERNAME_STATE_KEY);
         String email = passedIntent.getStringExtra(EMAIL_STATE_KEY);
 
-        this.txtName = findViewById(R.id.txtName);
-        this.txtIdNumber = findViewById(R.id.txtIdNumber);
+        this.txtName = findViewById(R.id.tvName);
+        this.txtIdNumber = findViewById(R.id.tvIdName);
 
         FirestoreReferences.getUsersCollectionReference().
                 whereEqualTo(FirestoreReferences.EMAIL_FIELD, email)
@@ -125,7 +125,7 @@ public class ClasslistView extends AppCompatActivity {
                             recyclerView = findViewById(R.id.recyclerView);
 
                             layoutManager = new LinearLayoutManager(getApplicationContext());
-                            recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
+                            recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
 
                             classlistAdapter = new ClasslistAdapter(classModels);
                             recyclerView.setAdapter(classlistAdapter);
@@ -141,9 +141,9 @@ public class ClasslistView extends AppCompatActivity {
     }
 
     //to be used once sir replies to our email inquiry
-        this.classModels = new ClassDataHelper().initializeData();
-        setupRecyclerView();
-    }
+//        this.classModels = new ClassDataHelper().initializeData();
+//        setupRecyclerView();
+
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -152,14 +152,14 @@ public class ClasslistView extends AppCompatActivity {
 
     }
 
-    void setupRecyclerView() {
-        this.recyclerView = findViewById(R.id.recyclerView);
-
-        this.layoutManager = new LinearLayoutManager(this);
-        this.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
-        this.classlistAdapter = new ClasslistAdapter(this.classModels);
-        this.recyclerView.setAdapter(this.classlistAdapter);
-    }
+//    void setupRecyclerView() {
+//        this.recyclerView = findViewById(R.id.recyclerView);
+//
+//        this.layoutManager = new LinearLayoutManager(this);
+//        this.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+//
+//        this.classlistAdapter = new ClasslistAdapter(this.classModels);
+//        this.recyclerView.setAdapter(this.classlistAdapter);
+//    }
 
 }
