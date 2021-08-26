@@ -6,12 +6,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 public class RegisterFormActivity extends AppCompatActivity {
 
@@ -23,11 +20,11 @@ public class RegisterFormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_form);
 
-        this.etFirstName = findViewById(R.id.etFirstName);
-        this.etLastName = findViewById(R.id.etLastName);
-        this.eteEmail = findViewById(R.id.eteEmail);
-        this.etpPassword = findViewById(R.id.etpPassword);
-        this.etpReenterPassword = findViewById(R.id.etpReenterPassword);
+        this.etFirstName = findViewById(R.id.inputFirstName);
+        this.etLastName = findViewById(R.id.inputLastName);
+        this.eteEmail = findViewById(R.id.inputEmail);
+        this.etpPassword = findViewById(R.id.inputPassword);
+        this.etpReenterPassword = findViewById(R.id.inputIdNumber);
         this.btnSubmitRegister = findViewById(R.id.btnSubmitRegister);
 
         Intent intent = getIntent();

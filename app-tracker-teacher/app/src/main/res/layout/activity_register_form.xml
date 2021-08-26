@@ -18,7 +18,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvSubHeader" />
 
     <EditText
-        android:id="@+id/etpReenterPassword"
+        android:id="@+id/inputIdNumber"
         android:layout_width="275dp"
         android:layout_height="47dp"
         android:layout_marginStart="24dp"
@@ -27,14 +27,14 @@
         android:drawableStart="@drawable/ic_lock"
         android:drawablePadding="12dp"
         android:ems="10"
-        android:hint="@string/tvReenterPassword"
+        android:hint="DLSU ID number"
         android:inputType="textPassword"
         android:paddingStart="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etpPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/inputPassword" />
 
     <EditText
-        android:id="@+id/etFirstName"
+        android:id="@+id/inputFirstName"
         android:layout_width="278dp"
         android:layout_height="45dp"
         android:layout_marginStart="24dp"
@@ -50,7 +50,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <EditText
-        android:id="@+id/etLastName"
+        android:id="@+id/inputLastName"
         android:layout_width="278dp"
         android:layout_height="45dp"
         android:layout_marginStart="24dp"
@@ -63,10 +63,10 @@
         android:inputType="textPersonName"
         android:paddingStart="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etFirstName" />
+        app:layout_constraintTop_toBottomOf="@+id/inputFirstName" />
 
     <EditText
-        android:id="@+id/etpPassword"
+        android:id="@+id/inputPassword"
         android:layout_width="275dp"
         android:layout_height="47dp"
         android:layout_marginStart="24dp"
@@ -79,10 +79,10 @@
         android:inputType="textPassword"
         android:paddingStart="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eteEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/inputEmail" />
 
     <EditText
-        android:id="@+id/eteEmail"
+        android:id="@+id/inputEmail"
         android:layout_width="274dp"
         android:layout_height="46dp"
         android:layout_marginStart="24dp"
@@ -95,7 +95,23 @@
         android:inputType="textEmailAddress"
         android:paddingStart="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etLastName" />
+        app:layout_constraintTop_toBottomOf="@+id/inputLastName" />
+
+    <EditText
+        android:id="@+id/inputUsername"
+        android:layout_width="274dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/custom_input"
+        android:drawableStart="@drawable/ic_email"
+        android:drawablePadding="12dp"
+        android:ems="10"
+        android:hint="@string/tvEmail"
+        android:inputType="textEmailAddress"
+        android:paddingStart="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputEmail" />
 
     <TextView
         android:id="@+id/tvHeader"
