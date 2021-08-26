@@ -31,8 +31,6 @@ public class SingleMeetingView extends AppCompatActivity {
 
         this.txtClassTitle = findViewById(R.id.txtClassTitle);
         txtClassTitle.setText(courseCode +" - "+sectionCode);
-
-        //txtClassTitle.setText(intent.getStringExtra("TXTCLASSTITLE_KEY").toString());
         
         this.txtStatus = findViewById(R.id.txtStatus);
         txtStatus.setOnClickListener(new View.OnClickListener() {

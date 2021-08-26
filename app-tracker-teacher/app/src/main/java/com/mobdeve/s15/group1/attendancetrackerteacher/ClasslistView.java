@@ -103,27 +103,6 @@ public class ClasslistView extends AppCompatActivity {
 //            }
 //        });
 
-        //other method:
-//        Task<QuerySnapshot> q2 = FirestoreReferences.getUserQuery("ben@dlsu.edu.ph");
-//        q2.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                List<DocumentSnapshot> result = task.getResult().getDocuments();
-//
-//            }
-//        });
-
-//        debugging database helper
-        //DocumentSnapshot ds = FirestoreReferences.getSingleUserData("ben@dlsu.edu.ph");
-
-//        Log.d("in classlist view", "test:"+ds);
-//        String username1 = ds.get("username").toString();
-//        if(username1 == null) {
-//            Log.d("classlist view","hatdog");
-//        } else {
-//            Log.d("classlist view else","not null");
-//        }
-//
 
         FirestoreReferences.getCoursesCollectionReference().
                 whereEqualTo(FirestoreReferences.HANDLEDBY_FIELD, username)
