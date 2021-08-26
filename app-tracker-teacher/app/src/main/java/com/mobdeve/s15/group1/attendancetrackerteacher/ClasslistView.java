@@ -9,16 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-<<<<<<< Updated upstream
 import android.util.Log;
 import android.util.SparseIntArray;
 import android.widget.TextView;
 import android.widget.Toast;
-=======
 import android.view.ContextMenu;
 import android.view.View;
 import android.widget.TextView;
->>>>>>> Stashed changes
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.SuccessContinuation;
@@ -60,7 +57,6 @@ public class ClasslistView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classlist);
-<<<<<<< Updated upstream
 
         this.db = FirebaseFirestore.getInstance();
 
@@ -145,7 +141,6 @@ public class ClasslistView extends AppCompatActivity {
     }
 
     //to be used once sir replies to our email inquiry
-=======
         this.classModels = new ClassDataHelper().initializeData();
         setupRecyclerView();
     }
@@ -157,7 +152,6 @@ public class ClasslistView extends AppCompatActivity {
 
     }
 
->>>>>>> Stashed changes
     void setupRecyclerView() {
         this.recyclerView = findViewById(R.id.recyclerView);
 
