@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -30,8 +31,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firestore.v1.Document;
 
 import java.io.Console;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -82,14 +86,23 @@ public class ClasslistView extends AppCompatActivity {
                     }
                 });
 
-        Task<QuerySnapshot> test = FirestoreReferences.getUsersWithEmail("ben@dlsu.edu.ph");
-        test.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                DocumentSnapshot res = FirestoreReferences.getFirstResult(task);
-                Log.d("in void here",res.get("username").toString());
-            }
-        });
+//        Task<QuerySnapshot> test = FirestoreReferences.getUsersWithEmail("ben@dlsu.edu.ph");
+//        test.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                DocumentSnapshot res = FirestoreReferences.getFirstResult(task);
+//                Log.d("what is res","res is: "+res);
+//
+//                Date test = res.getDate("timeTest");
+//                Log.d("in void here",test.toString());
+//
+////                String sDate1 = res.get("timeTest").toString();
+////                Log.d("what is sDate1",sDate1);
+////                Timestamp test = new Timestamp(1630383132,0);
+////                Log.d("in void here",test.toDate().toString());
+//            }
+//        });
+
         //other method:
 //        Task<QuerySnapshot> q2 = FirestoreReferences.getUserQuery("ben@dlsu.edu.ph");
 //        q2.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

@@ -64,7 +64,7 @@ public class SingleClassView extends AppCompatActivity {
                                         ds.get("courseCode").toString(),
                                         ds.get("sectionCode").toString(),
                                         ds.get("meetingCode").toString(),
-                                        new Date(2018, 15, 24, 10, 33, 30), //how to convert timestamp to Date?
+                                        ds.getTimestamp("meetingStart").toDate(), //how to convert timestamp to Date?
                                         Integer.parseInt(ds.get("studentCount").toString())));
                             }
                         }
