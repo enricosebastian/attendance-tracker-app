@@ -61,6 +61,7 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
                 //get the course code somehow
                 intent.putExtra("COURSECODE_KEY",data.get(position).getCourseCode());
                 intent.putExtra("SECTIONCODE_KEY",data.get(position).getSectionCode());
+                intent.putExtra("MEETINGCODE_KEY",data.get(position).getMeetingCode());
                 intent.putExtra("DATE_KEY", stringDate.format(data.get(position).getDate()));
                 intent.putExtra("STUDENTSPRESENT_KEY", data.get(position).getStudentsPresent());
 

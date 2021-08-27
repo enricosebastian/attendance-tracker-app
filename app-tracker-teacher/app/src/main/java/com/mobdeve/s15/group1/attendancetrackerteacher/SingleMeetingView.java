@@ -37,6 +37,9 @@ public class SingleMeetingView extends AppCompatActivity {
 
         String courseCode = intent.getStringExtra("COURSECODE_KEY");
         String sectionCode = intent.getStringExtra("SECTIONCODE_KEY");
+        String meetingCode = intent.getStringExtra("MEETINGCODE_KEY");
+
+        Toast.makeText(getApplicationContext(), ""+meetingCode, Toast.LENGTH_SHORT).show();
 
         this.txtClassTitle = findViewById(R.id.txtClassTitle);
         txtClassTitle.setText(courseCode +" - "+sectionCode);
@@ -51,12 +54,11 @@ public class SingleMeetingView extends AppCompatActivity {
                 } else if(txtStatus.getText().toString().equals("OPEN")) {
                     txtStatus.setText("CLOSED");
                     txtStatus.setBackgroundTintList(v.getContext().getResources().getColorStateList(R.color.red_light));
-
                 }
             }
         });
 
-        Task<QuerySnapshot> test = FirestoreReferences.getStudentsInMeeting("MOBDEVE+S12+0002");
+        Task<QuerySnapshot> test = FirestoreReferences.getStudentsInMeeting(meetingCode);
         test.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
