@@ -19,6 +19,7 @@
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/drawable/custom_input.xml" value="0.5713541666666667" />
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/drawable/ic_launcher_background.xml" value="0.35052083333333334" />
+<<<<<<< HEAD
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_accept_students.xml" value="0.334375" />
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_classlist.xml" value="0.5" />
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_create_course.xml" value="0.5" />
@@ -29,6 +30,26 @@
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_single_class.xml" value="0.16236068895643363" />
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/layout_class.xml" value="0.25" />
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/layout_meeting.xml" value="0.16236068895643363" />
+=======
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/drawable/ic_lock.xml" value="0.4046875" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/drawable/ic_more_settings_foreground.xml" value="0.4046875" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/drawable/ic_more_settings_horizontal_foreground.xml" value="0.4046875" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/drawable/template_rounded_corner.xml" value="0.3640625" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/font/roboto_bold.xml" value="0.41875" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_accept_students.xml" value="0.334375" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_classlist.xml" value="0.49166666666666664" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_create_course.xml" value="0.45724907063197023" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_create_course_temp.xml" value="0.47171197648787655" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_edit_course.xml" value="0.33" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_register_form.xml" value="0.5552083333333333" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_register_teacher.xml" value="0.5395833333333333" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_registration_view.xml" value="0.3880208333333333" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_single_class.xml" value="0.25" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/activity_single_meeting_view.xml" value="0.5552083333333333" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/layout_class.xml" value="0.30390143737166325" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/layout_meeting.xml" value="0.33" />
+>>>>>>> e9e10cdb020ddd86cebaee69c806cf86d1a8c359
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-teacher/app/src/main/res/layout/layout_student_requests.xml" value="0.334375" />
       </map>
     </option>

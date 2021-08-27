@@ -10,7 +10,7 @@
         android:id="@+id/etEditCourse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="32dp"
         android:ems="10"
         android:fontFamily="@font/roboto"
         android:hint="Course Name"
@@ -22,12 +22,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editCourseHeader" />
 
+    <Button
+        android:id="@+id/btnCancelEdit"
+        android:layout_width="98dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="101dp"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="14dp"
+        android:backgroundTint="@color/gray"
+        android:fontFamily="@font/roboto"
+        android:text="@string/btnCancelCreate"
+        app:layout_constraintEnd_toStartOf="@+id/btnSaveEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEditCourse" />
+
+    <Button
+        android:id="@+id/btnSaveEdit"
+        android:layout_width="98dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="101dp"
+        android:fontFamily="@font/roboto"
+        android:text="Save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEditCourse" />
+
     <TextView
         android:id="@+id/editCourseHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="121dp"
-        android:layout_marginTop="272dp"
+        android:layout_marginTop="220dp"
         android:layout_marginEnd="122dp"
         android:fontFamily="@font/roboto"
         android:text="EDIT A COURSE"
@@ -37,20 +62,5 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btnEditCourse"
-        android:layout_width="98dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="155dp"
-        android:layout_marginTop="41dp"
-        android:layout_marginEnd="158dp"
-        android:layout_marginBottom="253dp"
-        android:fontFamily="@font/roboto"
-        android:text="Save"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEditCourse" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

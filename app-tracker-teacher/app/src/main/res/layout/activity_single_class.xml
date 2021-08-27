@@ -39,21 +39,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtClassTitle" />
 
-        <ImageButton
-            android:id="@+id/imageButton4"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="9dp"
-            android:background="@null"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.978"
-            app:layout_constraintStart_toEndOf="@+id/txtClassTitle"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.3"
-            app:srcCompat="@drawable/ic_course_settings_foreground" />
+<!--        <ImageButton-->
+<!--            android:id="@+id/settingsCourse"-->
+<!--            android:layout_width="45dp"-->
+<!--            android:layout_height="45dp"-->
+<!--            android:layout_marginEnd="24dp"-->
+<!--            android:layout_marginBottom="9dp"-->
+<!--            android:background="@null"-->
+<!--            android:scaleType="fitXY"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.934"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/txtClassTitle"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintVertical_bias="1.0"-->
+<!--            app:srcCompat="@drawable/ic_course_settings_foreground" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
