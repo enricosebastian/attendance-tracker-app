@@ -52,47 +52,36 @@ public class LoginView extends AppCompatActivity {
         this.sp = getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
         this.editor = sp.edit();
 
-        this.db = FirebaseFirestore.getInstance();
-
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = inputEmail.getText().toString();
                 String password = inputPassword.getText().toString();
 
-                FirestoreReferences.getUsersCollectionReference()
-                        .whereEqualTo(FirestoreReferences.EMAIL_FIELD, email)
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if(task.isSuccessful()) {
-                                    if(task.getResult().isEmpty()) {
-                                        Toast.makeText(getApplicationContext(), "dude doesnt exist lmao", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        QuerySnapshot querySnapshot = task.getResult();
-                                        List<DocumentSnapshot> result = querySnapshot.getDocuments();
-                                        if(result.get(0).get(FirestoreReferences.USERTYPE_FIELD).toString().equals("teacher")) {
-                                            if(result.get(0).get(FirestoreReferences.PASSWORD_FIELD).toString().equals(password)) {
-                                                Intent intent = new Intent(LoginView.this, ClasslistView.class);
+                Task<QuerySnapshot> querySnapshot = FirestoreReferences.getUserInfoFromEmail(email);
+                querySnapshot.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<DocumentSnapshot> result = FirestoreReferences.toList(task);
+                        DocumentSnapshot documentSnapshot = FirestoreReferences.getFirstResult(task);
+                        if(result.isEmpty() || !documentSnapshot.get("userType").equals("teacher")) {
+                            Toast.makeText(getApplicationContext(), "doesnt exist bro lmao", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if(documentSnapshot.get("password").toString().equals(password)) {
+                                Intent intent = new Intent(LoginView.this, ClasslistView.class);
 
-                                                intent.putExtra(EMAIL_STATE_KEY,result.get(0).get(FirestoreReferences.EMAIL_FIELD).toString());
-                                                intent.putExtra(USERNAME_STATE_KEY,result.get(0).get(FirestoreReferences.USERNAME_FIELD).toString());
-                                                startActivity(intent);
+                                intent.putExtra(EMAIL_STATE_KEY,result.get(0).get(FirestoreReferences.EMAIL_FIELD).toString());
+                                intent.putExtra(USERNAME_STATE_KEY,result.get(0).get(FirestoreReferences.USERNAME_FIELD).toString());
 
-                                                finish();
-                                            } else {
-                                                Toast.makeText(getApplicationContext(), "Wrong password!", Toast.LENGTH_SHORT).show();
-                                            };
-                                        } else {
-                                            Toast.makeText(getApplicationContext(), "User is not a teacher", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                } else {
-                                    Log.d(TAG,"Error getting Users document: "+task.getException());
-                                }
+                                startActivity(intent);
+                                finish(); //ends login activity
+                            } else {
+                                Toast.makeText(getApplicationContext(), "wrong password!", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    });
+                        
+                    }
+                });
             }
         });
 

@@ -25,6 +25,6 @@ public class SingleMeetingVH extends RecyclerView.ViewHolder{
     }
 
     public void setTxtStudentName(String studentFirstName, String studentLastName) {
-        this.txtStudentName.setText(studentLastName+" "+studentFirstName);
+        this.txtStudentName.setText(studentLastName+", "+studentFirstName);
     }
 }

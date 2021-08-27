@@ -49,8 +49,6 @@ public class SingleMeetingView extends AppCompatActivity {
         String sectionCode = intent.getStringExtra("SECTIONCODE_KEY");
         String meetingCode = intent.getStringExtra("MEETINGCODE_KEY");
 
-        Toast.makeText(getApplicationContext(), ""+meetingCode, Toast.LENGTH_SHORT).show();
-
         this.txtClassTitle = findViewById(R.id.txtClassTitle);
         txtClassTitle.setText(courseCode +" - "+sectionCode);
         

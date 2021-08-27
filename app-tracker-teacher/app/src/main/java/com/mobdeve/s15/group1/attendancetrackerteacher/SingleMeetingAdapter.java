@@ -35,7 +35,7 @@ public class SingleMeetingAdapter extends RecyclerView.Adapter<SingleMeetingVH> 
     @Override
     public void onBindViewHolder(@NonNull SingleMeetingVH holder, int position) {
         holder.setSwitchIsPresent(data.get(position).isPresent);
-        holder.setTxtStudentName(data.get(position).getStudentAttended(), data.get(position).getStudentAttended());
+        holder.setTxtStudentName(data.get(position).getFirstName(), data.get(position).getLastName());
     }
 
     @Override

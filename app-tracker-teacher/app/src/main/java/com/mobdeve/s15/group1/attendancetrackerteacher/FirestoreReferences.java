@@ -106,23 +106,8 @@ public class FirestoreReferences {
 
     //returns null as of now
     //searches for a single user
-    public static DocumentSnapshot getSingleUserData(String stringRef) {
-        getUsersCollectionReference().whereEqualTo(FirestoreReferences.EMAIL_FIELD, stringRef) //this is a test
-        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()) {
-                    QuerySnapshot querySnapshot = task.getResult();
-                    List<DocumentSnapshot> result = querySnapshot.getDocuments();
-                    Log.d("inside void", "result is: "+result);
-                    userInfo = result.get(0);
-                    Log.d("inside void", userInfo.get("username").toString());
-                } else {
-                    Log.d("inside void", "rip booiiiii");
-                }
-            }
-        });
-        return userInfo; //returns null as of now
+    public static Task<QuerySnapshot> getUserInfoFromEmail(String emailRef) {
+        return getUsersCollectionReference().whereEqualTo(EMAIL_FIELD, emailRef).get();
     }
 
     //returns null as of now
@@ -138,10 +123,6 @@ public class FirestoreReferences {
             }
         });
         return classInfo; //returns null as of now
-    }
-
-    public static Task<QuerySnapshot> getUsersWithEmail(String emailRef) {
-        return getUsersCollectionReference().whereEqualTo(EMAIL_FIELD, emailRef).get();
     }
 
     public static DocumentSnapshot getFirstResult(Task<QuerySnapshot> task) {
@@ -172,7 +153,9 @@ public class FirestoreReferences {
                     ds.getString("meetingCode"),
                     ds.getString("sectionCode"),
                     ds.getString("studentAttended"),
-                    true));
+                    ds.getString("firstName"),
+                    ds.getString("lastName"),
+                    ds.getBoolean("isPresent")));
         }
         return studentPresentListModels;
     }
