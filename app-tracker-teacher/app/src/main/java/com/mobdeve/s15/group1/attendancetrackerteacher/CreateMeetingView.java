@@ -35,8 +35,8 @@ public class CreateMeetingView extends AppCompatActivity {
         this.tvDisplayDate = findViewById(R.id.tvSelectDate);
 
         Intent intent = getIntent();
-        this.courseCode = intent.getStringExtra("COURSECODE");
-        this.sectionCode = intent.getStringExtra("SECTIONCODE");
+        this.courseCode = intent.getStringExtra(MyKeys.COURSE_CODE_KEY.name());
+        this.sectionCode = intent.getStringExtra(MyKeys.SECTION_CODE_KEY.name());
 
         dsl = new DatePickerDialog.OnDateSetListener() {
             @Override

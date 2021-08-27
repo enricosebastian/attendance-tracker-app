@@ -51,8 +51,8 @@ public class ClasslistAdapter extends RecyclerView.Adapter<ClasslistVH> {
             public void onClick(View v) {
                 Intent intent = new Intent(holder.itemView.getContext(), SingleClassView.class);
 
-                intent.putExtra("CLASSCODE",data.get(position).getCourseCode());
-                intent.putExtra("SECTIONCODE",data.get(position).getSectionCode());
+                intent.putExtra(MyKeys.COURSE_CODE_KEY.name(), data.get(position).getCourseCode());
+                intent.putExtra(MyKeys.SECTION_CODE_KEY.name(), data.get(position).getSectionCode());
                 holder.itemView.getContext().startActivity(intent);
             }
         });

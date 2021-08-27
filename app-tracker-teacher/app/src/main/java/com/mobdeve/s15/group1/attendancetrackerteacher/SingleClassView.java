@@ -38,8 +38,8 @@ public class SingleClassView extends AppCompatActivity {
         setContentView(R.layout.activity_single_class);
 
         Intent intent = getIntent();
-        this.classCode = intent.getStringExtra("CLASSCODE");
-        this.sectionCode = intent.getStringExtra("SECTIONCODE");
+        this.classCode = intent.getStringExtra(MyKeys.COURSE_CODE_KEY.name());
+        this.sectionCode = intent.getStringExtra(MyKeys.SECTION_CODE_KEY.name());
 
         this.txtClassTitle = findViewById(R.id.txtClassTitle);
         this.btnAcceptStudents = findViewById(R.id.btnAcceptStudents);
@@ -85,8 +85,8 @@ public class SingleClassView extends AppCompatActivity {
                 //Toast.makeText(v.getContext(), "adding class...", Toast.LENGTH_SHORT).show();
                 //insert create meeting here
                 Intent intent = new Intent(SingleClassView.this, CreateMeetingView.class);
-                intent.putExtra("COURSECODE", classCode);
-                intent.putExtra("SECTIONCODE", sectionCode);
+                intent.putExtra(MyKeys.COURSE_CODE_KEY.name(), classCode);
+                intent.putExtra(MyKeys.SECTION_CODE_KEY.name(), sectionCode);
                 startActivity(intent);
             }
         });
