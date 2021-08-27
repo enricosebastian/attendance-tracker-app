@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -12,8 +13,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,6 +37,7 @@ public class FirestoreReferences {
     private static List<DocumentSnapshot> resultList = null;
 
     private static ArrayList<StudentPresentListModel> studentPresentListModels = new ArrayList<>();
+    private static ArrayList<ClassModel> classModels = new ArrayList<>();
 
     public final static String
         USERS_COLLECTION        = "Users",
@@ -158,6 +163,87 @@ public class FirestoreReferences {
                     ds.getBoolean("isPresent")));
         }
         return studentPresentListModels;
+    }
+
+    public static ArrayList<ClassModel> toClassModel(List<DocumentSnapshot> result) {
+        classModels.clear();
+        for(DocumentSnapshot ds:result) {
+            classModels.add(new ClassModel(
+                ds.getString("courseCode"),
+                ds.getString("courseName"),
+                ds.getString("handledBy"),
+                ds.getBoolean("isPublished"),
+                ds.getString("sectionCode"),
+                Integer.parseInt(ds.get("studentCount").toString())));
+        }
+        return classModels;
+    }
+
+    public static String getIdFromTask(Task<QuerySnapshot> task) {
+        QuerySnapshot qs = task.getResult();
+        String id = qs.getDocuments().get(0).getId();
+        return id;
+    }
+
+    public static void updateSingleStudent(String entry, String query, UserModel initialInfo) {
+        FirestoreReferences.getUsersCollectionReference()
+            .whereEqualTo(entry, query)
+            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    DocumentSnapshot ds = getFirstResult(task);
+                    if(initialInfo.getEmail().equals("")) initialInfo.setEmail(ds.getString("email"));
+                    if(initialInfo.getPassword().equals("")) initialInfo.setPassword(ds.getString("password"));
+                    if(initialInfo.getFirstName().equals("")) initialInfo.setFirstName(ds.getString("firstName"));
+                    if(initialInfo.getLastName().equals("")) initialInfo.setLastName(ds.getString("lastName"));
+                    if(initialInfo.getIdNumber().equals("")) initialInfo.setIdNumber(ds.getString("idNumber"));
+                    if(initialInfo.getUserType().equals("")) initialInfo.setUserType(ds.getString("userType"));
+
+                    String id = FirestoreReferences.getIdFromTask(task);
+                    FirestoreReferences.getUsersCollectionReference()
+                        .document(id)
+                        .set(initialInfo)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d("main","Single student document updated succesfully.");
+                            }
+                        });
+                }
+            });
+
+    }
+
+    public static void updateSingleCourse(String courseCode, String sectionCode, ClassModel initialInfo) {
+        FirestoreReferences.getCoursesCollectionReference()
+                .whereEqualTo(COURSECODE_FIELD, courseCode)
+                .whereEqualTo(SECTIONCODE_FIELD,sectionCode)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    DocumentSnapshot ds = getFirstResult(task);
+                    if(initialInfo.getCourseCode().equals("")) initialInfo.setCourseCode(ds.getString("courseCode"));
+                    if(initialInfo.getCourseName().equals("")) initialInfo.setCourseName(ds.getString("courseName"));
+                    if(initialInfo.getHandledBy().equals("")) initialInfo.setHandledBy(ds.getString("handledBy"));
+                    if(initialInfo.getSectionCode().equals("")) initialInfo.setSectionCode(ds.getString("sectionCode"));
+                    if(!initialInfo.isPublished()) initialInfo.setPublished(ds.getBoolean("isPublished"));
+                    if(initialInfo.getSectionCode().equals("")) initialInfo.setSectionCode(ds.getString("sectionCode"));
+                    if(initialInfo.getStudentCount() <= 0) initialInfo.setStudentCount(Integer.parseInt(ds.getString("studentCount")));
+
+                    String id = FirestoreReferences.getIdFromTask(task);
+                    Log.d("main","id is "+id);
+                    FirestoreReferences.getCoursesCollectionReference()
+                            .document(id)
+                            .set(initialInfo)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Log.d("main","Single course doucment updated succesfully.");
+                                }
+                            });
+                }
+            });
+
     }
 
 }

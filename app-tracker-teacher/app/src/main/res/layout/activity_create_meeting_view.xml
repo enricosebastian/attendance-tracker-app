@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreateMeetingView">
+
+    <TextView
+        android:id="@+id/tvCreateCourseHeader2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="103dp"
+        android:layout_marginTop="119dp"
+        android:layout_marginEnd="103dp"
+        android:fontFamily="@font/roboto"
+        android:text="@string/tvCreateCourseHeader"
+        android:textColor="#004D40"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnConfirmCreateMeeting"
+        android:layout_width="98dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="85dp"
+        android:layout_marginEnd="103dp"
+        android:fontFamily="@font/roboto"
+        android:text="@string/btnCreateCourse"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSelectDate" />
+
+    <Button
+        android:id="@+id/btnCancelCreateMeeting"
+        android:layout_width="98dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="98dp"
+        android:layout_marginTop="85dp"
+        android:backgroundTint="@color/gray"
+        android:fontFamily="@font/roboto"
+        android:text="@string/btnCancelCreate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSelectDate" />
+
+    <TextView
+        android:id="@+id/tvSelectDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="65dp"
+        android:layout_marginEnd="145dp"
+        android:text="@string/tvCreateMeeting"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCreateCourseHeader2" />
+</androidx.constraintlayout.widget.ConstraintLayout>

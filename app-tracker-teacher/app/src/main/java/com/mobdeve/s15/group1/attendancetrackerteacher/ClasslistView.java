@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
@@ -19,14 +20,23 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.w3c.dom.Document;
+
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
@@ -85,24 +95,6 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
                     }
                 });
 
-//        Task<QuerySnapshot> test = FirestoreReferences.getUsersWithEmail("ben@dlsu.edu.ph");
-//        test.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                DocumentSnapshot res = FirestoreReferences.getFirstResult(task);
-//                Log.d("what is res","res is: "+res);
-//
-//                Date test = res.getDate("timeTest");
-//                Log.d("in void here",test.toString());
-//
-////                String sDate1 = res.get("timeTest").toString();
-////                Log.d("what is sDate1",sDate1);
-////                Timestamp test = new Timestamp(1630383132,0);
-////                Log.d("in void here",test.toDate().toString());
-//            }
-//        });
-
-
         FirestoreReferences.getCoursesCollectionReference().
                 whereEqualTo(FirestoreReferences.HANDLEDBY_FIELD, username)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -110,26 +102,17 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         QuerySnapshot querySnapshot = task.getResult();
                         List<DocumentSnapshot> result = querySnapshot.getDocuments();
-                        for(DocumentSnapshot ds:result) {
-                            //TO REMEMBER: public ClassModel(String _id, String classCode, String sectionCode, String className, int studentCount, boolean isPublished)
-                            classModels.add(new ClassModel(
-                                    "0000",
-                                    ds.get("courseCode").toString(),
-                                    ds.get("sectionCode").toString(),
-                                    ds.get("courseName").toString(),
-                                    Integer.parseInt(ds.get("studentCount").toString()),
-                                    Boolean.parseBoolean( ds.get("isPublished").toString() )));
-                            //sets up the necessary courses
 
-                            recyclerView = findViewById(R.id.recyclerView);
+                        Log.d("test","look at these class counts: "+result.get(0).get("studentCount").toString());
+                        classModels = FirestoreReferences.toClassModel(result);
 
-                            layoutManager = new LinearLayoutManager(getApplicationContext());
-                            recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+                        recyclerView = findViewById(R.id.recyclerView);
 
-                            classlistAdapter = new ClasslistAdapter(classModels);
-                            recyclerView.setAdapter(classlistAdapter);
+                        layoutManager = new LinearLayoutManager(getApplicationContext());
+                        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
 
-                        }
+                        classlistAdapter = new ClasslistAdapter(classModels);
+                        recyclerView.setAdapter(classlistAdapter);
                     }
                 });
 
@@ -164,7 +147,6 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
                 editor.putString(SP_EMAIL_KEY,"");
                 editor.putString(SP_USERNAME_KEY,"");
                 editor.commit();
-
                 Intent intentLogout = new Intent (ClasslistView.this, LoginView.class);
                 startActivity(intentLogout);
                 return true;
