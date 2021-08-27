@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageButton;
@@ -31,8 +33,14 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
     private ArrayList<ClassModel> classModels = new ArrayList<>();
 
     private static String SP_FILE_NAME = "LoginPreferences";
+    private static String SP_EMAIL_KEY = "SP_EMAIL_KEY";
+    private static String SP_USERNAME_KEY = "SP_USERNAME_KEY";
+
     private static String USERNAME_STATE_KEY = "USERNAME_KEY";
     private static String EMAIL_STATE_KEY = "EMAIL_KEY";
+
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -48,6 +56,9 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classlist);
+
+        this.sp = getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
+        this.editor = sp.edit();
 
         this.db = FirebaseFirestore.getInstance();
 
@@ -150,6 +161,10 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
                 startActivity(intent);
                 return true;
             case R.id.logout:
+                editor.putString(SP_EMAIL_KEY,"");
+                editor.putString(SP_USERNAME_KEY,"");
+                editor.commit();
+
                 Intent intentLogout = new Intent (ClasslistView.this, LoginView.class);
                 startActivity(intentLogout);
                 return true;

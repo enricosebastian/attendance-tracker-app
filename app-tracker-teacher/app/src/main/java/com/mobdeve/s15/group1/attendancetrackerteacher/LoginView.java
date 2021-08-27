@@ -29,15 +29,17 @@ public class LoginView extends AppCompatActivity {
     private final String TAG = "LoginView.java";
 
     private static String SP_FILE_NAME = "LoginPreferences";
+    private static String SP_EMAIL_KEY = "SP_EMAIL_KEY";
+    private static String SP_USERNAME_KEY = "SP_USERNAME_KEY";
+
     private static String USERNAME_STATE_KEY = "USERNAME_KEY";
     private static String EMAIL_STATE_KEY = "EMAIL_KEY";
+
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
 
     private EditText inputEmail, inputPassword;
     private Button btnLogin, btnRegister;
-
-    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,19 @@ public class LoginView extends AppCompatActivity {
 
         this.sp = getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
         this.editor = sp.edit();
+
+        String previousEmailEntry = sp.getString(SP_EMAIL_KEY, "");
+        String previousUsernameEntry = sp.getString(SP_USERNAME_KEY, "");
+
+        if(!previousEmailEntry.equals("") && !previousUsernameEntry.equals("") ) {
+            Intent intent = new Intent(LoginView.this, ClasslistView.class);
+
+            intent.putExtra(EMAIL_STATE_KEY,previousEmailEntry);
+            intent.putExtra(USERNAME_STATE_KEY,previousUsernameEntry);
+
+            startActivity(intent);
+            finish(); //ends login activity
+        }
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,8 +85,12 @@ public class LoginView extends AppCompatActivity {
                             if(documentSnapshot.get("password").toString().equals(password)) {
                                 Intent intent = new Intent(LoginView.this, ClasslistView.class);
 
-                                intent.putExtra(EMAIL_STATE_KEY,result.get(0).get(FirestoreReferences.EMAIL_FIELD).toString());
-                                intent.putExtra(USERNAME_STATE_KEY,result.get(0).get(FirestoreReferences.USERNAME_FIELD).toString());
+                                intent.putExtra(EMAIL_STATE_KEY,documentSnapshot.get(FirestoreReferences.EMAIL_FIELD).toString());
+                                intent.putExtra(USERNAME_STATE_KEY,documentSnapshot.get(FirestoreReferences.USERNAME_FIELD).toString());
+
+                                editor.putString(SP_EMAIL_KEY,documentSnapshot.getString(FirestoreReferences.EMAIL_FIELD));
+                                editor.putString(SP_USERNAME_KEY,documentSnapshot.getString(FirestoreReferences.USERNAME_FIELD));
+                                editor.commit();
 
                                 startActivity(intent);
                                 finish(); //ends login activity
