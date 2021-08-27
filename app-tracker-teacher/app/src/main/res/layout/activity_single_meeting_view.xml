@@ -56,24 +56,30 @@
         android:id="@+id/tvMeeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="187dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="184dp"
         android:fontFamily="sans-serif"
         android:text="CODE:"
         android:textColor="#004D40"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/statusBar"
-        tools:layout_editor_absoluteX="187dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statusBar" />
 
     <TextView
         android:id="@+id/tvCourseCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="137dp"
         android:layout_marginTop="4dp"
+        android:layout_marginEnd="137dp"
         android:fontFamily="@font/roboto"
         android:text="MOBDEVE+S15+0001"
         android:textColor="#004D40"
-        app:layout_constraintTop_toBottomOf="@+id/tvMeeting"
-        tools:layout_editor_absoluteX="137dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvMeeting" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/statusBar"
@@ -123,15 +129,15 @@
         tools:layout_editor_absoluteX="0dp" />
 
     <Button
+        android:id="@+id/btnDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnDelete"
-        android:text="delete"
-        app:layout_constraintTop_toBottomOf="@id/studentListRecyclerView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:backgroundTint="@color/red_light"
         android:layout_marginTop="20dp"
-        />
+        android:backgroundTint="@color/red_light"
+        android:fontFamily="@font/roboto_medium"
+        android:text="Delete meeting"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/studentListRecyclerView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
