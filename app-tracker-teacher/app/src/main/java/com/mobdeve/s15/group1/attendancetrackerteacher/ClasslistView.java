@@ -92,6 +92,7 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
         //Picasso.get().load(url).into(imgTest);
 
 
+
         this.db = FirebaseFirestore.getInstance();
 
         Intent passedIntent = getIntent();
@@ -117,6 +118,7 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
                     }
                 });
 
+
         FirestoreReferences.getCoursesCollectionReference().
                 whereEqualTo(FirestoreReferences.HANDLEDBY_FIELD, username)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -125,7 +127,6 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
                         QuerySnapshot querySnapshot = task.getResult();
                         List<DocumentSnapshot> result = querySnapshot.getDocuments();
 
-                        Log.d("test","look at these class counts: "+result.get(0).get("studentCount").toString());
                         classModels = FirestoreReferences.toClassModel(result);
 
                         recyclerView = findViewById(R.id.recyclerView);
@@ -138,11 +139,9 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
                     }
                 });
 
-
         btnAddCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(v.getContext(), "adding class...", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(ClasslistView.this, CreateCourse.class);
                 startActivity(intent);
             }
