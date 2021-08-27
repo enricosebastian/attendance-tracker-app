@@ -88,4 +88,12 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/studentListRecyclerView"
+        app:layout_constraintTop_toBottomOf="@id/statusBar"
+        android:layout_marginTop="10dp"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

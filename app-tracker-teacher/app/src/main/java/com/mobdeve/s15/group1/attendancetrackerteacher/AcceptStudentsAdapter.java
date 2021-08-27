@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH> {
 
 
-    private ArrayList<Student> data;
+    private ArrayList<StudentModel> data;
 
     /**
      * This method creates the view holder for the accept students view

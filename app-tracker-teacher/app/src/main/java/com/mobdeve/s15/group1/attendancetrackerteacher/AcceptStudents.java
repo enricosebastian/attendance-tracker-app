@@ -1,7 +1,6 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 
 public class AcceptStudents extends AppCompatActivity {
 
-    private ArrayList<Student> students = new ArrayList<>();
+    private ArrayList<StudentModel> students = new ArrayList<>();
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;

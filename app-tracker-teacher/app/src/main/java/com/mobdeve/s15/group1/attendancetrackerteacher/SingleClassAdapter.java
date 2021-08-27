@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
     private static final String TAG = "Class Adapter";
@@ -26,6 +27,7 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
     public SingleClassAdapter(ArrayList data) {
         this.data = data;
         Log.d(TAG, "Adapter: initialized");
+
     }
 
     @NonNull

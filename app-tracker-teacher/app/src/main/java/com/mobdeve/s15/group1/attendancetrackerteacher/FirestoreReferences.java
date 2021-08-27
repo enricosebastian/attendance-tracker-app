@@ -23,10 +23,13 @@ public class FirestoreReferences {
     private static FirebaseFirestore firebaseFirestoreInstance = null;
     private static StorageReference storageReferenceInstance = null;
     private static CollectionReference usersRef = null;
+    private static CollectionReference meetingCollection = null;
     private static CollectionReference coursesRef = null;
     private static CollectionReference meetingsRef = null;
     private static DocumentSnapshot userInfo = null;
     private static DocumentSnapshot classInfo = null;
+
+    private static List<DocumentSnapshot> resultList = null;
 
     public final static String
         USERS_COLLECTION        = "Users",
@@ -43,8 +46,10 @@ public class FirestoreReferences {
             SECTIONCODE_FIELD   = "sectionCode",
             STUDENTCOUNT_FIELD  = "studentCount",
             ISPUBLISHED_FIELD   = "isPublished",
-            HANDLEDBY_FIELD     = "handledBy",
-        MEETINGS_COLLECTION     = "Meetings";
+            HANDLEDBY_FIELD         = "handledBy",
+        MEETINGS_COLLECTION         = "Meetings",
+            MEETINGCODE_FIELD         = "meetingCode",
+        MEETINGHISTORY_COLLECTION       = "MeetingHistory";
 
     public static FirebaseFirestore getFirestoreInstance() {
         if(firebaseFirestoreInstance == null) {
@@ -66,6 +71,14 @@ public class FirestoreReferences {
             usersRef = getFirestoreInstance().collection(USERS_COLLECTION);
         }
         return usersRef;
+    }
+
+    //gets the entire MeetingHistory collection
+    public static CollectionReference getMeetingHistoryCollection() {
+        if(meetingCollection == null) {
+            meetingCollection = getFirestoreInstance().collection(MEETINGHISTORY_COLLECTION);
+        }
+        return meetingCollection;
     }
 
     //gets the entire course collection
@@ -135,6 +148,19 @@ public class FirestoreReferences {
             userInfo = result.get(0);
         }
         return userInfo;
+    }
+
+    public static Task<QuerySnapshot> getStudentsInMeeting(String meetingCode) {
+        return getMeetingHistoryCollection().whereEqualTo(MEETINGCODE_FIELD, meetingCode).get();
+    }
+
+    public static List<DocumentSnapshot> toList(Task<QuerySnapshot> task) {
+        if(resultList == null) {
+            QuerySnapshot querySnapshot = task.getResult();
+            List<DocumentSnapshot> result = querySnapshot.getDocuments();
+            resultList = result;
+        }
+        return resultList;
     }
 
 }

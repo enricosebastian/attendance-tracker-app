@@ -1,14 +1,23 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import org.w3c.dom.Text;
+
+import java.util.List;
 
 public class SingleMeetingView extends AppCompatActivity {
     
@@ -44,6 +53,15 @@ public class SingleMeetingView extends AppCompatActivity {
                     txtStatus.setBackgroundTintList(v.getContext().getResources().getColorStateList(R.color.red_light));
 
                 }
+            }
+        });
+
+        Task<QuerySnapshot> test = FirestoreReferences.getStudentsInMeeting("MOBDEVE+S12+0002");
+        test.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<DocumentSnapshot> result = FirestoreReferences.toList(task);
+                Log.d("in here lmao",""+result.size());
             }
         });
 
