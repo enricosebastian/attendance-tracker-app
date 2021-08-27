@@ -7,54 +7,59 @@
     tools:context=".CreateMeetingView">
 
     <TextView
-        android:id="@+id/tvCreateCourseHeader2"
+        android:id="@+id/tvCreateMeetingHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="103dp"
-        android:layout_marginTop="119dp"
+        android:layout_marginTop="200dp"
         android:layout_marginEnd="103dp"
         android:fontFamily="@font/roboto"
-        android:text="@string/tvCreateCourseHeader"
+        android:text="CREATE MEETING"
         android:textColor="#004D40"
         android:textSize="24dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btnConfirmCreateMeeting"
-        android:layout_width="98dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="85dp"
-        android:layout_marginEnd="103dp"
-        android:fontFamily="@font/roboto"
-        android:text="@string/btnCreateCourse"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSelectDate" />
-
-    <Button
-        android:id="@+id/btnCancelCreateMeeting"
-        android:layout_width="98dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="98dp"
-        android:layout_marginTop="85dp"
-        android:backgroundTint="@color/gray"
-        android:fontFamily="@font/roboto"
-        android:text="@string/btnCancelCreate"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSelectDate" />
 
     <TextView
         android:id="@+id/tvSelectDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="144dp"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="68dp"
         android:layout_marginEnd="145dp"
         android:text="@string/tvCreateMeeting"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCreateCourseHeader2" />
+        app:layout_constraintTop_toBottomOf="@+id/tvCreateMeetingHeader" />
+
+    <Button
+        android:id="@+id/btnCancelCreateMeeting"
+        android:layout_width="98dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="84dp"
+        android:backgroundTint="@color/gray"
+        android:fontFamily="@font/roboto"
+        android:text="@string/btnCancelCreate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSelectDate" />
+
+    <Button
+        android:id="@+id/btnConfirmCreateMeeting"
+        android:layout_width="98dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="84dp"
+        android:layout_marginEnd="103dp"
+        android:fontFamily="@font/roboto"
+        android:text="@string/btnCreateCourse"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/btnCancelCreateMeeting"
+        app:layout_constraintTop_toBottomOf="@+id/tvSelectDate" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
