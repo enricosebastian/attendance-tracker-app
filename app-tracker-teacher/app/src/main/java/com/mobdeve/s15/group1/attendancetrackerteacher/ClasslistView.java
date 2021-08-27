@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
@@ -19,14 +20,19 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
@@ -70,6 +76,18 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
         this.txtIdNumber = findViewById(R.id.tvIdName);
         this.btnAddCourse = findViewById(R.id.btnAddCourse);
 
+        UserModel stud = new UserModel(
+                "erwin@dlsu.edu.ph",
+                "erwinpassword",
+                "erwin",
+                "ErwinFirstName",
+                "",
+                "11839260",
+                "student");
+
+        FirestoreReferences
+            .updateSingleStudent(FirestoreReferences.USERNAME_FIELD,"erwin", stud);
+
         FirestoreReferences.getUsersCollectionReference().
                 whereEqualTo(FirestoreReferences.EMAIL_FIELD, email)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -84,24 +102,6 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
                         txtIdNumber.setText(result.get(0).get(FirestoreReferences.IDNUMBER_FIELD).toString());
                     }
                 });
-
-//        Task<QuerySnapshot> test = FirestoreReferences.getUsersWithEmail("ben@dlsu.edu.ph");
-//        test.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                DocumentSnapshot res = FirestoreReferences.getFirstResult(task);
-//                Log.d("what is res","res is: "+res);
-//
-//                Date test = res.getDate("timeTest");
-//                Log.d("in void here",test.toString());
-//
-////                String sDate1 = res.get("timeTest").toString();
-////                Log.d("what is sDate1",sDate1);
-////                Timestamp test = new Timestamp(1630383132,0);
-////                Log.d("in void here",test.toDate().toString());
-//            }
-//        });
-
 
         FirestoreReferences.getCoursesCollectionReference().
                 whereEqualTo(FirestoreReferences.HANDLEDBY_FIELD, username)
@@ -164,7 +164,6 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
                 editor.putString(SP_EMAIL_KEY,"");
                 editor.putString(SP_USERNAME_KEY,"");
                 editor.commit();
-
                 Intent intentLogout = new Intent (ClasslistView.this, LoginView.class);
                 startActivity(intentLogout);
                 return true;

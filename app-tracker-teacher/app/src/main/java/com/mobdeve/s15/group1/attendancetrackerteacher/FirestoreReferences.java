@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -12,8 +13,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -158,6 +162,72 @@ public class FirestoreReferences {
                     ds.getBoolean("isPresent")));
         }
         return studentPresentListModels;
+    }
+
+    public static String getIdFromTask(Task<QuerySnapshot> task) {
+        QuerySnapshot qs = task.getResult();
+        String id = qs.getDocuments().get(0).getId();
+        return id;
+    }
+
+    public static void updateSingleStudent(String entry, String query, UserModel initialInfo) {
+
+        FirestoreReferences.getUsersCollectionReference()
+            .whereEqualTo(entry, query)
+            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    DocumentSnapshot ds = getFirstResult(task);
+                    if(initialInfo.getEmail().equals("")) initialInfo.setEmail(ds.getString("email"));
+                    if(initialInfo.getPassword().equals("")) initialInfo.setPassword(ds.getString("password"));
+                    if(initialInfo.getFirstName().equals("")) initialInfo.setFirstName(ds.getString("firstName"));
+                    if(initialInfo.getLastName().equals("")) initialInfo.setLastName(ds.getString("lastName"));
+                    if(initialInfo.getIdNumber().equals("")) initialInfo.setIdNumber(ds.getString("idNumber"));
+                    if(initialInfo.getUserType().equals("")) initialInfo.setUserType(ds.getString("userType"));
+
+                    String id = FirestoreReferences.getIdFromTask(task);
+                    FirestoreReferences.getUsersCollectionReference()
+                        .document(id)
+                        .set(initialInfo)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d("main","Document updated succesfully.");
+                            }
+                        });
+                }
+            });
+
+    }
+
+    public static void updateSingle(String entry, String query, UserModel initialInfo) {
+
+        FirestoreReferences.getUsersCollectionReference()
+                .whereEqualTo(entry, query)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                DocumentSnapshot ds = getFirstResult(task);
+                if(initialInfo.getEmail().equals("")) initialInfo.setEmail(ds.getString("email"));
+                if(initialInfo.getPassword().equals("")) initialInfo.setPassword(ds.getString("password"));
+                if(initialInfo.getFirstName().equals("")) initialInfo.setFirstName(ds.getString("firstName"));
+                if(initialInfo.getLastName().equals("")) initialInfo.setLastName(ds.getString("lastName"));
+                if(initialInfo.getIdNumber().equals("")) initialInfo.setIdNumber(ds.getString("idNumber"));
+                if(initialInfo.getUserType().equals("")) initialInfo.setUserType(ds.getString("userType"));
+
+                String id = FirestoreReferences.getIdFromTask(task);
+                FirestoreReferences.getUsersCollectionReference()
+                        .document(id)
+                        .set(initialInfo)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d("main","Document updated succesfully.");
+                            }
+                        });
+            }
+        });
+
     }
 
 }
