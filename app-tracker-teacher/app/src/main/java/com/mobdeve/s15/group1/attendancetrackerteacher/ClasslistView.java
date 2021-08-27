@@ -126,7 +126,7 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
         btnAddCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "adding class...", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(v.getContext(), "adding class...", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(ClasslistView.this, CreateCourse.class);
                 startActivity(intent);
             }
@@ -137,9 +137,6 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
         //setupRecyclerView();
     }
 
-    //to be used once sir replies to our email inquiry
-//        this.classModels = new ClassDataHelper().initializeData();
-//        setupRecyclerView();
 
 
    public void showPopup (View v) {
