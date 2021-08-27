@@ -92,27 +92,30 @@
         android:id="@+id/tvEditProfilePic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="45dp"
         android:text="Edit Profile Picture:"
         android:textColor="#004D40"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="163dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editProfileHeader" />
 
     <Button
         android:id="@+id/btnSelectImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:backgroundTint="#004D40"
         android:text="Select Image"
         android:textSize="10sp"
-        tools:layout_editor_absoluteX="17dp"
-        tools:layout_editor_absoluteY="187dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvEditProfilePic" />
 
     <Button
         android:id="@+id/btnSaveEditProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="13dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="60dp"
         android:layout_marginEnd="118dp"
         android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
@@ -124,7 +127,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="99dp"
-        android:layout_marginTop="67dp"
+        android:layout_marginTop="60dp"
         android:backgroundTint="@color/gray"
         android:text="@android:string/cancel"
         app:layout_constraintStart_toStartOf="parent"
