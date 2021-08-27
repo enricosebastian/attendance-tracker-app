@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class FirestoreReferences {
+    public static String TAG = "In FirestoreReference";
 
     private static FirebaseFirestore firebaseFirestoreInstance = null;
     private static StorageReference storageReferenceInstance = null;
@@ -244,4 +245,26 @@ public class FirestoreReferences {
 
     }
 
+    public static void deleteDocumentWithParameter(String collection, String fieldName, String fieldValue) {
+        getFirestoreInstance().collection(collection).whereEqualTo(fieldName,fieldValue).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String id = getIdFromTask(task);
+                getFirestoreInstance().collection(collection).document(id).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            Log.d(TAG,"Successfully deleted a "+collection+" document");
+                        } else {
+                            Log.d(TAG,"Failed: "+task.getException());
+                        }
+                    }
+                });
+
+            }
+        });
+
+    }
+
 }
+
