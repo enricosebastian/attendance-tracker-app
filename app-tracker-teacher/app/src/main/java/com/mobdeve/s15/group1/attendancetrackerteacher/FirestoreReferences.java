@@ -212,7 +212,6 @@ public class FirestoreReferences {
                         });
                 }
             });
-
     }
 
     public static void updateSingleCourse(String courseCode, String sectionCode, ClassModel initialInfo) {
@@ -260,10 +259,8 @@ public class FirestoreReferences {
                         }
                     }
                 });
-
             }
         });
-
     }
 
     public static void deleteDocumentWithTwoParameters(String collection, String fieldName1, String fieldValue1, String fieldName2, String fieldValue2) {

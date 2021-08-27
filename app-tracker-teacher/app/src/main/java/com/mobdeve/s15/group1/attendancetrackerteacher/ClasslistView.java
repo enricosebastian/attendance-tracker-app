@@ -80,27 +80,6 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
         this.txtIdNumber = findViewById(R.id.tvIdName);
         this.btnAddCourse = findViewById(R.id.btnAddCourse);
 
-//  //this is for updating course
-//        ClassModel cl = new ClassModel(
-//                "CCAPDEV",
-//                "Into into Your Mom",
-//                "ben",
-//                true,
-//                "S11",
-//                69);
-//
-//        FirestoreReferences.updateSingleCourse("CCAPDEV","S11", cl);
-
-        //FirestoreReferences.deleteDocumentWithParameter(FirestoreReferences.COURSES_COLLECTION,"sectionCode","S69");
-
-        FirestoreReferences.deleteDocumentWithTwoParameters(
-                FirestoreReferences.MEETINGS_COLLECTION,
-                FirestoreReferences.COURSECODE_FIELD,
-                "MOBDEVE",
-                FirestoreReferences.SECTIONCODE_FIELD,
-                "S69"
-                );
-
         FirestoreReferences.getUsersCollectionReference().
                 whereEqualTo(FirestoreReferences.EMAIL_FIELD, email)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
