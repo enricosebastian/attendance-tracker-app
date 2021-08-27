@@ -3,8 +3,29 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.5755208333333334" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/drawable/ic_add_student_foreground.xml" value="0.5755208333333334" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/drawable/ic_add_students_foreground.xml" value="0.5755208333333334" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/drawable/ic_check.xml" value="0.5755208333333334" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/drawable/ic_course_settings_foreground.xml" value="0.5755208333333334" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/drawable/ic_email.xml" value="0.5755208333333334" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/drawable/ic_launcher_background.xml" value="0.5755208333333334" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/drawable/ic_lock.xml" value="0.5755208333333334" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/drawable/ic_more_settings_horizontal_foreground.xml" value="0.5755208333333334" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/drawable/ic_person.xml" value="0.5755208333333334" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/layout/activity_class_list_view.xml" value="0.5" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/layout/activity_edit_profile.xml" value="0.33958333333333335" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/layout/activity_main.xml" value="0.4782608695652174" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/layout/activity_registration_view.xml" value="0.5" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/layout/activity_search_course.xml" value="0.25" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/layout/activity_single_class_view.xml" value="0.559375" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/layout/activity_single_meeting_view.xml" value="0.33" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/layout/layout_class.xml" value="0.33958333333333335" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/layout/layout_meeting.xml" value="0.10833333333333334" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/menu/course_menu.xml" value="0.33958333333333335" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/menu/menu.xml" value="0.33958333333333335" />
+        <entry key="..\:/Users/willi/Desktop/MOBDEVE Proj/attendance-tracker-app/app-tracker-student/app/src/main/res/menu/profile_menu.xml" value="0.10833333333333334" />
       </map>
     </option>
   </component>

@@ -7,7 +7,6 @@
     android:paddingStart="30dp"
     android:paddingEnd="30dp"
     tools:context=".RegistrationView">
-
     <EditText
         android:id="@+id/inputFirstName"
         android:layout_width="match_parent"
@@ -21,18 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/techerRegistrationHeader" />
 
-    <Button
-        android:id="@+id/btnSubmit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="69dp"
-        android:text="register"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnCancelRegistration"
-        app:layout_constraintTop_toBottomOf="@+id/inputIdNumber" />
-
     <EditText
         android:id="@+id/inputUsername"
         android:layout_width="match_parent"
@@ -45,7 +32,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inputEmail" />
-
     <EditText
         android:id="@+id/inputPassword"
         android:layout_width="match_parent"
@@ -59,6 +45,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inputUsername" />
+
 
     <EditText
         android:id="@+id/inputEmail"
@@ -116,10 +103,20 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="48dp"
+        android:text="register"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputIdNumber" />
+
+    <Button
         android:id="@+id/btnCancelRegistration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="69dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="52dp"
         android:backgroundTint="@color/gray"
         android:text="@android:string/cancel"

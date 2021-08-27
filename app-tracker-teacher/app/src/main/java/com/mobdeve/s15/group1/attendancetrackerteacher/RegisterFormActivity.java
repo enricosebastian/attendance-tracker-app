@@ -12,7 +12,8 @@ import android.widget.Toast;
 
 public class RegisterFormActivity extends AppCompatActivity {
 
-    int IDnumber;
+    private int IDnumber;
+
     EditText etFirstName, etLastName, eteEmail, etpPassword, etpReenterPassword;
     ImageButton btnSubmitRegister;
     @Override

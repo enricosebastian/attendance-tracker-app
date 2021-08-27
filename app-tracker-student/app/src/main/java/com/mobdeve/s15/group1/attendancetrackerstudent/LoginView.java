@@ -12,6 +12,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.List;
+
 public class LoginView extends AppCompatActivity {
     private final String TAG = "LoginView.java";
 
@@ -31,7 +38,7 @@ public class LoginView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         this.btnLogin = findViewById(R.id.btnLogin);
         this.btnRegister = findViewById(R.id.btnRegister);
@@ -66,7 +73,7 @@ public class LoginView extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         List<DocumentSnapshot> result = FirestoreReferences.toList(task);
                         DocumentSnapshot documentSnapshot = FirestoreReferences.getFirstResult(task);
-                        if(result.isEmpty() || !documentSnapshot.get("userType").equals("teacher")) {
+                        if(result.isEmpty() || !documentSnapshot.get("userType").equals("student")) {
                             Toast.makeText(getApplicationContext(), "doesnt exist bro lmao", Toast.LENGTH_SHORT).show();
                         } else {
                             if(documentSnapshot.get("password").toString().equals(password)) {
