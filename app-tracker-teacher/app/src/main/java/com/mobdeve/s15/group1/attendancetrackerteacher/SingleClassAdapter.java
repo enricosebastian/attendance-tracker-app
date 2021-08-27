@@ -59,11 +59,11 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
                 Intent intent = new Intent(holder.itemView.getContext(), SingleMeetingView.class);
 
                 //get the course code somehow
-                intent.putExtra("COURSECODE_KEY",data.get(position).getCourseCode());
-                intent.putExtra("SECTIONCODE_KEY",data.get(position).getSectionCode());
-                intent.putExtra("MEETINGCODE_KEY",data.get(position).getMeetingCode());
-                intent.putExtra("DATE_KEY", stringDate.format(data.get(position).getDate()));
-                intent.putExtra("STUDENTSPRESENT_KEY", data.get(position).getStudentsPresent());
+                intent.putExtra(MyKeys.COURSE_CODE_KEY.name(), data.get(position).getCourseCode());
+                intent.putExtra(MyKeys.SECTION_CODE_KEY.name(), data.get(position).getSectionCode());
+                intent.putExtra(MyKeys.MEETING_CODE_KEY.name(), data.get(position).getMeetingCode());
+                intent.putExtra(MyKeys.DATE_KEY.name(), stringDate.format(data.get(position).getDate()));
+                intent.putExtra(MyKeys.PRESENT_STUDENTS_KEY.name(), data.get(position).getStudentsPresent());
 
                 holder.itemView.getContext().startActivity(intent);
             }

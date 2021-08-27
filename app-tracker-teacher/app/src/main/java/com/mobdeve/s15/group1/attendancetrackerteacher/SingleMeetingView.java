@@ -43,11 +43,11 @@ public class SingleMeetingView extends AppCompatActivity {
         Intent intent = getIntent();
 
         this.txtDate = findViewById(R.id.txtDate);
-        txtDate.setText(intent.getStringExtra("DATE_KEY"));
+        txtDate.setText(intent.getStringExtra(MyKeys.DATE_KEY.name()));
 
-        String courseCode = intent.getStringExtra("COURSECODE_KEY");
-        String sectionCode = intent.getStringExtra("SECTIONCODE_KEY");
-        String meetingCode = intent.getStringExtra("MEETINGCODE_KEY");
+        String courseCode = intent.getStringExtra(MyKeys.COURSE_CODE_KEY.name());
+        String sectionCode = intent.getStringExtra(MyKeys.SECTION_CODE_KEY.name());
+        String meetingCode = intent.getStringExtra(MyKeys.MEETING_CODE_KEY.name());
 
         this.txtClassTitle = findViewById(R.id.txtClassTitle);
         txtClassTitle.setText(courseCode +" - "+sectionCode);
