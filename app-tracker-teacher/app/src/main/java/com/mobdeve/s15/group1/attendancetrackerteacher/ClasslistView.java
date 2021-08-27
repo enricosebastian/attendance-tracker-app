@@ -91,8 +91,15 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
 //
 //        FirestoreReferences.updateSingleCourse("CCAPDEV","S11", cl);
 
-        FirestoreReferences.deleteDocumentWithParameter(FirestoreReferences.COURSES_COLLECTION,"sectionCode","S69");
+        //FirestoreReferences.deleteDocumentWithParameter(FirestoreReferences.COURSES_COLLECTION,"sectionCode","S69");
 
+        FirestoreReferences.deleteDocumentWithTwoParameters(
+                FirestoreReferences.MEETINGS_COLLECTION,
+                FirestoreReferences.COURSECODE_FIELD,
+                "MOBDEVE",
+                FirestoreReferences.SECTIONCODE_FIELD,
+                "S69"
+                );
 
         FirestoreReferences.getUsersCollectionReference().
                 whereEqualTo(FirestoreReferences.EMAIL_FIELD, email)

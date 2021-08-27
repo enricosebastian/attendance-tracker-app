@@ -266,5 +266,30 @@ public class FirestoreReferences {
 
     }
 
+    public static void deleteDocumentWithTwoParameters(String collection, String fieldName1, String fieldValue1, String fieldName2, String fieldValue2) {
+        getFirestoreInstance().collection(collection)
+            .whereEqualTo(fieldName1,fieldValue1)
+            .whereEqualTo(fieldName2,fieldValue2)
+            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String id = getIdFromTask(task);
+                Log.d(TAG,"Successfully deleted an "+id+" document");
+                getFirestoreInstance().collection(collection).document(id).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            Log.d(TAG,"Successfully deleted a "+collection+" document");
+                        } else {
+                            Log.d(TAG,"Failed: "+task.getException());
+                        }
+                    }
+                });
+
+            }
+        });
+
+    }
+
 }
 
