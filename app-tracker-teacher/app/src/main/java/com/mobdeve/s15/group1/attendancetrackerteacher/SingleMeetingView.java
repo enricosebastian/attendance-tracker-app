@@ -2,6 +2,9 @@ package com.mobdeve.s15.group1.attendancetrackerteacher;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +30,10 @@ public class SingleMeetingView extends AppCompatActivity {
     private TextView txtClassTitle;
 
     private ArrayList<StudentPresentListModel> studentPresentListModels = new ArrayList<>();
+
+    private RecyclerView studentListRecyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private SingleMeetingAdapter singleMeetingAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +74,14 @@ public class SingleMeetingView extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<DocumentSnapshot> result = FirestoreReferences.toList(task);
                 ArrayList<StudentPresentListModel> studentPresentListModels = FirestoreReferences.toStudentPresentListModel(result);
-                Log.d("arraylist","size is "+studentPresentListModels.size());
+
+                studentListRecyclerView = findViewById(R.id.studentListRecyclerView);
+
+                layoutManager = new LinearLayoutManager(getApplicationContext());
+                studentListRecyclerView.setLayoutManager(layoutManager);
+
+                singleMeetingAdapter = new SingleMeetingAdapter(studentPresentListModels);
+                studentListRecyclerView.setAdapter(singleMeetingAdapter);
             }
         });
 
