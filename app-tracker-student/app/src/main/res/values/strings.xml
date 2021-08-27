@@ -1,3 +1,28 @@
 <resources>
+    <string name="btnRegister">Register</string>
+    <string name="btnConfirmRegister">Confirm</string>
+    <string name="formHeader">Teacher Registration</string>
+    <string name="formSubHeader">Please enter the fields below</string>
+    <string name="txtEnterIDnumber">Enter your ID number</string>
+    <string name="etHintID">ID number (e.g. 11812345)</string>
+    <string name="btnNext">Next</string>
+
+    <string name="tvFirstName">First Name</string>
+    <string name="tvLastName">Last Name</string>
+    <string name="tvEmail">Email</string>
+    <string name="tvPassword">Password</string>
+    <string name="tvReenterPassword">Re-enter Password</string>
+
+
     <string name="app_name">Attendance Tracker - Student</string>
+    <string name="btnCreateCourse">Create</string>
+    <string name="btnCancelCreate">Cancel</string>
+    <string name="btnConfirm">Confirm</string>
+    <string name="btnDelete">Delete</string>
+    <string name="tvCreateCourseHeader">CREATE A COURSE</string>
+
+    <string name="itemEditCourse">Edit course</string>
+    <string name="itemDeleteCourse">Delete course</string>
+    <string name="itemEditProfile">Edit profile</string>
+    <string name="itemLogout">Logout</string>
 </resources>
