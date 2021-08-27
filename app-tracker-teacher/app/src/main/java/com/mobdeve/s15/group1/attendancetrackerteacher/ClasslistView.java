@@ -23,10 +23,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,18 +80,6 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
         this.txtIdNumber = findViewById(R.id.tvIdName);
         this.btnAddCourse = findViewById(R.id.btnAddCourse);
 
-        UserModel stud = new UserModel(
-                "erwin@dlsu.edu.ph",
-                "erwinpassword",
-                "erwin",
-                "ErwinFirstName",
-                "",
-                "11839260",
-                "student");
-
-        FirestoreReferences
-            .updateSingleStudent(FirestoreReferences.USERNAME_FIELD,"erwin", stud);
-
         FirestoreReferences.getUsersCollectionReference().
                 whereEqualTo(FirestoreReferences.EMAIL_FIELD, email)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -110,26 +102,17 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         QuerySnapshot querySnapshot = task.getResult();
                         List<DocumentSnapshot> result = querySnapshot.getDocuments();
-                        for(DocumentSnapshot ds:result) {
-                            //TO REMEMBER: public ClassModel(String _id, String classCode, String sectionCode, String className, int studentCount, boolean isPublished)
-                            classModels.add(new ClassModel(
-                                    "0000",
-                                    ds.get("courseCode").toString(),
-                                    ds.get("sectionCode").toString(),
-                                    ds.get("courseName").toString(),
-                                    Integer.parseInt(ds.get("studentCount").toString()),
-                                    Boolean.parseBoolean( ds.get("isPublished").toString() )));
-                            //sets up the necessary courses
 
-                            recyclerView = findViewById(R.id.recyclerView);
+                        Log.d("test","look at these class counts: "+result.get(0).get("studentCount").toString());
+                        classModels = FirestoreReferences.toClassModel(result);
 
-                            layoutManager = new LinearLayoutManager(getApplicationContext());
-                            recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+                        recyclerView = findViewById(R.id.recyclerView);
 
-                            classlistAdapter = new ClasslistAdapter(classModels);
-                            recyclerView.setAdapter(classlistAdapter);
+                        layoutManager = new LinearLayoutManager(getApplicationContext());
+                        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
 
-                        }
+                        classlistAdapter = new ClasslistAdapter(classModels);
+                        recyclerView.setAdapter(classlistAdapter);
                     }
                 });
 
