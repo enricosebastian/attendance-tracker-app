@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -54,7 +55,7 @@ public class ClasslistView extends AppCompatActivity {
 
     private TextView txtName;
     private TextView txtIdNumber;
-
+    private FloatingActionButton btnAddCourse;
     private FirebaseFirestore db;
 
     @Override
@@ -70,6 +71,7 @@ public class ClasslistView extends AppCompatActivity {
 
         this.txtName = findViewById(R.id.tvName);
         this.txtIdNumber = findViewById(R.id.tvIdName);
+        this.btnAddCourse = findViewById(R.id.btnAddCourse);
 
         FirestoreReferences.getUsersCollectionReference().
                 whereEqualTo(FirestoreReferences.EMAIL_FIELD, email)
@@ -134,6 +136,15 @@ public class ClasslistView extends AppCompatActivity {
                     }
                 });
 
+
+        btnAddCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "adding class...", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ClasslistView.this, CreateCourse.class);
+                startActivity(intent);
+            }
+        });
         //to be used once sir replies to our email inquiry
 
         //this.classModels = new ClassDataHelper().initializeData();

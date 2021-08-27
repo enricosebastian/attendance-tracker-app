@@ -28,12 +28,12 @@ public class CreateCourse extends AppCompatActivity {
             }
         });
 
-        //When user creates the course
+        //When user edits the course
         this.btnCreateCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //insert logic here
-                Toast.makeText(CreateCourse.this, "Class added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateCourse.this, "Course name edited", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });

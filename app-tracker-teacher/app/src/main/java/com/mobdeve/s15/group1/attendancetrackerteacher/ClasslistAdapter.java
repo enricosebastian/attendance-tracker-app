@@ -65,35 +65,4 @@ public class ClasslistAdapter extends RecyclerView.Adapter<ClasslistVH> {
     public int getItemCount() {
         return data.size();
     }
-//
-//    @Override
-//    public void onClick(View v) {
-//        Log.d(TAG, "onCLick: ");
-//        showPopupMenu(v);
-//    }
-//
-//    @Override
-//    public boolean onMenuItemClick(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.editCourse:
-//                Log.d(TAG, "Action edit course ");
-//                Intent intent2 = new Intent(vh.itemView.getContext(), EditCourse.class);
-//                vh.itemView.getContext().startActivity(intent2);
-//                return true;
-//            case R.id.deleteCourse:
-//                Log.d(TAG, "Action delete course ");
-//                return true;
-//            default:
-//                return false;
-//        }
-//
-//    }
-//
-//    //  Attribution: https://youtu.be/hKyjb4b19YM
-//    private void showPopupMenu(View view)  {
-//        PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
-//        popupMenu.inflate(R.menu.course_menu);
-//        popupMenu.setOnMenuItemClickListener(this);
-//        popupMenu.show();
-//    }
 }

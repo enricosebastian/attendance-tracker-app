@@ -1,5 +1,6 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.MenuItem;
@@ -8,8 +9,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ClasslistVH extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
@@ -21,8 +24,8 @@ public class ClasslistVH extends RecyclerView.ViewHolder implements View.OnClick
         super(itemView);
         this.txtClassCode = itemView.findViewById(R.id.txtClassCode);
         this.txtSectionCode = itemView.findViewById(R.id.txtSectionCode);
-        //this.btnMoreOptions = itemView.findViewById(R.id.btnMoreOptions);
-        //this.btnMoreOptions.setOnClickListener(this);
+        this.btnMoreOptions = itemView.findViewById(R.id.btnMoreOption);
+        this.btnMoreOptions.setOnClickListener(this);
     }
 
     public void setTxtClassCode(String txtClassCode) {
@@ -33,10 +36,6 @@ public class ClasslistVH extends RecyclerView.ViewHolder implements View.OnClick
         this.txtSectionCode.setText(txtName);
     }
 
-
-    public void setBtnMoreOptions(String txtName) {
-        this.txtSectionCode.setText(txtName);
-    }
 
     @Override
     public void onClick(View v) {
@@ -58,11 +57,29 @@ public class ClasslistVH extends RecyclerView.ViewHolder implements View.OnClick
         switch (item.getItemId()) {
             case R.id.editCourse:
                 Log.d(TAG, "Action edit course @ position: " + getAdapterPosition());
-                Intent intent = new Intent();
-
+                Intent intent = new Intent(itemView.getContext(), EditCourse.class);
+                itemView.getContext().startActivity(intent);
                 return true;
             case R.id.deleteCourse:
                 Log.d(TAG, "Action delete course @ position: " + getAdapterPosition());
+                new AlertDialog.Builder(itemView.getContext())
+                        .setTitle("Delete course")
+                        .setMessage("Are you sure you want to delete this entry?")
+
+                        // Specifying a listener allows you to take an action before dismissing the dialog.
+                        // The dialog is automatically dismissed when a dialog button is clicked.
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Continue with delete operation
+                                //Toast.makeText(itemView.getContext(), txtClassCode.getText().toString(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(itemView.getContext(), "Course has been successfully deleted", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+
+                        // A null listener allows the button to dismiss the dialog and take no further action.
+                        .setNegativeButton(android.R.string.no, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
                 return true;
             default:
                 return false;
