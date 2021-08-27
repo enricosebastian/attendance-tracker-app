@@ -1,5 +1,6 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -241,7 +242,6 @@ public class FirestoreReferences {
                             });
                 }
             });
-
     }
 
     public static Query findDocuments(String collection, String fieldName, String fieldValue) {
@@ -257,7 +257,7 @@ public class FirestoreReferences {
             .whereEqualTo(fieldName2, fieldValue2);
     }
 
-    public static void deleteDocumentWithParameter(String collection, String fieldName, String fieldValue) {
+    public static void deleteDocument(String collection, String fieldName, String fieldValue) {
         getFirestoreInstance().collection(collection).whereEqualTo(fieldName,fieldValue).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -299,6 +299,14 @@ public class FirestoreReferences {
             }
         });
 
+    }
+
+    public static Task uploadImage(String username, Uri imgUri) {
+        return getStorageReferenceInstance().child(username).putFile(imgUri);
+    }
+
+    public static Task<Uri> getImageUri(String username) {
+        return getStorageReferenceInstance().child(username).getDownloadUrl();
     }
 
 }

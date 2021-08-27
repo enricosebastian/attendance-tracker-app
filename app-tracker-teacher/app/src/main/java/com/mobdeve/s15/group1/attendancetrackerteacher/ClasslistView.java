@@ -69,6 +69,8 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
 
     private ImageView imgTest;
 
+    private static String previousUsernameEntry;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,21 +79,9 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
         this.sp = getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
         this.editor = sp.edit();
 
+        this.previousUsernameEntry = sp.getString(SP_USERNAME_KEY, "");
+
         this.imgTest = findViewById(R.id.img_profilePic);
-
-        StorageReference fs = FirebaseStorage.getInstance().getReference();
-        Task <Uri> taskUri = fs.child("thanos").getDownloadUrl();
-        taskUri.addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                Uri test = task.getResult();
-                Picasso.get().load(test).into(imgTest);
-            }
-        });
-
-        //Picasso.get().load(url).into(imgTest);
-
-
 
         this.db = FirebaseFirestore.getInstance();
 
@@ -118,6 +108,36 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
                     }
                 });
 
+//        upload image
+//        Query q = FirestoreReferences.findDocuments(FirestoreReferences.USERS_COLLECTION,FirestoreReferences.USERNAME_FIELD,previousUsernameEntry);
+//        q.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                String id = FirestoreReferences.getIdFromTask(task);
+//
+//                Task<Uri> getImageTask = FirestoreReferences
+//                    .getImageUri(id)
+//                    .addOnCompleteListener(new OnCompleteListener<Uri>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Uri> task) {
+//                            Uri imgUri = task.getResult();
+//                            Picasso.get().load(imgUri).into(imgTest);
+//                        }
+//                    });
+//            }
+//        });
+
+
+
+//        StorageReference fs = FirebaseStorage.getInstance().getReference();
+//        Task <Uri> taskUri = fs.child("thanos").getDownloadUrl();
+//        taskUri.addOnCompleteListener(new OnCompleteListener<Uri>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Uri> task) {
+//                Uri test = task.getResult()
+//                //Picasso.get().load(test).into(imgTest);
+//            }
+//        });
 
         FirestoreReferences.getCoursesCollectionReference().
                 whereEqualTo(FirestoreReferences.HANDLEDBY_FIELD, username)
@@ -127,10 +147,6 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
                         QuerySnapshot querySnapshot = task.getResult();
                         List<DocumentSnapshot> result = querySnapshot.getDocuments();
 
-<<<<<<< HEAD
-=======
-                        //Log.d("test","look at these class counts: "+result.get(0).get("studentCount").toString());
->>>>>>> d73334f9f3938a297e91729cf2954c54b5e008a4
                         classModels = FirestoreReferences.toClassModel(result);
 
                         recyclerView = findViewById(R.id.recyclerView);

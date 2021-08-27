@@ -4,10 +4,13 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,9 +19,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -29,10 +35,18 @@ import java.util.List;
 
 public class EditProfile extends AppCompatActivity {
 
+    private static String SP_FILE_NAME = "LoginPreferences";
+    private static String SP_EMAIL_KEY = "SP_EMAIL_KEY";
+    private static String SP_USERNAME_KEY = "SP_USERNAME_KEY";
+
     EditText inputPassword, inputFirstName, inputLastname, inputEmail;
     Button btnSelectImage, btnSaveEditProfile, btnCancelEditProfile;
 
+    private static String previousUsernameEntry;
+
     private Uri imageUri = null;
+
+    private SharedPreferences sp;
 
     private ActivityResultLauncher<Intent> myActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -42,18 +56,21 @@ public class EditProfile extends AppCompatActivity {
                     if (result.getResultCode() == Activity.RESULT_OK){
                         try {
                             if(result.getData() != null) {
-                                imageUri = result.getData().getData();
 
-                                StorageReference imageRef = FirebaseStorage.getInstance().getReference().child("thanos");
-
-                                Toast.makeText(getApplicationContext(), "long string is: "+imageUri.toString(), Toast.LENGTH_SHORT).show();
-                                Toast.makeText(getApplicationContext(), "string is: "+imageUri.getLastPathSegment(), Toast.LENGTH_SHORT).show();
-
-                                Task t1 = imageRef.putFile(imageUri);
-                                Tasks.whenAllSuccess(t1).addOnSuccessListener(new OnSuccessListener<List<Object>>() {
+                                Query q = FirestoreReferences.findDocuments(FirestoreReferences.USERS_COLLECTION,"username",previousUsernameEntry);
+                                q.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
-                                    public void onSuccess(List<Object> objects) {
-                                        Toast.makeText(getApplicationContext(), "upload success", Toast.LENGTH_SHORT).show();
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        String id = FirestoreReferences.getIdFromTask(task);
+
+                                        imageUri = result.getData().getData();
+                                        Task uploadTask = FirestoreReferences.uploadImage(id, imageUri);
+                                        Tasks.whenAllSuccess(uploadTask).addOnSuccessListener(new OnSuccessListener<List<Object>>() {
+                                            @Override
+                                            public void onSuccess(List<Object> objects) {
+                                                Toast.makeText(getApplicationContext(), "Upload was a success", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                                     }
                                 });
 
@@ -71,6 +88,10 @@ public class EditProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        this.sp = getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
+
+        this.previousUsernameEntry = sp.getString(SP_USERNAME_KEY, "");
+
         this.inputPassword = findViewById(R.id.inputPassword);
         this.inputFirstName = findViewById(R.id.inputFirstName);
         this.inputLastname = findViewById(R.id.inputLastName);
@@ -87,9 +108,6 @@ public class EditProfile extends AppCompatActivity {
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
                 myActivityResultLauncher.launch(Intent.createChooser(intent, "Select Picture"));
-                //startActivity(intent);
-
-                //implement picasso
             }
         });
 
