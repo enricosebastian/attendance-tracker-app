@@ -15,6 +15,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -30,6 +31,8 @@ public class FirestoreReferences {
     private static DocumentSnapshot classInfo = null;
 
     private static List<DocumentSnapshot> resultList = null;
+
+    private static ArrayList<StudentPresentListModel> studentPresentListModels = new ArrayList<>();
 
     public final static String
         USERS_COLLECTION        = "Users",
@@ -155,12 +158,23 @@ public class FirestoreReferences {
     }
 
     public static List<DocumentSnapshot> toList(Task<QuerySnapshot> task) {
-        if(resultList == null) {
-            QuerySnapshot querySnapshot = task.getResult();
-            List<DocumentSnapshot> result = querySnapshot.getDocuments();
-            resultList = result;
-        }
+        QuerySnapshot querySnapshot = task.getResult();
+        List<DocumentSnapshot> result = querySnapshot.getDocuments();
+        resultList = result;
         return resultList;
+    }
+
+    public static ArrayList<StudentPresentListModel> toStudentPresentListModel(List<DocumentSnapshot> result) {
+        studentPresentListModels.clear();
+        for(DocumentSnapshot ds:result) {
+            studentPresentListModels.add(new StudentPresentListModel(
+                    ds.getString("courseCode"),
+                    ds.getString("meetingCode"),
+                    ds.getString("sectionCode"),
+                    ds.getString("studentAttended"),
+                    true));
+        }
+        return studentPresentListModels;
     }
 
 }

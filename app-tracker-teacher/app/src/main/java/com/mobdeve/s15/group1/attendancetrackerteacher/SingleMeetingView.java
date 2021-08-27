@@ -17,6 +17,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SingleMeetingView extends AppCompatActivity {
@@ -24,6 +25,8 @@ public class SingleMeetingView extends AppCompatActivity {
     private TextView txtStatus;
     private TextView txtDate;
     private TextView txtClassTitle;
+
+    private ArrayList<StudentPresentListModel> studentPresentListModels = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +61,13 @@ public class SingleMeetingView extends AppCompatActivity {
             }
         });
 
-        Task<QuerySnapshot> test = FirestoreReferences.getStudentsInMeeting(meetingCode);
-        test.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        Task<QuerySnapshot> querySnapshotTask = FirestoreReferences.getStudentsInMeeting(meetingCode);
+        querySnapshotTask.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<DocumentSnapshot> result = FirestoreReferences.toList(task);
-                Log.d("in here lmao",""+result.size());
+                ArrayList<StudentPresentListModel> studentPresentListModels = FirestoreReferences.toStudentPresentListModel(result);
+                Log.d("arraylist","size is "+studentPresentListModels.size());
             }
         });
 
