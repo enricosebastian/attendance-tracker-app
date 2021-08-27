@@ -244,6 +244,19 @@ public class FirestoreReferences {
 
     }
 
+    public static Query findDocuments(String collection, String fieldName, String fieldValue) {
+        return getFirestoreInstance()
+                .collection(collection)
+                .whereEqualTo(fieldName,fieldValue);
+    }
+
+    public static Query findDocumentsWithTwoParameters(String collection, String fieldName1, String fieldValue1, String fieldName2, String fieldValue2) {
+        return getFirestoreInstance()
+            .collection(collection)
+            .whereEqualTo(fieldName1,fieldValue1)
+            .whereEqualTo(fieldName2, fieldValue2);
+    }
+
     public static void deleteDocumentWithParameter(String collection, String fieldName, String fieldValue) {
         getFirestoreInstance().collection(collection).whereEqualTo(fieldName,fieldValue).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
