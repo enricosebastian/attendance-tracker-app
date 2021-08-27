@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
@@ -81,51 +82,36 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
             }
         });
 
-//        Task<QuerySnapshot> test = FirestoreReferences.getUsersWithEmail("ben@dlsu.edu.ph");
-//        test.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                DocumentSnapshot res = FirestoreReferences.getFirstResult(task);
-//                Log.d("what is res","res is: "+res);
-//
-//                Date test = res.getDate("timeTest");
-//                Log.d("in void here",test.toString());
-//
-////                String sDate1 = res.get("timeTest").toString();
-////                Log.d("what is sDate1",sDate1);
-////                Timestamp test = new Timestamp(1630383132,0);
-////                Log.d("in void here",test.toDate().toString());
-//            }
-//        });
-
-
-        FirestoreReferences.getCoursesCollectionReference().
-                whereEqualTo(FirestoreReferences.HANDLEDBY_FIELD, username)
+        FirestoreReferences.getClassListCollectionReference().
+                whereEqualTo(FirestoreReferences.STUDENT_FIELD, username)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 QuerySnapshot querySnapshot = task.getResult();
                 List<DocumentSnapshot> result = querySnapshot.getDocuments();
-                for(DocumentSnapshot ds:result) {
-                    //TO REMEMBER: public ClassModel(String _id, String classCode, String sectionCode, String className, int studentCount, boolean isPublished)
-                    classModels.add(new ClassModel(
-                            "0000",
-                            ds.get("courseCode").toString(),
-                            ds.get("sectionCode").toString(),
-                            ds.get("courseName").toString(),
-                            Integer.parseInt(ds.get("studentCount").toString()),
-                            Boolean.parseBoolean( ds.get("isPublished").toString() )));
-                    //sets up the necessary courses
 
-                    recyclerView = findViewById(R.id.recyclerView);
+                Log.d("some shit", "size of result should be 2: "+result.get(0).get("courseCode").toString());
 
-                    layoutManager = new LinearLayoutManager(getApplicationContext());
-                    recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+                FirestoreReferences.getCoursesCollectionReference().
+                        whereEqualTo(FirestoreReferences.COURSECODE_FIELD, result.get(0).get("courseCode"))
+                        .whereEqualTo(FirestoreReferences.SECTIONCODE_FIELD, result.get(0).get("sectionCode"))
+                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                QuerySnapshot querySnapshot = task.getResult();
+                                List<DocumentSnapshot> result = querySnapshot.getDocuments();
 
-                    classlistAdapter = new ClasslistAdapter(classModels);
-                    recyclerView.setAdapter(classlistAdapter);
+                                classModels = FirestoreReferences.toClassModel(result);
 
-                }
+                                recyclerView = findViewById(R.id.recyclerView);
+
+                                layoutManager = new LinearLayoutManager(getApplicationContext());
+                                recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+
+                                classlistAdapter = new ClasslistAdapter(classModels);
+                                recyclerView.setAdapter(classlistAdapter);
+                            }
+                        });
             }
         });
 

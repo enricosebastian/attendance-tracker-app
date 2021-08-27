@@ -1,61 +1,46 @@
 package com.mobdeve.s15.group1.attendancetrackerstudent;
 
 public class ClassModel {
-    //what should a class have?
-    //class code, section code, unique identifier ONLY
-    //MOBDEVE, S13, MOBILE DEVELOPMENT, 00001, PUBLISHED
 
-    private String _id, classCode, sectionCode, className;
+    private String courseCode, courseName, handledBy, sectionCode;
     private boolean isPublished;
     private int studentCount;
 
-    public boolean isPublished() {
-        return isPublished;
+    public ClassModel() {
+
     }
 
-    public void setPublished(boolean published) {
-        isPublished = published;
-    }
-
-    public ClassModel(String _id, String classCode, String sectionCode, String className, int studentCount, boolean isPublished) {
-        this._id = _id;
-        this.classCode = classCode;
+    public ClassModel(String courseCode, String courseName, String handledBy, boolean isPublished, String sectionCode, int studentCount) {
+        this.courseCode = courseCode;
+        this.courseName = courseName;
+        this.handledBy = handledBy;
         this.sectionCode = sectionCode;
-        this.className = className;
-        this.studentCount = studentCount;
         this.isPublished = isPublished;
-    }
-
-    public int getStudentCount() {
-        return studentCount;
-    }
-
-    public void setStudentCount(int studentCount) {
         this.studentCount = studentCount;
     }
 
-    public String getClassName() {
-        return className;
+    public String getCourseCode() {
+        return courseCode;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
     }
 
-    public String get_id() {
-        return _id;
+    public String getCourseName() {
+        return courseName;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
-    public String getClassCode() {
-        return classCode;
+    public String getHandledBy() {
+        return handledBy;
     }
 
-    public void setClassCode(String classCode) {
-        this.classCode = classCode;
+    public void setHandledBy(String handledBy) {
+        this.handledBy = handledBy;
     }
 
     public String getSectionCode() {
@@ -64,5 +49,21 @@ public class ClassModel {
 
     public void setSectionCode(String sectionCode) {
         this.sectionCode = sectionCode;
+    }
+
+    public boolean getIsPublished() {
+        return isPublished;
+    }
+
+    public void setPublished(boolean published) {
+        isPublished = published;
+    }
+
+    public int getStudentCount() {
+        return studentCount;
+    }
+
+    public void setStudentCount(int studentCount) {
+        this.studentCount = studentCount;
     }
 }

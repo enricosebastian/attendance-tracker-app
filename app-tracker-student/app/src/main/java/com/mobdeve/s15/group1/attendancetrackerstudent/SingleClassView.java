@@ -28,7 +28,7 @@ public class SingleClassView extends AppCompatActivity {
     private SingleClassAdapter adapter;
 
     TextView txtClassTitle;
-    private String _id, classCode, sectionCode;
+    private String classCode, sectionCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +36,13 @@ public class SingleClassView extends AppCompatActivity {
         setContentView(R.layout.activity_single_class_view);
 
         Intent intent = getIntent();
-        this._id = intent.getStringExtra("_ID");
-        this.classCode = intent.getStringExtra("CLASSCODE");
-        this.sectionCode = intent.getStringExtra("SECTIONCODE");
+        this.classCode = intent.getStringExtra(MyKeys.COURSE_CODE_KEY.name());
+        this.sectionCode = intent.getStringExtra(MyKeys.SECTION_CODE_KEY.name());
+
+
 
         this.txtClassTitle = findViewById(R.id.txtClassTitle);
-
+        this.txtClassTitle = findViewById(R.id.txtClassTitle);
 
         txtClassTitle.setText(classCode+" - "+sectionCode);
 
@@ -74,21 +75,5 @@ public class SingleClassView extends AppCompatActivity {
                 recyclerView.setAdapter(adapter);
             }
         });
-
-        //will be enabled once sir answers our inquiries
-        //this.meetingModels = new MeetingDataHelper().initializeData();
-        //setupRecyclerView();
-
-    }
-
-    //will be enabled once sir answers our inquiries
-    void setupRecyclerView() {
-        this.recyclerView = findViewById(R.id.SingleClassRecyclerView);
-
-        this.layoutManager = new LinearLayoutManager(this);
-        this.recyclerView.setLayoutManager(this.layoutManager);
-
-        this.adapter = new SingleClassAdapter(this.meetingModels);
-        this.recyclerView.setAdapter(this.adapter);
     }
 }

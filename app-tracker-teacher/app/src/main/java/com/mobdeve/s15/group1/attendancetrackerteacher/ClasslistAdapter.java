@@ -43,8 +43,6 @@ public class ClasslistAdapter extends RecyclerView.Adapter<ClasslistVH> {
     public void onBindViewHolder(@NonNull ClasslistVH holder, int position) {
         holder.setTxtClassCode(data.get(position).getCourseCode());
         holder.setTxtSectionCode(data.get(position).getSectionCode());
-        //ImageButton btnMoreOptions =  holder.itemView.findViewById(R.id.btnMoreOptions);
-
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

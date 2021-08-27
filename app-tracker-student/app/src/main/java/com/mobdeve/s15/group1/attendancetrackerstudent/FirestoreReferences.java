@@ -1,7 +1,12 @@
 package com.mobdeve.s15.group1.attendancetrackerstudent;
 
+import android.net.Uri;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -9,26 +14,35 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.mobdeve.s15.group1.attendancetrackerstudent.ClassModel;
+import com.mobdeve.s15.group1.attendancetrackerstudent.StudentPresentListModel;
+
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class FirestoreReferences {
+    public static String TAG = "In FirestoreReference";
+
     private static FirebaseFirestore firebaseFirestoreInstance = null;
     private static StorageReference storageReferenceInstance = null;
     private static CollectionReference usersRef = null;
     private static CollectionReference meetingCollection = null;
     private static CollectionReference coursesRef = null;
     private static CollectionReference meetingsRef = null;
+    private static CollectionReference classListRef = null;
     private static DocumentSnapshot userInfo = null;
     private static DocumentSnapshot classInfo = null;
 
     private static List<DocumentSnapshot> resultList = null;
 
     private static ArrayList<StudentPresentListModel> studentPresentListModels = new ArrayList<>();
+    private static ArrayList<ClassModel> classModels = new ArrayList<>();
 
     public final static String
             USERS_COLLECTION        = "Users",
@@ -40,6 +54,7 @@ public class FirestoreReferences {
             LASTNAME_FIELD      = "lastName",
             USERTYPE_FIELD      = "userType",
             COURSES_COLLECTION      = "Courses",
+            CLASSLIST_COLLECTION      = "ClassList",
             COURSECODE_FIELD    = "courseCode",
             COURSENAME_FIELD    = "courseName",
             SECTIONCODE_FIELD   = "sectionCode",
@@ -48,6 +63,7 @@ public class FirestoreReferences {
             HANDLEDBY_FIELD         = "handledBy",
             MEETINGS_COLLECTION         = "Meetings",
             MEETINGCODE_FIELD         = "meetingCode",
+            STUDENT_FIELD         = "student",
             MEETINGHISTORY_COLLECTION       = "MeetingHistory";
 
     public static FirebaseFirestore getFirestoreInstance() {
@@ -94,6 +110,14 @@ public class FirestoreReferences {
             meetingsRef = getFirestoreInstance().collection(MEETINGS_COLLECTION);
         }
         return meetingsRef;
+    }
+
+    //gets the entire meeting collection
+    public static CollectionReference getClassListCollectionReference() {
+        if(classListRef == null) {
+            classListRef = getFirestoreInstance().collection(CLASSLIST_COLLECTION);
+        }
+        return classListRef;
     }
 
     public static DocumentReference getDocumentReference(String stringRef) {
@@ -155,4 +179,148 @@ public class FirestoreReferences {
         }
         return studentPresentListModels;
     }
+
+    public static ArrayList<ClassModel> toClassModel(List<DocumentSnapshot> result) {
+        classModels.clear();
+        for(DocumentSnapshot ds:result) {
+            classModels.add(new ClassModel(
+                    ds.getString("courseCode"),
+                    ds.getString("courseName"),
+                    ds.getString("handledBy"),
+                    ds.getBoolean("isPublished"),
+                    ds.getString("sectionCode"),
+                    Integer.parseInt(ds.get("studentCount").toString())));
+        }
+        return classModels;
+    }
+
+    public static String getIdFromTask(Task<QuerySnapshot> task) {
+        QuerySnapshot qs = task.getResult();
+        String id = qs.getDocuments().get(0).getId();
+        return id;
+    }
+
+    public static void updateSingleStudent(String entry, String query, UserModel initialInfo) {
+        FirestoreReferences.getUsersCollectionReference()
+                .whereEqualTo(entry, query)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                DocumentSnapshot ds = getFirstResult(task);
+                if(initialInfo.getEmail().equals("")) initialInfo.setEmail(ds.getString("email"));
+                if(initialInfo.getPassword().equals("")) initialInfo.setPassword(ds.getString("password"));
+                if(initialInfo.getFirstName().equals("")) initialInfo.setFirstName(ds.getString("firstName"));
+                if(initialInfo.getLastName().equals("")) initialInfo.setLastName(ds.getString("lastName"));
+                if(initialInfo.getIdNumber().equals("")) initialInfo.setIdNumber(ds.getString("idNumber"));
+                if(initialInfo.getUserType().equals("")) initialInfo.setUserType(ds.getString("userType"));
+
+                String id = FirestoreReferences.getIdFromTask(task);
+                FirestoreReferences.getUsersCollectionReference()
+                        .document(id)
+                        .set(initialInfo)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d("main","Single student document updated successfully.");
+                            }
+                        });
+            }
+        });
+    }
+
+    public static void updateSingleCourse(String courseCode, String sectionCode, ClassModel initialInfo) {
+        FirestoreReferences.getCoursesCollectionReference()
+                .whereEqualTo(COURSECODE_FIELD, courseCode)
+                .whereEqualTo(SECTIONCODE_FIELD,sectionCode)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                DocumentSnapshot ds = getFirstResult(task);
+                if(initialInfo.getCourseCode().equals("")) initialInfo.setCourseCode(ds.getString("courseCode"));
+                if(initialInfo.getCourseName().equals("")) initialInfo.setCourseName(ds.getString("courseName"));
+                if(initialInfo.getHandledBy().equals("")) initialInfo.setHandledBy(ds.getString("handledBy"));
+                if(initialInfo.getSectionCode().equals("")) initialInfo.setSectionCode(ds.getString("sectionCode"));
+                if(initialInfo.getStudentCount() <= 0) initialInfo.setStudentCount(Integer.parseInt(ds.getString("studentCount")));
+
+                String id = FirestoreReferences.getIdFromTask(task);
+                Log.d("main","id is "+id);
+                FirestoreReferences.getCoursesCollectionReference()
+                        .document(id)
+                        .set(initialInfo)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d("main","Single course document updated successfully.");
+                            }
+                        });
+            }
+        });
+    }
+
+    public static Query findDocuments(String collection, String fieldName, String fieldValue) {
+        return getFirestoreInstance()
+                .collection(collection)
+                .whereEqualTo(fieldName,fieldValue);
+    }
+
+    public static Query findDocumentsWithTwoParameters(String collection, String fieldName1, String fieldValue1, String fieldName2, String fieldValue2) {
+        return getFirestoreInstance()
+                .collection(collection)
+                .whereEqualTo(fieldName1,fieldValue1)
+                .whereEqualTo(fieldName2, fieldValue2);
+    }
+
+    public static void deleteDocument(String collection, String fieldName, String fieldValue) {
+        getFirestoreInstance().collection(collection).whereEqualTo(fieldName,fieldValue).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String id = getIdFromTask(task);
+                getFirestoreInstance().collection(collection).document(id).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            Log.d(TAG,"Successfully deleted a "+collection+" document");
+                        } else {
+                            Log.d(TAG,"Failed: "+task.getException());
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public static void deleteDocumentWithTwoParameters(String collection, String fieldName1, String fieldValue1, String fieldName2, String fieldValue2) {
+        getFirestoreInstance().collection(collection)
+                .whereEqualTo(fieldName1,fieldValue1)
+                .whereEqualTo(fieldName2,fieldValue2)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String id = getIdFromTask(task);
+                Log.d(TAG,"Successfully deleted an "+id+" document");
+                getFirestoreInstance().collection(collection).document(id).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            Log.d(TAG,"Successfully deleted a "+collection+" document");
+                        } else {
+                            Log.d(TAG,"Failed: "+task.getException());
+                        }
+                    }
+                });
+
+            }
+        });
+
+    }
+
+    public static Task uploadImage(String username, Uri imgUri) {
+        return getStorageReferenceInstance().child(username).putFile(imgUri);
+    }
+
+    public static Task<Uri> getImageUri(String username) {
+        return getStorageReferenceInstance().child(username).getDownloadUrl();
+    }
+
 }
+
