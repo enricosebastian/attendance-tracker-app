@@ -54,7 +54,6 @@ public class SingleClassView extends AppCompatActivity {
                         QuerySnapshot querySnapshot = task.getResult();
                         List<DocumentSnapshot> result = querySnapshot.getDocuments();
 
-                        //Log.d("yeet yeet", result.get(0).get("meetingEnd").toString());
                         for(DocumentSnapshot ds:result) {
                             //MeetingModel(String courseCode, String sectionCode, String meetingCode, Date date, int studentsPresent)
                             if(ds.get("sectionCode").toString().equals(sectionCode)) {
