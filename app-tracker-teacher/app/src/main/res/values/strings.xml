@@ -23,4 +23,6 @@
 
     <string name="itemEditCourse">Edit course</string>
     <string name="itemDeleteCourse">Delete course</string>
+    <string name="itemEditProfile">Edit profile</string>
+    <string name="itemLogout">Logout</string>
 </resources>

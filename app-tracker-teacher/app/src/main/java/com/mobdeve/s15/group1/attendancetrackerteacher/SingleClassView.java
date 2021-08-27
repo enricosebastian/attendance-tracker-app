@@ -7,9 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -20,11 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 public class SingleClassView extends AppCompatActivity {
@@ -36,6 +29,7 @@ public class SingleClassView extends AppCompatActivity {
     private SingleClassAdapter adapter;
 
     TextView txtAddClass, txtClassTitle;
+    ImageButton btnAcceptStudents;
     private String _id, classCode, sectionCode;
 
     @Override
@@ -49,6 +43,8 @@ public class SingleClassView extends AppCompatActivity {
         this.sectionCode = intent.getStringExtra("SECTIONCODE");
 
         this.txtClassTitle = findViewById(R.id.txtClassTitle);
+        this.btnAcceptStudents = findViewById(R.id.btnAcceptStudents);
+
         txtClassTitle.setText(classCode+" - "+sectionCode);
 
         FirestoreReferences.getMeetingsCollectionReference().
@@ -81,14 +77,22 @@ public class SingleClassView extends AppCompatActivity {
                     }
                 });
 
-        this.txtAddClass = findViewById(R.id.txtAddClass);
+        this.txtAddClass = findViewById(R.id.txtCreateMeeting);
 
-        // Clicking the create button brings the user to the create class activity
+        // Clicking the create button brings the user to the create meeting activity
         txtAddClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), "adding class...", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(SingleClassView.this, CreateCourse.class);
+                startActivity(intent);
+            }
+        });
+
+        btnAcceptStudents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SingleClassView.this, AcceptStudents.class);
                 startActivity(intent);
             }
         });

@@ -4,118 +4,120 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegistrationView"
     android:paddingStart="30dp"
     android:paddingEnd="30dp"
-    >
+    tools:context=".RegistrationView">
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/inputFirstName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/custom_input"
+        android:drawableStart="@drawable/ic_person"
         android:hint="first name"
-        android:background="@drawable/custom_input"
-        android:drawableStart="@drawable/ic_person"
         android:padding="10dp"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="80dp"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/techerRegistrationHeader" />
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="register"
+        app:layout_constraintTop_toBottomOf="@+id/inputIdNumber"
+        tools:layout_editor_absoluteX="209dp" />
 
     <EditText
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/custom_input"
-        android:drawableStart="@drawable/ic_person"
-        android:padding="10dp"
-        android:id="@+id/inputLastName"
-        android:hint="last name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputFirstName"
-        />
-
-    <EditText
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/custom_input"
-        android:drawableStart="@drawable/ic_email"
-        android:padding="10dp"
-        android:id="@+id/inputEmail"
-        android:hint="email"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputLastName"
-        />
-
-    <EditText
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/custom_input"
-        android:drawableStart="@drawable/ic_person"
-        android:padding="10dp"
         android:id="@+id/inputUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/custom_input"
+        android:drawableStart="@drawable/ic_person"
         android:hint="username"
-        app:layout_constraintStart_toStartOf="parent"
+        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputEmail"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputEmail" />
 
     <EditText
-        android:layout_marginTop="20dp"
         android:id="@+id/inputPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:background="@drawable/custom_input"
         android:drawableStart="@drawable/ic_lock"
-        android:padding="10dp"
         android:hint="password"
         android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@id/inputUsername"
-        app:layout_constraintStart_toStartOf="parent"
+        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputUsername" />
 
     <EditText
-        android:layout_marginTop="20dp"
+        android:id="@+id/inputEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/custom_input"
+        android:drawableStart="@drawable/ic_email"
+        android:hint="email"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputLastName" />
+
+    <EditText
+        android:id="@+id/inputIdNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:background="@drawable/custom_input"
         android:drawableStart="@drawable/ic_person"
-        android:padding="10dp"
-        android:id="@+id/inputIdNumber"
         android:hint="DLSU ID number"
-        app:layout_constraintTop_toBottomOf="@+id/inputPassword"
-        app:layout_constraintStart_toStartOf="parent"
+        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputPassword" />
 
-    <Button
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/inputLastName"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnSubmit"
-        app:layout_constraintTop_toBottomOf="@id/inputIdNumber"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="20dp"
-        android:text="register"
-        />
+        android:background="@drawable/custom_input"
+        android:drawableStart="@drawable/ic_person"
+        android:hint="last name"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputFirstName" />
 
     <TextView
+        android:id="@+id/techerRegistrationHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Teacher's registration"
-        android:textStyle="bold"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="50dp"
+        android:fontFamily="@font/roboto"
+        android:text="Teacher's Registration"
+        android:textColor="#004D40"
         android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnSubmit"
-        android:layout_marginTop="40dp"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/btnCancelRegistration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/gray"
+        android:text="@android:string/cancel"
+        app:layout_constraintTop_toBottomOf="@+id/inputIdNumber"
+        tools:layout_editor_absoluteX="66dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

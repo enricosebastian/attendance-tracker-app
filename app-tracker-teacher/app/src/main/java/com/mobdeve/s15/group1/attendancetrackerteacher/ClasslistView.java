@@ -2,45 +2,31 @@ package com.mobdeve.s15.group1.attendancetrackerteacher;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.SparseIntArray;
+import android.view.MenuItem;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.view.ContextMenu;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firestore.v1.Document;
 
-import java.io.Console;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-public class ClasslistView extends AppCompatActivity {
+public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
     private ArrayList<ClassModel> classModels = new ArrayList<>();
 
@@ -156,14 +142,32 @@ public class ClasslistView extends AppCompatActivity {
 //        setupRecyclerView();
 
 
+   public void showPopup (View v) {
+       PopupMenu popup = new PopupMenu(this, v);
+       popup.setOnMenuItemClickListener(this);
+       popup.inflate(R.menu.profile_menu);
+       popup.show();
+
+   }
+
+   //Handles the clicks on the items
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-
-
+    public boolean onMenuItemClick(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.editProfile:
+                Intent intent = new Intent (ClasslistView.this, EditProfile.class);
+                startActivity(intent);
+                return true;
+            case R.id.logout:
+                Intent intentLogout = new Intent (ClasslistView.this, LoginView.class);
+                startActivity(intentLogout);
+                return true;
+            default:
+                return false;
+        }
     }
 
-//    void setupRecyclerView() {
+    //    void setupRecyclerView() {
 //        this.recyclerView = findViewById(R.id.recyclerView);
 //
 //        this.layoutManager = new LinearLayoutManager(this);

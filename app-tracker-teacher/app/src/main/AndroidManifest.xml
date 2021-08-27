@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mobdeve.s15.group1.attendancetrackerteacher">
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,9 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AttendanceTrackerTeacher">
         <activity
+            android:name=".EditProfile"
+            android:exported="true" />
+        <activity
             android:name=".RegistrationView"
             android:exported="true" />
-
         <activity
             android:name=".EditCourse"
             android:exported="true" />
@@ -34,8 +37,7 @@
             android:name=".SingleClassView"
             android:exported="true" />
         <activity android:name=".ClasslistView" />
-
-        <activity android:name=".LoginView" >
+        <activity android:name=".LoginView">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
