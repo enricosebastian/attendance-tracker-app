@@ -6,6 +6,10 @@ public class ClassModel {
     private boolean isPublished;
     private int studentCount;
 
+    public ClassModel() {
+
+    }
+
     public ClassModel(String courseCode, String courseName, String handledBy, boolean isPublished, String sectionCode, int studentCount) {
         this.courseCode = courseCode;
         this.courseName = courseName;
@@ -47,7 +51,7 @@ public class ClassModel {
         this.sectionCode = sectionCode;
     }
 
-    public boolean isPublished() {
+    public boolean getIsPublished() {
         return isPublished;
     }
 

@@ -80,6 +80,19 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
         this.txtIdNumber = findViewById(R.id.tvIdName);
         this.btnAddCourse = findViewById(R.id.btnAddCourse);
 
+//  //this is for updating course
+//        ClassModel cl = new ClassModel(
+//                "CCAPDEV",
+//                "Into into Your Mom",
+//                "ben",
+//                true,
+//                "S11",
+//                69);
+//
+//        FirestoreReferences.updateSingleCourse("CCAPDEV","S11", cl);
+
+
+
         FirestoreReferences.getUsersCollectionReference().
                 whereEqualTo(FirestoreReferences.EMAIL_FIELD, email)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -144,8 +157,7 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
                 startActivity(intent);
                 return true;
             case R.id.logout:
-                editor.putString(SP_EMAIL_KEY,"");
-                editor.putString(SP_USERNAME_KEY,"");
+                editor.clear();
                 editor.commit();
                 Intent intentLogout = new Intent (ClasslistView.this, LoginView.class);
                 startActivity(intentLogout);
