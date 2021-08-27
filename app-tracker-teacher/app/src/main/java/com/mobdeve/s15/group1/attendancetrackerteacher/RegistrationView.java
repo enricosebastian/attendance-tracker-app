@@ -42,7 +42,7 @@ public class RegistrationView extends AppCompatActivity {
                         inputPassword,
                         inputIdNumber;
 
-    private Button btnSubmit;
+    private Button btnSubmit, btnCancelRegistration;
 
     private FirebaseFirestore db;
 
@@ -54,6 +54,7 @@ public class RegistrationView extends AppCompatActivity {
         this.db = FirebaseFirestore.getInstance();
 
         this.btnSubmit = findViewById(R.id.btnSubmit);
+        this.btnCancelRegistration = findViewById(R.id.btnCancelRegistration);
         this.inputFirstName = findViewById(R.id.inputFirstName);
         this.inputLastName = findViewById(R.id.inputLastName);
         this.inputEmail = findViewById(R.id.inputEmail);
@@ -135,6 +136,13 @@ public class RegistrationView extends AppCompatActivity {
                     });
                 }
 
+            }
+        });
+
+        btnCancelRegistration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
