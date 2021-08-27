@@ -131,13 +131,7 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
                 startActivity(intent);
             }
         });
-        //to be used once sir replies to our email inquiry
-
-        //this.classModels = new ClassDataHelper().initializeData();
-        //setupRecyclerView();
     }
-
-
 
    public void showPopup (View v) {
        PopupMenu popup = new PopupMenu(this, v);
@@ -163,15 +157,4 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
                 return false;
         }
     }
-
-    //    void setupRecyclerView() {
-//        this.recyclerView = findViewById(R.id.recyclerView);
-//
-//        this.layoutManager = new LinearLayoutManager(this);
-//        this.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-//
-//        this.classlistAdapter = new ClasslistAdapter(this.classModels);
-//        this.recyclerView.setAdapter(this.classlistAdapter);
-//    }
-
 }

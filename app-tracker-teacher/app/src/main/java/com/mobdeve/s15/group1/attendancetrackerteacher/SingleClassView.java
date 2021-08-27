@@ -83,8 +83,9 @@ public class SingleClassView extends AppCompatActivity {
         txtAddClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "adding class...", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(SingleClassView.this, CreateCourse.class);
+                //Toast.makeText(v.getContext(), "adding class...", Toast.LENGTH_SHORT).show();
+                //insert create meeting here
+                //Intent intent = new Intent(SingleClassView.this, CreateCourse.class);
                 startActivity(intent);
             }
         });

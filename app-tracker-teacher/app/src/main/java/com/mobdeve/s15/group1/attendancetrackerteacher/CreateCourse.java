@@ -33,7 +33,7 @@ public class CreateCourse extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //insert logic here
-                Toast.makeText(CreateCourse.this, "Course name edited", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateCourse.this, "Course successfully created", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
