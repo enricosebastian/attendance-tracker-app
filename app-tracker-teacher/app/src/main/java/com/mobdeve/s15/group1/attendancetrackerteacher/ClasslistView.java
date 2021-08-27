@@ -127,6 +127,10 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
                         QuerySnapshot querySnapshot = task.getResult();
                         List<DocumentSnapshot> result = querySnapshot.getDocuments();
 
+<<<<<<< HEAD
+=======
+                        //Log.d("test","look at these class counts: "+result.get(0).get("studentCount").toString());
+>>>>>>> d73334f9f3938a297e91729cf2954c54b5e008a4
                         classModels = FirestoreReferences.toClassModel(result);
 
                         recyclerView = findViewById(R.id.recyclerView);
