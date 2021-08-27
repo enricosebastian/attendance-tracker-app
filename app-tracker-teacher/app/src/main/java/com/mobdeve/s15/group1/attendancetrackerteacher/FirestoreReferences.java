@@ -206,7 +206,7 @@ public class FirestoreReferences {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                Log.d("main","Single student document updated succesfully.");
+                                Log.d("main","Single student document updated successfully.");
                             }
                         });
                 }
@@ -226,8 +226,6 @@ public class FirestoreReferences {
                     if(initialInfo.getCourseName().equals("")) initialInfo.setCourseName(ds.getString("courseName"));
                     if(initialInfo.getHandledBy().equals("")) initialInfo.setHandledBy(ds.getString("handledBy"));
                     if(initialInfo.getSectionCode().equals("")) initialInfo.setSectionCode(ds.getString("sectionCode"));
-                    if(!initialInfo.isPublished()) initialInfo.setPublished(ds.getBoolean("isPublished"));
-                    if(initialInfo.getSectionCode().equals("")) initialInfo.setSectionCode(ds.getString("sectionCode"));
                     if(initialInfo.getStudentCount() <= 0) initialInfo.setStudentCount(Integer.parseInt(ds.getString("studentCount")));
 
                     String id = FirestoreReferences.getIdFromTask(task);
@@ -238,7 +236,7 @@ public class FirestoreReferences {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Log.d("main","Single course doucment updated succesfully.");
+                                    Log.d("main","Single course document updated successfully.");
                                 }
                             });
                 }
