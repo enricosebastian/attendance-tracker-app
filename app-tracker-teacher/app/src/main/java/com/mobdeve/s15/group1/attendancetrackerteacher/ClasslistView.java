@@ -9,10 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.view.ContextMenu;
@@ -29,6 +31,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Document;
 
@@ -62,6 +67,8 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
     private FloatingActionButton btnAddCourse;
     private FirebaseFirestore db;
 
+    private ImageView imgTest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +76,21 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
 
         this.sp = getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
         this.editor = sp.edit();
+
+        this.imgTest = findViewById(R.id.img_profilePic);
+
+        StorageReference fs = FirebaseStorage.getInstance().getReference();
+        Task <Uri> taskUri = fs.child("thanos").getDownloadUrl();
+        taskUri.addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                Uri test = task.getResult();
+                Picasso.get().load(test).into(imgTest);
+            }
+        });
+
+        //Picasso.get().load(url).into(imgTest);
+
 
         this.db = FirebaseFirestore.getInstance();
 
