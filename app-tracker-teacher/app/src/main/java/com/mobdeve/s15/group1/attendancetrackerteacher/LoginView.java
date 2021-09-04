@@ -23,6 +23,7 @@ import java.util.List;
 public class LoginView extends AppCompatActivity {
     private final String TAG = "LoginView.java";
 
+
     private static String SP_FILE_NAME = "LoginPreferences";
     private static String SP_EMAIL_KEY = "SP_EMAIL_KEY";
     private static String SP_USERNAME_KEY = "SP_USERNAME_KEY";

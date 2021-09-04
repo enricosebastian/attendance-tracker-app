@@ -71,6 +71,33 @@ public class Db {
         return storageReferenceInstance;
     }
 
+    /////NEW AS OF 2021, 09, 04
+    public static Task<QuerySnapshot> getTable(String tableName) {
+        return getFirestoreInstance().collection(tableName).get();
+    }
+
+    public static List<DocumentSnapshot> getDocuments(Task<QuerySnapshot> task) {
+        return task.getResult().getDocuments();
+    }
+
+    public static Task<QuerySnapshot> getDocumentsWith(String field, String value, String tableName) {
+        return  getFirestoreInstance().
+                collection(tableName).
+                whereEqualTo(field,value).
+                get();
+    }
+
+    public static Task<QuerySnapshot> getDocumentsWith(String field1, String value1, String field2, String value2, String tableName) {
+        return  getFirestoreInstance().
+                collection(tableName).
+                whereEqualTo(field1, value1).
+                whereEqualTo(field2, value2).
+                get();
+    }
+
+    ////////////////////NEW AS OF 2021, 09, 04
+
+
     //gets the entire user collection
     public static CollectionReference getUsersCollectionReference() {
         if(usersRef == null) {
