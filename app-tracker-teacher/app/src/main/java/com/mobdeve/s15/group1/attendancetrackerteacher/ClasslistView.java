@@ -1,7 +1,6 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -19,48 +17,47 @@ import android.widget.TextView;
 import android.view.View;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
     private ArrayList<ClassModel> classModels = new ArrayList<>();
 
+    //shared preferences initialization
     private static String SP_FILE_NAME      = "LoginPreferences";
     private static String SP_EMAIL_KEY      = "SP_EMAIL_KEY";
-
-
-    private static String SP_USERNAME_KEY   = "SP_USERNAME_KEY"; //delete this
-
-    private static String USERNAME_STATE_KEY = "USERNAME_KEY";
-    private static String EMAIL_STATE_KEY = "EMAIL_KEY";
-
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
+    ////////////
 
+    //recycler view initialization
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ClasslistAdapter classlistAdapter;
-    private DocumentSnapshot donny;
+    ////////////
 
+    //widget initialization
     private TextView txtName;
     private TextView txtIdNumber;
     private FloatingActionButton btnAddCourse;
-    private FirebaseFirestore db;
+    ////////////
 
+    //delete this LMAO
+    private static String SP_USERNAME_KEY   = "SP_USERNAME_KEY";    //delete this
+    private static String USERNAME_STATE_KEY = "USERNAME_KEY";      //delete this
+    private static String EMAIL_STATE_KEY = "EMAIL_KEY";            //delete this
     private ImageView imgTest;
-
     private static String previousUsernameEntry;
+    private FirebaseFirestore db;
+    ////////////////////delete this
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,7 +185,7 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
             case R.id.logout:
                 editor.clear();
                 editor.commit();
-                Intent intentLogout = new Intent (ClasslistView.this, LoginView.class);
+                Intent intentLogout = new Intent (ClasslistView.this, LoginActivity.class);
                 startActivity(intentLogout);
                 return true;
             default:
