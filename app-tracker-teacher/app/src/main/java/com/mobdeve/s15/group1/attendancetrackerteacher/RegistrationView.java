@@ -27,7 +27,7 @@ import java.util.Map;
 
 public class RegistrationView extends AppCompatActivity {
 
-    public final String TAG = "Inside RegistrationView";
+    public final String TAG = "Registration";
     private static String USERNAME_STATE_KEY = "USERNAME_KEY";
     private static String EMAIL_STATE_KEY = "EMAIL_KEY";
     private SharedPreferences sp;
@@ -60,6 +60,7 @@ public class RegistrationView extends AppCompatActivity {
         this.inputPassword = findViewById(R.id.inputPassword);
         this.inputIdNumber = findViewById(R.id.inputIdNumber);
 
+        // When Clicks register
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,16 +71,16 @@ public class RegistrationView extends AppCompatActivity {
                 String password = inputPassword.getText().toString();
                 String usertype = "teacher";
                 String username = inputUsername.getText().toString();
-                
-                if( email.isEmpty() ||
-                    firstName.isEmpty() ||
-                    idNumber.isEmpty() ||
-                    lastName.isEmpty() ||
-                    password.isEmpty() ||
-                    username.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "one of the fields is empty!", Toast.LENGTH_SHORT).show();
-                } else {
 
+                // If not all entries are field
+                if(!doAllFieldsHaveEntries()) {
+                    Log.d(TAG, "Not all fields have entries");
+                    Toast.makeText(getApplicationContext(), "Please fill up all the fields", Toast.LENGTH_SHORT).show();
+                } else {
+                    /**
+                     * Todo: Check for unique ID NUMBER
+                     * */
+                
                     Db.getUsersCollectionReference().
                         whereEqualTo(Db.EMAIL_FIELD, email)
                         .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -116,6 +117,7 @@ public class RegistrationView extends AppCompatActivity {
                                                         intent.putExtra(EMAIL_STATE_KEY,email);
                                                         intent.putExtra(USERNAME_STATE_KEY,username);
                                                         startActivity(intent);
+                                                        finish();
                                                     }
                                                 }).addOnFailureListener(new OnFailureListener() {
                                             @Override
@@ -145,5 +147,16 @@ public class RegistrationView extends AppCompatActivity {
         });
 
 
+    }
+
+    /*  This method was created for code readability. It checks if the fields have completely been
+     *  filled up by the user
+     **/
+    private boolean doAllFieldsHaveEntries() {
+        return  !inputEmail.getText().toString().isEmpty() &&
+                !inputIdNumber.getText().toString().isEmpty() &&
+                !inputLastName.getText().toString().isEmpty() &&
+                !inputPassword.getText().toString().isEmpty() &&
+                !inputUsername.getText().toString().isEmpty();
     }
 }
