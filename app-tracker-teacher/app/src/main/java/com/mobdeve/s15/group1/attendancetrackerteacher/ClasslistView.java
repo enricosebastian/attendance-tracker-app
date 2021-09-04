@@ -62,7 +62,7 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
         this.sp = getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
         this.editor = sp.edit();
 
-        this.previousUsernameEntry = sp.getString(SP_USERNAME_KEY, "");
+        //this.previousUsernameEntry = sp.getString(SP_USERNAME_KEY, "");
 
         this.imgTest = findViewById(R.id.img_profilePic);
 
