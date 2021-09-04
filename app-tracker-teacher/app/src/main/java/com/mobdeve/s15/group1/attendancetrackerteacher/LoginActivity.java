@@ -21,9 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
-    private final String TAG = "LoginView.java";
-    private static String SP_FILE_NAME = "LoginPreferences";
-    private static String SP_EMAIL_KEY = "SP_EMAIL_KEY";
+    private static final String TAG = "LoginView.java";
 
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
@@ -48,77 +46,39 @@ public class LoginActivity extends AppCompatActivity {
         this.inputEmail = findViewById(R.id.inputEmail);
         this.inputPassword = findViewById(R.id.inputPassword);
 
-        this.sp = getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
+        this.sp = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
         this.editor = sp.edit();
 
-        String previousEmailEntry = sp.getString(SP_EMAIL_KEY, "");
-        String previousUsernameEntry = sp.getString(SP_USERNAME_KEY, ""); //delete
+        String previousEmailEntry = sp.getString(Keys.SP_EMAIL_KEY, "");
 
-        Log.d(TAG,"shared preferences: "+previousEmailEntry); //delete
+        Log.d(TAG,"previous email entry is "+previousEmailEntry); //delete
 
+        //initializing shared preference file
         if(!previousEmailEntry.isEmpty()) {
             //login screen
-            Intent intent = new Intent(LoginActivity.this, ClasslistView.class);
-            intent.putExtra(SP_EMAIL_KEY,previousEmailEntry);
+            Intent intent = new Intent(LoginActivity.this, ClasslistActivity.class);
+            intent.putExtra(Keys.SP_EMAIL_KEY,previousEmailEntry);
             startActivity(intent);
             finish();
         }
 
-//        Db.getDocumentsWith("email","ben@dlsu.edu.ph","password","benpassword",Db.USERS_COLLECTION).
-//            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                    List<DocumentSnapshot> result = Db.getDocuments(task);
-//                    Log.d(TAG,"result is "+result.size());
-//                }b
-//            });
-
+        //logging in
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = inputEmail.getText().toString();
                 String password = inputPassword.getText().toString();
-
-                Db.getDocumentsWith(Db.USERS_COLLECTION, "email", email,"password",password).
-                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                List<DocumentSnapshot> result = Db.getDocuments(task);
-                                Log.d(TAG,"result is "+result.get(0).get("userType").toString()); //cleanup lmao
-                            }
-                        });
-
-//                Task<QuerySnapshot> querySnapshot = Db.getUserInfoFromEmail(email);
-//                querySnapshot.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        List<DocumentSnapshot> result = Db.toList(task);
-//                        DocumentSnapshot documentSnapshot = Db.getFirstResult(task);
-//                        if(result.isEmpty() || !documentSnapshot.get("userType").equals("teacher")) {
-//                            Toast.makeText(getApplicationContext(), "doesnt exist bro lmao", Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            if(documentSnapshot.get("password").toString().equals(password)) {
-//                                Intent intent = new Intent(LoginActivity.this, ClasslistView.class);
-//
-//                                intent.putExtra(EMAIL_STATE_KEY,documentSnapshot.get(Db.EMAIL_FIELD).toString());
-//                                intent.putExtra(USERNAME_STATE_KEY,documentSnapshot.get(Db.USERNAME_FIELD).toString());
-//
-//                                editor.putString(SP_EMAIL_KEY,documentSnapshot.getString(Db.EMAIL_FIELD));
-//                                editor.putString(SP_USERNAME_KEY,documentSnapshot.getString(Db.USERNAME_FIELD));
-//                                editor.commit();
-//
-//                                startActivity(intent);
-//                                finish(); //ends login activity
-//                            } else {
-//                                Toast.makeText(getApplicationContext(), "wrong password!", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//
-//                    }
-//                });
+                if(email.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Email field is empty!", Toast.LENGTH_SHORT).show();
+                } else if(password.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Password field is empty!", Toast.LENGTH_SHORT).show();
+                } else {
+                    login(email, password);
+                }
             }
         });
 
+        //registering a new account
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,17 +86,34 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
 
-        //delete
-        if(!previousEmailEntry.equals("") && !previousUsernameEntry.equals("") ) {
-            Intent intent = new Intent(LoginActivity.this, ClasslistView.class);
+    protected void login(String email, String password) {
+        Db.getDocumentsWith(Db.COLLECTION_USERS,
+            Db.FIELD_EMAIL, email,
+            Db.FIELD_USERTYPE, Db.VALUE_USERTYPE).
+            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    List<DocumentSnapshot> result = Db.getDocuments(task);
+                    if(!result.isEmpty()) {
+                        if(result.get(0).getString(Db.FIELD_PASSWORD).equals(password)) {
+                            Log.d(TAG,"User exists");
+                            editor.putString(Keys.SP_EMAIL_KEY, email);
+                            editor.commit();
+                            Intent loginIntent = new Intent(LoginActivity.this, ClasslistActivity.class);
+                            startActivity(loginIntent);
+                            finish();
+                        } else {
+                            Log.d(TAG,"Incorrect password entry");
+                            Toast.makeText(getApplicationContext(), "Incorrect password!", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Log.d(TAG,"Account does not exist");
+                        Toast.makeText(getApplicationContext(), "Account does not exist!", Toast.LENGTH_SHORT).show();
+                    }
 
-            intent.putExtra(EMAIL_STATE_KEY,previousEmailEntry);
-            intent.putExtra(USERNAME_STATE_KEY,previousUsernameEntry);
-
-            startActivity(intent);
-            finish(); //ends login activity
-        }
-        //////////////////////delete
+                }
+            });
     }
 }

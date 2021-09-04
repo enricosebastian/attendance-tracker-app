@@ -16,7 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ClasslistVH extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
-    private static final String TAG = "Class ViewHolder";
+    private static final String TAG = "ClasslistVH.java";
     private TextView txtClassCode, txtSectionCode;
     private ImageButton btnMoreOptions;
 

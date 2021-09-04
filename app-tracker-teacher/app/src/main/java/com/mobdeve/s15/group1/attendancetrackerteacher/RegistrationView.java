@@ -114,7 +114,7 @@ public class RegistrationView extends AppCompatActivity {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {
                                                         Log.d(TAG, "Input added succesfully");
-                                                        Intent intent = new Intent(RegistrationView.this, ClasslistView.class);
+                                                        Intent intent = new Intent(RegistrationView.this, ClasslistActivity.class);
                                                         intent.putExtra(EMAIL_STATE_KEY,email);
                                                         startActivity(intent);
                                                         finish();

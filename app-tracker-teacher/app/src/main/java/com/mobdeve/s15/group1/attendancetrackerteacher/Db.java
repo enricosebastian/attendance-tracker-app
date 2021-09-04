@@ -37,7 +37,7 @@ public class Db {
     private static ArrayList<StudentPresentListModel> studentPresentListModels = new ArrayList<>();
     private static ArrayList<ClassModel> classModels = new ArrayList<>();
 
-    public final static String
+    public final static String //DELETE SOON
         USERS_COLLECTION        = "Users",
             USERNAME_FIELD      = "username",
             IDNUMBER_FIELD      = "idNumber",
@@ -56,6 +56,31 @@ public class Db {
         MEETINGS_COLLECTION         = "Meetings",
             MEETINGCODE_FIELD         = "meetingCode",
         MEETINGHISTORY_COLLECTION       = "MeetingHistory";
+    ////////////DELETE SOON
+
+    //new version
+    public final static String
+        COLLECTION_USERS = "Users",
+        FIELD_EMAIL = "email",
+        FIELD_FIRSTNAME = "firstName",
+        FIELD_IDNUMBER = "idNumber",
+        FIELD_LASTNAME = "lastName",
+        FIELD_PASSWORD = "password",
+        FIELD_USERTYPE = "userType",
+        VALUE_USERTYPE = "teacher",
+
+        COLLECTION_COURSES = "Courses",
+        FIELD_COURSECODE = "courseCode",
+        FIELD_COURSENAME = "courseName",
+        FIELD_HANDLEDBY = "handledBy",
+        FIELD_ISPUBLISHED = "isPublished",
+        FIELD_SECTIONCODE = "sectionCode",
+        FIELD_STUDENTCOUNT = "studentCount"; //no need for username here
+
+
+    ////////////////////////new version
+
+
 
     public static FirebaseFirestore getFirestoreInstance() {
         if(firebaseFirestoreInstance == null) {
@@ -92,6 +117,15 @@ public class Db {
                 collection(tableName).
                 whereEqualTo(field1, value1).
                 whereEqualTo(field2, value2).
+                get();
+    }
+
+    public static Task<QuerySnapshot> getDocumentsWith(String tableName, String field1, String value1, String field2, String value2, String field3, String value3) {
+        return  getFirestoreInstance().
+                collection(tableName).
+                whereEqualTo(field1, value1).
+                whereEqualTo(field2, value2).
+                whereEqualTo(field3, value3).
                 get();
     }
 

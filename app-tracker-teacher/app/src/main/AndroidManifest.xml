@@ -51,7 +51,7 @@
             android:name=".SingleClassView"
             android:exported="true"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ClasslistView"
+        <activity android:name=".ClasslistActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".LoginActivity"

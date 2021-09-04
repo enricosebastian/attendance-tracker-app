@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -26,13 +27,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+public class ClasslistActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+    private static final String TAG = "ClasslistActivity.java";
 
     private ArrayList<ClassModel> classModels = new ArrayList<>();
 
     //shared preferences initialization
-    private static String SP_FILE_NAME      = "LoginPreferences";
-    private static String SP_EMAIL_KEY      = "SP_EMAIL_KEY";
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
     ////////////
@@ -54,7 +54,6 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
     private static String USERNAME_STATE_KEY = "USERNAME_KEY";      //delete this
     private static String EMAIL_STATE_KEY = "EMAIL_KEY";            //delete this
     private ImageView imgTest;
-    private static String previousUsernameEntry;
     private FirebaseFirestore db;
     ////////////////////delete this
 
@@ -64,22 +63,65 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classlist);
 
-        this.sp = getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
+        this.sp = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
         this.editor = sp.edit();
 
-        //this.previousUsernameEntry = sp.getString(SP_USERNAME_KEY, "");
+        String email = sp.getString(Keys.SP_EMAIL_KEY,"");
+        Log.d(TAG,"received: "+email);
 
         this.imgTest = findViewById(R.id.img_profilePic);
-
-        this.db = FirebaseFirestore.getInstance();
-
-        Intent passedIntent = getIntent();
-        String username = passedIntent.getStringExtra(USERNAME_STATE_KEY);
-        String email = passedIntent.getStringExtra(EMAIL_STATE_KEY);
 
         this.txtName = findViewById(R.id.tvName);
         this.txtIdNumber = findViewById(R.id.tvIdName);
         this.btnAddCourse = findViewById(R.id.btnAddCourse);
+
+        initializeViews(email);
+
+//        Db.getUsersCollectionReference().
+//                whereEqualTo(Db.EMAIL_FIELD, email)
+//                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                QuerySnapshot querySnapshot = task.getResult();
+//                List<DocumentSnapshot> result = querySnapshot.getDocuments();
+//                String fullName =
+//                        result.get(0).get(Db.FIRSTNAME_FIELD).toString() + " " +
+//                                result.get(0).get(Db.FIRSTNAME_FIELD).toString();
+//                txtName.setText(fullName);
+//                txtIdNumber.setText(result.get(0).get(Db.IDNUMBER_FIELD).toString());
+//            }
+//        });
+//
+//        Db.getCoursesCollectionReference().
+//                whereEqualTo(Db.HANDLEDBY_FIELD, username)
+//                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                QuerySnapshot querySnapshot = task.getResult();
+//                List<DocumentSnapshot> result = querySnapshot.getDocuments();
+//
+//                classModels = Db.toClassModel(result);
+//
+//                recyclerView = findViewById(R.id.recyclerView);
+//
+//                layoutManager = new LinearLayoutManager(getApplicationContext());
+//                recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+//
+//                classlistAdapter = new ClasslistAdapter(classModels);
+//                recyclerView.setAdapter(classlistAdapter);
+//            }
+//        });
+
+        btnAddCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ClasslistActivity.this, CreateCourse.class);
+                startActivity(intent);
+            }
+        });
+
+
+        //////////////////////////////////////////////////////FUCK//////////////////////////////////////////
 
         //delete when everything is done
 //        Db.getDocumentsWith("email","ben@dlsu.edu.ph", Db.USERS_COLLECTION).
@@ -92,20 +134,7 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
 //            });
 
 
-        Db.getUsersCollectionReference().
-                whereEqualTo(Db.EMAIL_FIELD, email)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        QuerySnapshot querySnapshot = task.getResult();
-                        List<DocumentSnapshot> result = querySnapshot.getDocuments();
-                        String fullName =
-                                result.get(0).get(Db.FIRSTNAME_FIELD).toString() + " " +
-                                result.get(0).get(Db.FIRSTNAME_FIELD).toString();
-                        txtName.setText(fullName);
-                        txtIdNumber.setText(result.get(0).get(Db.IDNUMBER_FIELD).toString());
-                    }
-                });
+
 
 //        upload image
 //        Query q = FirestoreReferences.findDocuments(FirestoreReferences.USERS_COLLECTION,FirestoreReferences.USERNAME_FIELD,previousUsernameEntry);
@@ -136,34 +165,6 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
 //                //Picasso.get().load(test).into(imgTest);
 //            }
 //        });
-
-        Db.getCoursesCollectionReference().
-                whereEqualTo(Db.HANDLEDBY_FIELD, username)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        QuerySnapshot querySnapshot = task.getResult();
-                        List<DocumentSnapshot> result = querySnapshot.getDocuments();
-
-                        classModels = Db.toClassModel(result);
-
-                        recyclerView = findViewById(R.id.recyclerView);
-
-                        layoutManager = new LinearLayoutManager(getApplicationContext());
-                        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
-
-                        classlistAdapter = new ClasslistAdapter(classModels);
-                        recyclerView.setAdapter(classlistAdapter);
-                    }
-                });
-
-        btnAddCourse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ClasslistView.this, CreateCourse.class);
-                startActivity(intent);
-            }
-        });
     }
 
    public void showPopup (View v) {
@@ -179,17 +180,51 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.editProfile:
-                Intent intent = new Intent (ClasslistView.this, EditProfile.class);
+                Intent intent = new Intent (ClasslistActivity.this, EditProfile.class);
                 startActivity(intent);
                 return true;
             case R.id.logout:
                 editor.clear();
                 editor.commit();
-                Intent intentLogout = new Intent (ClasslistView.this, LoginActivity.class);
-                startActivity(intentLogout);
+                Intent logoutIntent = new Intent (ClasslistActivity.this, LoginActivity.class);
+                startActivity(logoutIntent);
+                finish();
                 return true;
             default:
                 return false;
         }
+    }
+
+    //initializes views
+    protected void initializeViews(String email) {
+        Db.getDocumentsWith(Db.COLLECTION_USERS,
+            Db.FIELD_EMAIL, email).
+            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    List<DocumentSnapshot> result = Db.getDocuments(task);
+                    String firstName = result.get(0).getString(Db.FIELD_FIRSTNAME);
+                    String lastName = result.get(0).getString(Db.FIELD_FIRSTNAME);
+                    String idNumber = result.get(0).getString(Db.FIELD_IDNUMBER);
+                    txtName.setText(firstName+" "+lastName);
+                    txtIdNumber.setText(idNumber);
+                }
+            });
+
+        Db.getDocumentsWith(Db.COLLECTION_COURSES,
+            Db.FIELD_HANDLEDBY, email).
+            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    classModels.addAll(Db.toClassModel(Db.getDocuments(task)));
+                    Log.d(TAG,"classModel size is "+classModels.size());
+
+                    recyclerView = findViewById(R.id.recyclerView);
+                    layoutManager = new LinearLayoutManager(getApplicationContext());
+                    recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+                    classlistAdapter = new ClasslistAdapter(classModels);
+                    recyclerView.setAdapter(classlistAdapter);
+                }
+            });
     }
 }
