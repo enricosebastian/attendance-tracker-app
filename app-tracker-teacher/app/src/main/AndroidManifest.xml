@@ -13,36 +13,49 @@
         android:theme="@style/Theme.AttendanceTrackerTeacher">
         <activity
             android:name=".CreateMeetingView"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".EditProfile"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".RegistrationView"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".EditCourse"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".RegisterFormActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".RegisterTeacherActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SingleMeetingView"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AcceptStudents"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".CreateCourse"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SingleClassView"
-            android:exported="true" />
-        <activity android:name=".ClasslistView" />
-        <activity android:name=".LoginView">
+            android:exported="true"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ClasslistView"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".LoginView"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
