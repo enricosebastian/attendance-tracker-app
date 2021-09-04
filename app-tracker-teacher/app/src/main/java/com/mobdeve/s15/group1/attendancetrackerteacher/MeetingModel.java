@@ -8,6 +8,7 @@ public class MeetingModel {
     int studentsPresent;
 
 
+
     public MeetingModel(String courseCode, String sectionCode, String meetingCode, Date date, int studentsPresent) {
         this.courseCode = courseCode;
         this.sectionCode = sectionCode;
