@@ -2,23 +2,18 @@ package com.mobdeve.s15.group1.attendancetrackerteacher;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,12 +61,12 @@ public class SingleMeetingView extends AppCompatActivity {
             }
         });
 
-        Task<QuerySnapshot> querySnapshotTask = FirestoreReferences.getStudentsInMeeting(meetingCode);
+        Task<QuerySnapshot> querySnapshotTask = Db.getStudentsInMeeting(meetingCode);
         querySnapshotTask.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<DocumentSnapshot> result = FirestoreReferences.toList(task);
-                ArrayList<StudentPresentListModel> studentPresentListModels = FirestoreReferences.toStudentPresentListModel(result);
+                List<DocumentSnapshot> result = Db.toList(task);
+                ArrayList<StudentPresentListModel> studentPresentListModels = Db.toStudentPresentListModel(result);
 
                 studentListRecyclerView = findViewById(R.id.studentListRecyclerView);
 

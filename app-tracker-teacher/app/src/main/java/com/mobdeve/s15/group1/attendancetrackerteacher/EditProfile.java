@@ -25,11 +25,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -57,14 +52,14 @@ public class EditProfile extends AppCompatActivity {
                         try {
                             if(result.getData() != null) {
 
-                                Query q = FirestoreReferences.findDocuments(FirestoreReferences.USERS_COLLECTION,"username",previousUsernameEntry);
+                                Query q = Db.findDocuments(Db.USERS_COLLECTION,"username",previousUsernameEntry);
                                 q.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        String id = FirestoreReferences.getIdFromTask(task);
+                                        String id = Db.getIdFromTask(task);
 
                                         imageUri = result.getData().getData();
-                                        Task uploadTask = FirestoreReferences.uploadImage(id, imageUri);
+                                        Task uploadTask = Db.uploadImage(id, imageUri);
                                         Tasks.whenAllSuccess(uploadTask).addOnSuccessListener(new OnSuccessListener<List<Object>>() {
                                             @Override
                                             public void onSuccess(List<Object> objects) {

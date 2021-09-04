@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -46,8 +45,8 @@ public class SingleClassView extends AppCompatActivity {
 
         txtClassTitle.setText(classCode+" - "+sectionCode);
 
-        FirestoreReferences.getMeetingsCollectionReference().
-                whereEqualTo(FirestoreReferences.COURSECODE_FIELD, classCode)
+        Db.getMeetingsCollectionReference().
+                whereEqualTo(Db.COURSECODE_FIELD, classCode)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

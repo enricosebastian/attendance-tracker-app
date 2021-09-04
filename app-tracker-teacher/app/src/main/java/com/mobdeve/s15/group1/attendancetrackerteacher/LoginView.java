@@ -14,13 +14,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
@@ -57,6 +52,8 @@ public class LoginView extends AppCompatActivity {
         String previousEmailEntry = sp.getString(SP_EMAIL_KEY, "");
         String previousUsernameEntry = sp.getString(SP_USERNAME_KEY, "");
 
+        Log.d("login screen",""+previousEmailEntry+" "+previousUsernameEntry);
+
         if(!previousEmailEntry.equals("") && !previousUsernameEntry.equals("") ) {
             Intent intent = new Intent(LoginView.this, ClasslistView.class);
 
@@ -73,23 +70,23 @@ public class LoginView extends AppCompatActivity {
                 String email = inputEmail.getText().toString();
                 String password = inputPassword.getText().toString();
 
-                Task<QuerySnapshot> querySnapshot = FirestoreReferences.getUserInfoFromEmail(email);
+                Task<QuerySnapshot> querySnapshot = Db.getUserInfoFromEmail(email);
                 querySnapshot.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        List<DocumentSnapshot> result = FirestoreReferences.toList(task);
-                        DocumentSnapshot documentSnapshot = FirestoreReferences.getFirstResult(task);
+                        List<DocumentSnapshot> result = Db.toList(task);
+                        DocumentSnapshot documentSnapshot = Db.getFirstResult(task);
                         if(result.isEmpty() || !documentSnapshot.get("userType").equals("teacher")) {
                             Toast.makeText(getApplicationContext(), "doesnt exist bro lmao", Toast.LENGTH_SHORT).show();
                         } else {
                             if(documentSnapshot.get("password").toString().equals(password)) {
                                 Intent intent = new Intent(LoginView.this, ClasslistView.class);
 
-                                intent.putExtra(EMAIL_STATE_KEY,documentSnapshot.get(FirestoreReferences.EMAIL_FIELD).toString());
-                                intent.putExtra(USERNAME_STATE_KEY,documentSnapshot.get(FirestoreReferences.USERNAME_FIELD).toString());
+                                intent.putExtra(EMAIL_STATE_KEY,documentSnapshot.get(Db.EMAIL_FIELD).toString());
+                                intent.putExtra(USERNAME_STATE_KEY,documentSnapshot.get(Db.USERNAME_FIELD).toString());
 
-                                editor.putString(SP_EMAIL_KEY,documentSnapshot.getString(FirestoreReferences.EMAIL_FIELD));
-                                editor.putString(SP_USERNAME_KEY,documentSnapshot.getString(FirestoreReferences.USERNAME_FIELD));
+                                editor.putString(SP_EMAIL_KEY,documentSnapshot.getString(Db.EMAIL_FIELD));
+                                editor.putString(SP_USERNAME_KEY,documentSnapshot.getString(Db.USERNAME_FIELD));
                                 editor.commit();
 
                                 startActivity(intent);
