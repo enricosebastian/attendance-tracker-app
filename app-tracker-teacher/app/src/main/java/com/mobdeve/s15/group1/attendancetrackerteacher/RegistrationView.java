@@ -36,7 +36,6 @@ public class RegistrationView extends AppCompatActivity {
     private EditText    inputFirstName,
                         inputLastName,
                         inputEmail,
-                        inputUsername,
                         inputPassword,
                         inputIdNumber;
 
@@ -49,6 +48,7 @@ public class RegistrationView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_view);
 
+        //get firestore instance
         this.db = FirebaseFirestore.getInstance();
 
         this.btnSubmit = findViewById(R.id.btnSubmit);
@@ -56,11 +56,10 @@ public class RegistrationView extends AppCompatActivity {
         this.inputFirstName = findViewById(R.id.inputFirstName);
         this.inputLastName = findViewById(R.id.inputLastName);
         this.inputEmail = findViewById(R.id.inputEmail);
-        this.inputUsername = findViewById(R.id.inputUsername);
         this.inputPassword = findViewById(R.id.inputPassword);
         this.inputIdNumber = findViewById(R.id.inputIdNumber);
 
-        // When Clicks register
+        // When User registers
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,26 +68,27 @@ public class RegistrationView extends AppCompatActivity {
                 String idNumber = inputIdNumber.getText().toString();
                 String lastName = inputLastName.getText().toString();
                 String password = inputPassword.getText().toString();
-                String usertype = "teacher";
-                String username = inputUsername.getText().toString();
+                String userType = "teacher";
 
-                // If not all entries are field
+                // If not all entries are filled
                 if(!doAllFieldsHaveEntries()) {
                     Log.d(TAG, "Not all fields have entries");
                     Toast.makeText(getApplicationContext(), "Please fill up all the fields", Toast.LENGTH_SHORT).show();
                 } else {
-                    /**
-                     * Todo: Check for unique ID NUMBER
-                     * */
-                
+
+                    // Get the user collection
                     Db.getUsersCollectionReference().
-                        whereEqualTo(Db.EMAIL_FIELD, email)
-                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        whereEqualTo(Db.EMAIL_FIELD, email).
+                        get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             QuerySnapshot emailQuery = task.getResult();
                             List<DocumentSnapshot> emailResult = emailQuery.getDocuments();
+
+                            //If email is unique
                             if(emailResult.isEmpty()) {
+
                                 Db.getUsersCollectionReference().
                                     whereEqualTo(Db.IDNUMBER_FIELD, idNumber).
                                     get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -96,16 +96,17 @@ public class RegistrationView extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                         QuerySnapshot idNumberQuery = task.getResult();
                                         List<DocumentSnapshot> idNumberResult = idNumberQuery.getDocuments();
-                                        if(idNumberResult.isEmpty()) {
 
+                                        // If id number is unique
+                                        if(idNumberResult.isEmpty()) {
                                             Map<String, Object> input = new HashMap<>();
-                                            input.put("email",email);
-                                            input.put("firstName",firstName);
-                                            input.put("idNumber",idNumber);
-                                            input.put("lastName",lastName);
-                                            input.put("password",password);
-                                            input.put("usertype",usertype);
-                                            input.put("username",username);
+                                            input.put(Db.EMAIL_FIELD,email);
+                                            input.put(Db.FIRSTNAME_FIELD,firstName);
+                                            input.put(Db.IDNUMBER_FIELD,idNumber);
+                                            input.put(Db.LASTNAME_FIELD,lastName);
+                                            input.put(Db.PASSWORD_FIELD,password);
+                                            input.put(Db.USERTYPE_FIELD,userType);
+
                                             Db.
                                                 getUsersCollectionReference().
                                                 add(input).
@@ -115,38 +116,37 @@ public class RegistrationView extends AppCompatActivity {
                                                         Log.d(TAG, "Input added succesfully");
                                                         Intent intent = new Intent(RegistrationView.this, ClasslistView.class);
                                                         intent.putExtra(EMAIL_STATE_KEY,email);
-                                                        intent.putExtra(USERNAME_STATE_KEY,username);
                                                         startActivity(intent);
                                                         finish();
                                                     }
                                                 }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                String error = e.getMessage();
-                                                Log.d(TAG, "error is "+error);
-                                            }
-                                        });
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        String error = e.getMessage();
+                                                        Log.w(TAG, "Error adding document: "+ error);
+                                                    }
+                                                });
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Account already exists", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
                             } else {
-                                Toast.makeText(getApplicationContext(), "user already exists!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Account already exists", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
                 }
-
             }
         });
 
+        // When user cancels the registration
         btnCancelRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-
-
     }
 
     /*  This method was created for code readability. It checks if the fields have completely been
@@ -156,7 +156,6 @@ public class RegistrationView extends AppCompatActivity {
         return  !inputEmail.getText().toString().isEmpty() &&
                 !inputIdNumber.getText().toString().isEmpty() &&
                 !inputLastName.getText().toString().isEmpty() &&
-                !inputPassword.getText().toString().isEmpty() &&
-                !inputUsername.getText().toString().isEmpty();
+                !inputPassword.getText().toString().isEmpty();
     }
 }
