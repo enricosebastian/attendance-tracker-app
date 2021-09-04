@@ -22,20 +22,21 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
     private final String TAG = "LoginView.java";
-
-
     private static String SP_FILE_NAME = "LoginPreferences";
     private static String SP_EMAIL_KEY = "SP_EMAIL_KEY";
-    private static String SP_USERNAME_KEY = "SP_USERNAME_KEY";
-
-    private static String USERNAME_STATE_KEY = "USERNAME_KEY";
-    private static String EMAIL_STATE_KEY = "EMAIL_KEY";
 
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
 
     private EditText inputEmail, inputPassword;
     private Button btnLogin, btnRegister;
+
+
+    //junk shit to delete later
+    private static String SP_USERNAME_KEY = "SP_USERNAME_KEY"; //delete
+    private static String USERNAME_STATE_KEY = "USERNAME_KEY"; //delete
+    private static String EMAIL_STATE_KEY = "EMAIL_KEY"; //delete
+    ///////////////junk shit to delete later
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,19 +52,26 @@ public class LoginActivity extends AppCompatActivity {
         this.editor = sp.edit();
 
         String previousEmailEntry = sp.getString(SP_EMAIL_KEY, "");
-        String previousUsernameEntry = sp.getString(SP_USERNAME_KEY, "");
+        String previousUsernameEntry = sp.getString(SP_USERNAME_KEY, ""); //delete
 
-        Log.d("login screen",""+previousEmailEntry+" "+previousUsernameEntry);
+        Log.d(TAG,"shared preferences: "+previousEmailEntry); //delete
 
-        if(!previousEmailEntry.equals("") && !previousUsernameEntry.equals("") ) {
+        if(!previousEmailEntry.isEmpty()) {
+            //login screen
             Intent intent = new Intent(LoginActivity.this, ClasslistView.class);
-
-            intent.putExtra(EMAIL_STATE_KEY,previousEmailEntry);
-            intent.putExtra(USERNAME_STATE_KEY,previousUsernameEntry);
-
+            intent.putExtra(SP_EMAIL_KEY,previousEmailEntry);
             startActivity(intent);
-            finish(); //ends login activity
+            finish();
         }
+
+//        Db.getDocumentsWith("email","ben@dlsu.edu.ph","password","benpassword",Db.USERS_COLLECTION).
+//            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                    List<DocumentSnapshot> result = Db.getDocuments(task);
+//                    Log.d(TAG,"result is "+result.size());
+//                }b
+//            });
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,34 +79,43 @@ public class LoginActivity extends AppCompatActivity {
                 String email = inputEmail.getText().toString();
                 String password = inputPassword.getText().toString();
 
-                Task<QuerySnapshot> querySnapshot = Db.getUserInfoFromEmail(email);
-                querySnapshot.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        List<DocumentSnapshot> result = Db.toList(task);
-                        DocumentSnapshot documentSnapshot = Db.getFirstResult(task);
-                        if(result.isEmpty() || !documentSnapshot.get("userType").equals("teacher")) {
-                            Toast.makeText(getApplicationContext(), "doesnt exist bro lmao", Toast.LENGTH_SHORT).show();
-                        } else {
-                            if(documentSnapshot.get("password").toString().equals(password)) {
-                                Intent intent = new Intent(LoginActivity.this, ClasslistView.class);
-
-                                intent.putExtra(EMAIL_STATE_KEY,documentSnapshot.get(Db.EMAIL_FIELD).toString());
-                                intent.putExtra(USERNAME_STATE_KEY,documentSnapshot.get(Db.USERNAME_FIELD).toString());
-
-                                editor.putString(SP_EMAIL_KEY,documentSnapshot.getString(Db.EMAIL_FIELD));
-                                editor.putString(SP_USERNAME_KEY,documentSnapshot.getString(Db.USERNAME_FIELD));
-                                editor.commit();
-
-                                startActivity(intent);
-                                finish(); //ends login activity
-                            } else {
-                                Toast.makeText(getApplicationContext(), "wrong password!", Toast.LENGTH_SHORT).show();
+                Db.getDocumentsWith(Db.USERS_COLLECTION, "email", email,"password",password).
+                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                List<DocumentSnapshot> result = Db.getDocuments(task);
+                                Log.d(TAG,"result is "+result.get(0).get("userType").toString()); //cleanup lmao
                             }
-                        }
-                        
-                    }
-                });
+                        });
+
+//                Task<QuerySnapshot> querySnapshot = Db.getUserInfoFromEmail(email);
+//                querySnapshot.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        List<DocumentSnapshot> result = Db.toList(task);
+//                        DocumentSnapshot documentSnapshot = Db.getFirstResult(task);
+//                        if(result.isEmpty() || !documentSnapshot.get("userType").equals("teacher")) {
+//                            Toast.makeText(getApplicationContext(), "doesnt exist bro lmao", Toast.LENGTH_SHORT).show();
+//                        } else {
+//                            if(documentSnapshot.get("password").toString().equals(password)) {
+//                                Intent intent = new Intent(LoginActivity.this, ClasslistView.class);
+//
+//                                intent.putExtra(EMAIL_STATE_KEY,documentSnapshot.get(Db.EMAIL_FIELD).toString());
+//                                intent.putExtra(USERNAME_STATE_KEY,documentSnapshot.get(Db.USERNAME_FIELD).toString());
+//
+//                                editor.putString(SP_EMAIL_KEY,documentSnapshot.getString(Db.EMAIL_FIELD));
+//                                editor.putString(SP_USERNAME_KEY,documentSnapshot.getString(Db.USERNAME_FIELD));
+//                                editor.commit();
+//
+//                                startActivity(intent);
+//                                finish(); //ends login activity
+//                            } else {
+//                                Toast.makeText(getApplicationContext(), "wrong password!", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//
+//                    }
+//                });
             }
         });
 
@@ -109,5 +126,17 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        //delete
+        if(!previousEmailEntry.equals("") && !previousUsernameEntry.equals("") ) {
+            Intent intent = new Intent(LoginActivity.this, ClasslistView.class);
+
+            intent.putExtra(EMAIL_STATE_KEY,previousEmailEntry);
+            intent.putExtra(USERNAME_STATE_KEY,previousUsernameEntry);
+
+            startActivity(intent);
+            finish(); //ends login activity
+        }
+        //////////////////////delete
     }
 }

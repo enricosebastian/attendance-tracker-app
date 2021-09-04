@@ -80,14 +80,14 @@ public class Db {
         return task.getResult().getDocuments();
     }
 
-    public static Task<QuerySnapshot> getDocumentsWith(String field, String value, String tableName) {
+    public static Task<QuerySnapshot> getDocumentsWith(String tableName, String field, String value) {
         return  getFirestoreInstance().
                 collection(tableName).
                 whereEqualTo(field,value).
                 get();
     }
 
-    public static Task<QuerySnapshot> getDocumentsWith(String field1, String value1, String field2, String value2, String tableName) {
+    public static Task<QuerySnapshot> getDocumentsWith(String tableName, String field1, String value1, String field2, String value2) {
         return  getFirestoreInstance().
                 collection(tableName).
                 whereEqualTo(field1, value1).
