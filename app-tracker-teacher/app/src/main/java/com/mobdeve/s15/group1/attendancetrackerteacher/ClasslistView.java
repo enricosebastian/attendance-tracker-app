@@ -30,29 +30,34 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
 
     private ArrayList<ClassModel> classModels = new ArrayList<>();
 
-    private static String SP_FILE_NAME = "LoginPreferences";
-    private static String SP_EMAIL_KEY = "SP_EMAIL_KEY";
-    private static String SP_USERNAME_KEY = "SP_USERNAME_KEY";
-
-    private static String USERNAME_STATE_KEY = "USERNAME_KEY";
-    private static String EMAIL_STATE_KEY = "EMAIL_KEY";
-
+    //shared preferences initialization
+    private static String SP_FILE_NAME      = "LoginPreferences";
+    private static String SP_EMAIL_KEY      = "SP_EMAIL_KEY";
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
+    ////////////
 
+    //recycler view initialization
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ClasslistAdapter classlistAdapter;
-    private DocumentSnapshot donny;
+    ////////////
 
+    //widget initialization
     private TextView txtName;
     private TextView txtIdNumber;
     private FloatingActionButton btnAddCourse;
-    private FirebaseFirestore db;
+    ////////////
 
+    //delete this LMAO
+    private static String SP_USERNAME_KEY   = "SP_USERNAME_KEY";    //delete this
+    private static String USERNAME_STATE_KEY = "USERNAME_KEY";      //delete this
+    private static String EMAIL_STATE_KEY = "EMAIL_KEY";            //delete this
     private ImageView imgTest;
-
     private static String previousUsernameEntry;
+    private FirebaseFirestore db;
+    ////////////////////delete this
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,17 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
         this.txtName = findViewById(R.id.tvName);
         this.txtIdNumber = findViewById(R.id.tvIdName);
         this.btnAddCourse = findViewById(R.id.btnAddCourse);
+
+        //delete when everything is done
+//        Db.getDocumentsWith("email","ben@dlsu.edu.ph", Db.USERS_COLLECTION).
+//            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                    List<DocumentSnapshot> results = Db.getDocuments(task);
+//                    Log.d("what",""+results.get(0).toString());
+//                }
+//            });
+
 
         Db.getUsersCollectionReference().
                 whereEqualTo(Db.EMAIL_FIELD, email)
@@ -169,7 +185,7 @@ public class ClasslistView extends AppCompatActivity implements PopupMenu.OnMenu
             case R.id.logout:
                 editor.clear();
                 editor.commit();
-                Intent intentLogout = new Intent (ClasslistView.this, LoginView.class);
+                Intent intentLogout = new Intent (ClasslistView.this, LoginActivity.class);
                 startActivity(intentLogout);
                 return true;
             default:

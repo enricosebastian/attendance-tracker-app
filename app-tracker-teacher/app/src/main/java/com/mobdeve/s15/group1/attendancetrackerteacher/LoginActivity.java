@@ -20,8 +20,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
-public class LoginView extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     private final String TAG = "LoginView.java";
+
 
     private static String SP_FILE_NAME = "LoginPreferences";
     private static String SP_EMAIL_KEY = "SP_EMAIL_KEY";
@@ -55,7 +56,7 @@ public class LoginView extends AppCompatActivity {
         Log.d("login screen",""+previousEmailEntry+" "+previousUsernameEntry);
 
         if(!previousEmailEntry.equals("") && !previousUsernameEntry.equals("") ) {
-            Intent intent = new Intent(LoginView.this, ClasslistView.class);
+            Intent intent = new Intent(LoginActivity.this, ClasslistView.class);
 
             intent.putExtra(EMAIL_STATE_KEY,previousEmailEntry);
             intent.putExtra(USERNAME_STATE_KEY,previousUsernameEntry);
@@ -80,7 +81,7 @@ public class LoginView extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "doesnt exist bro lmao", Toast.LENGTH_SHORT).show();
                         } else {
                             if(documentSnapshot.get("password").toString().equals(password)) {
-                                Intent intent = new Intent(LoginView.this, ClasslistView.class);
+                                Intent intent = new Intent(LoginActivity.this, ClasslistView.class);
 
                                 intent.putExtra(EMAIL_STATE_KEY,documentSnapshot.get(Db.EMAIL_FIELD).toString());
                                 intent.putExtra(USERNAME_STATE_KEY,documentSnapshot.get(Db.USERNAME_FIELD).toString());
@@ -104,7 +105,7 @@ public class LoginView extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginView.this, RegistrationView.class);
+                Intent intent = new Intent(LoginActivity.this, RegistrationView.class);
                 startActivity(intent);
             }
         });
