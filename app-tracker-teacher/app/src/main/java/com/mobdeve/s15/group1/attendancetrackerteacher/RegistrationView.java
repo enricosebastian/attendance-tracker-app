@@ -21,8 +21,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.w3c.dom.Document;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,17 +80,17 @@ public class RegistrationView extends AppCompatActivity {
                     /**
                      * Todo: Check for unique ID NUMBER
                      * */
-                    FirestoreReferences.getUsersCollectionReference().
-                        whereEqualTo(FirestoreReferences.EMAIL_FIELD, email)
+                
+                    Db.getUsersCollectionReference().
+                        whereEqualTo(Db.EMAIL_FIELD, email)
                         .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             QuerySnapshot emailQuery = task.getResult();
                             List<DocumentSnapshot> emailResult = emailQuery.getDocuments();
                             if(emailResult.isEmpty()) {
-
-                                FirestoreReferences.getUsersCollectionReference().
-                                    whereEqualTo(FirestoreReferences.IDNUMBER_FIELD, idNumber).
+                                Db.getUsersCollectionReference().
+                                    whereEqualTo(Db.IDNUMBER_FIELD, idNumber).
                                     get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -108,7 +106,7 @@ public class RegistrationView extends AppCompatActivity {
                                             input.put("password",password);
                                             input.put("usertype",usertype);
                                             input.put("username",username);
-                                            FirestoreReferences.
+                                            Db.
                                                 getUsersCollectionReference().
                                                 add(input).
                                                 addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

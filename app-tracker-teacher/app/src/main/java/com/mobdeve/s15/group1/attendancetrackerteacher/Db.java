@@ -14,18 +14,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.w3c.dom.Document;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-public class FirestoreReferences {
-    public static String TAG = "In FirestoreReference";
+public class Db {
+    public static String TAG = "Db.java";
 
     private static FirebaseFirestore firebaseFirestoreInstance = null;
     private static StorageReference storageReferenceInstance = null;
@@ -120,7 +116,7 @@ public class FirestoreReferences {
     //returns null as of now
     //searches for a single class
     public static DocumentSnapshot getSingleClassData(String stringRef) {
-        getUsersCollectionReference().whereEqualTo(FirestoreReferences.COURSECODE_FIELD, stringRef) //this is a test
+        getUsersCollectionReference().whereEqualTo(Db.COURSECODE_FIELD, stringRef) //this is a test
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -188,7 +184,7 @@ public class FirestoreReferences {
     }
 
     public static void updateSingleStudent(String entry, String query, UserModel initialInfo) {
-        FirestoreReferences.getUsersCollectionReference()
+        Db.getUsersCollectionReference()
             .whereEqualTo(entry, query)
             .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
@@ -201,8 +197,8 @@ public class FirestoreReferences {
                     if(initialInfo.getIdNumber().equals("")) initialInfo.setIdNumber(ds.getString("idNumber"));
                     if(initialInfo.getUserType().equals("")) initialInfo.setUserType(ds.getString("userType"));
 
-                    String id = FirestoreReferences.getIdFromTask(task);
-                    FirestoreReferences.getUsersCollectionReference()
+                    String id = Db.getIdFromTask(task);
+                    Db.getUsersCollectionReference()
                         .document(id)
                         .set(initialInfo)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -216,7 +212,7 @@ public class FirestoreReferences {
     }
 
     public static void updateSingleCourse(String courseCode, String sectionCode, ClassModel initialInfo) {
-        FirestoreReferences.getCoursesCollectionReference()
+        Db.getCoursesCollectionReference()
                 .whereEqualTo(COURSECODE_FIELD, courseCode)
                 .whereEqualTo(SECTIONCODE_FIELD,sectionCode)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -229,9 +225,9 @@ public class FirestoreReferences {
                     if(initialInfo.getSectionCode().equals("")) initialInfo.setSectionCode(ds.getString("sectionCode"));
                     if(initialInfo.getStudentCount() <= 0) initialInfo.setStudentCount(Integer.parseInt(ds.getString("studentCount")));
 
-                    String id = FirestoreReferences.getIdFromTask(task);
+                    String id = Db.getIdFromTask(task);
                     Log.d("main","id is "+id);
-                    FirestoreReferences.getCoursesCollectionReference()
+                    Db.getCoursesCollectionReference()
                             .document(id)
                             .set(initialInfo)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
