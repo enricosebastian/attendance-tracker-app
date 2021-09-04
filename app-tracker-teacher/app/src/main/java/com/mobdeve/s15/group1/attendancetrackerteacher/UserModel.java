@@ -3,6 +3,12 @@ package com.mobdeve.s15.group1.attendancetrackerteacher;
 public class UserModel {
     private String email, password, username, firstName, lastName, idNumber, userType;
 
+
+    //Blank Constructor for firebase
+    public UserModel() {
+
+    }
+
     public UserModel(String email, String password, String username, String firstName, String lastName, String idNumber, String userType) {
         this.email = email;
         this.password = password;
