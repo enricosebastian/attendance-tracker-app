@@ -47,70 +47,26 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
     private TextView txtName;
     private TextView txtIdNumber;
     private FloatingActionButton btnAddCourse;
+    private ImageView imgProfilePic;
     ////////////
-
-    //delete this LMAO
-    private static String SP_USERNAME_KEY   = "SP_USERNAME_KEY";    //delete this
-    private static String USERNAME_STATE_KEY = "USERNAME_KEY";      //delete this
-    private static String EMAIL_STATE_KEY = "EMAIL_KEY";            //delete this
-    private ImageView imgTest;
-    private FirebaseFirestore db;
-    ////////////////////delete this
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classlist);
 
-        this.sp = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
-        this.editor = sp.edit();
+        this.sp             = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
+        this.editor         = sp.edit();
+        String email        = sp.getString(Keys.SP_EMAIL_KEY,"");
 
-        String email = sp.getString(Keys.SP_EMAIL_KEY,"");
+        this.txtName        = findViewById(R.id.tvName);
+        this.txtIdNumber    = findViewById(R.id.tvIdName);
+        this.btnAddCourse   = findViewById(R.id.btnAddCourse);
+        this.imgProfilePic  = findViewById(R.id.img_profilePic);
+
+
         Log.d(TAG,"received: "+email);
-
-        this.imgTest = findViewById(R.id.img_profilePic);
-
-        this.txtName = findViewById(R.id.tvName);
-        this.txtIdNumber = findViewById(R.id.tvIdName);
-        this.btnAddCourse = findViewById(R.id.btnAddCourse);
-
         initializeViews(email);
-
-//        Db.getUsersCollectionReference().
-//                whereEqualTo(Db.EMAIL_FIELD, email)
-//                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                QuerySnapshot querySnapshot = task.getResult();
-//                List<DocumentSnapshot> result = querySnapshot.getDocuments();
-//                String fullName =
-//                        result.get(0).get(Db.FIRSTNAME_FIELD).toString() + " " +
-//                                result.get(0).get(Db.FIRSTNAME_FIELD).toString();
-//                txtName.setText(fullName);
-//                txtIdNumber.setText(result.get(0).get(Db.IDNUMBER_FIELD).toString());
-//            }
-//        });
-//
-//        Db.getCoursesCollectionReference().
-//                whereEqualTo(Db.HANDLEDBY_FIELD, username)
-//                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                QuerySnapshot querySnapshot = task.getResult();
-//                List<DocumentSnapshot> result = querySnapshot.getDocuments();
-//
-//                classModels = Db.toClassModel(result);
-//
-//                recyclerView = findViewById(R.id.recyclerView);
-//
-//                layoutManager = new LinearLayoutManager(getApplicationContext());
-//                recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
-//
-//                classlistAdapter = new ClasslistAdapter(classModels);
-//                recyclerView.setAdapter(classlistAdapter);
-//            }
-//        });
 
         btnAddCourse.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,52 +75,6 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
                 startActivity(intent);
             }
         });
-
-
-        //////////////////////////////////////////////////////FUCK//////////////////////////////////////////
-
-        //delete when everything is done
-//        Db.getDocumentsWith("email","ben@dlsu.edu.ph", Db.USERS_COLLECTION).
-//            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                    List<DocumentSnapshot> results = Db.getDocuments(task);
-//                    Log.d("what",""+results.get(0).toString());
-//                }
-//            });
-
-
-
-
-//        upload image
-//        Query q = FirestoreReferences.findDocuments(FirestoreReferences.USERS_COLLECTION,FirestoreReferences.USERNAME_FIELD,previousUsernameEntry);
-//        q.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                String id = FirestoreReferences.getIdFromTask(task);
-//
-//                Task<Uri> getImageTask = FirestoreReferences
-//                    .getImageUri(id)
-//                    .addOnCompleteListener(new OnCompleteListener<Uri>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Uri> task) {
-//                            Uri imgUri = task.getResult();
-//                            Picasso.get().load(imgUri).into(imgTest);
-//                        }
-//                    });
-//            }
-//        });
-
-
-//        StorageReference fs = FirebaseStorage.getInstance().getReference();
-//        Task <Uri> taskUri = fs.child("thanos").getDownloadUrl();
-//        taskUri.addOnCompleteListener(new OnCompleteListener<Uri>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Uri> task) {
-//                Uri test = task.getResult()
-//                //Picasso.get().load(test).into(imgTest);
-//            }
-//        });
     }
 
    public void showPopup (View v) {
@@ -226,5 +136,50 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
                     recyclerView.setAdapter(classlistAdapter);
                 }
             });
-    }
+    }//initializes views
 }
+
+//////////////////////////////////////////////////////FUCK//////////////////////////////////////////
+
+//delete when everything is done
+//        Db.getDocumentsWith("email","ben@dlsu.edu.ph", Db.USERS_COLLECTION).
+//            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                    List<DocumentSnapshot> results = Db.getDocuments(task);
+//                    Log.d("what",""+results.get(0).toString());
+//                }
+//            });
+
+
+
+
+//        upload image
+//        Query q = FirestoreReferences.findDocuments(FirestoreReferences.USERS_COLLECTION,FirestoreReferences.USERNAME_FIELD,previousUsernameEntry);
+//        q.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                String id = FirestoreReferences.getIdFromTask(task);
+//
+//                Task<Uri> getImageTask = FirestoreReferences
+//                    .getImageUri(id)
+//                    .addOnCompleteListener(new OnCompleteListener<Uri>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Uri> task) {
+//                            Uri imgUri = task.getResult();
+//                            Picasso.get().load(imgUri).into(imgTest);
+//                        }
+//                    });
+//            }
+//        });
+
+
+//        StorageReference fs = FirebaseStorage.getInstance().getReference();
+//        Task <Uri> taskUri = fs.child("thanos").getDownloadUrl();
+//        taskUri.addOnCompleteListener(new OnCompleteListener<Uri>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Uri> task) {
+//                Uri test = task.getResult()
+//                //Picasso.get().load(test).into(imgTest);
+//            }
+//        });
