@@ -120,6 +120,7 @@ public class Db {
         COLLECTION_MEETINGS     = "Meetings",   //has same fields as collection courses
         FIELD_MEETINGCODE       = "meetingCode",
         FIELD_MEETINGSTART      = "meetingStart",
+        FIELD_MEETINGSTATUS     = "meetingStatus"
 
         COLLECTION_MEETINGHISTORY       = "MeetingHistory",   //has same fields as collection courses
         FIELD_ISPRESENT                 = "isPresent",
@@ -294,7 +295,8 @@ public class Db {
                 ds.get("sectionCode").toString(),
                 ds.get("meetingCode").toString(),
                 ds.getTimestamp("meetingStart").toDate(), //this is how to convert timestamp to Date
-                Integer.parseInt(ds.get("studentCount").toString()))
+                Integer.parseInt(ds.get("studentCount").toString()),
+                ds.get("meetingStatus").toString())
             );
         }
         return meetingModels;
@@ -485,8 +487,6 @@ public class Db {
         }
         return studentPresentListModels;
     }
-
-
 
     public static void updateSingleStudent(String entry, String query, UserModel initialInfo) {
         Db.getUsersCollectionReference()

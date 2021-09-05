@@ -37,7 +37,6 @@ public class ClasslistVH extends RecyclerView.ViewHolder implements View.OnClick
         this.txtSectionCode.setText(txtName);
     }
 
-
     @Override
     public void onClick(View v) {
         Log.d(TAG, "onCLick: " + getAdapterPosition());

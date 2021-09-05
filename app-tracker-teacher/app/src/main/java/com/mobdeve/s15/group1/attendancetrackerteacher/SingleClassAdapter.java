@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
-    private static final String TAG = "Class Adapter";
+    private static final String TAG = "Single Class Adapter";
 
     //store data here
     private ArrayList<MeetingModel> data;
@@ -59,7 +59,9 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
                 intent.putExtra(MyKeys.MEETING_CODE_KEY.name(), data.get(position).getMeetingCode());
                 intent.putExtra(MyKeys.DATE_KEY.name(), stringDate.format(data.get(position).getDate()));
                 intent.putExtra(MyKeys.PRESENT_STUDENTS_KEY.name(), data.get(position).getStudentsPresent());
-
+                intent.putExtra(MyKeys.MEETING_STATUS_KEY.name(), data.get(position).getMeetingStatus());
+                Log.d(TAG, "Status: " + data.get(position).getMeetingStatus());
+                Log.d(TAG, "Status: " + data.get(position).getCourseCode());
                 holder.itemView.getContext().startActivity(intent);
             }
         });

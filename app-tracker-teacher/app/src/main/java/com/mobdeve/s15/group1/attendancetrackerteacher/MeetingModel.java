@@ -3,18 +3,21 @@ package com.mobdeve.s15.group1.attendancetrackerteacher;
 import java.util.Date;
 
 public class MeetingModel {
-    String courseCode, sectionCode, meetingCode; //keys could be int? or long?
+    String courseCode, sectionCode, meetingCode, meetingStatus; //keys could be int? or long?
     Date date;
     int studentsPresent;
 
+    public MeetingModel() {
 
+    }
 
-    public MeetingModel(String courseCode, String sectionCode, String meetingCode, Date date, int studentsPresent) {
+    public MeetingModel(String courseCode, String sectionCode, String meetingCode, Date date, int studentsPresent, String meetingStatus) {
         this.courseCode = courseCode;
         this.sectionCode = sectionCode;
         this.meetingCode = meetingCode;
         this.date = date;
         this.studentsPresent = studentsPresent;
+        this.meetingStatus = meetingStatus;
     }
 
     public String getCourseCode() {
@@ -39,6 +42,14 @@ public class MeetingModel {
 
     public void setMeetingCode(String meetingCode) {
         this.meetingCode = meetingCode;
+    }
+
+    public String getMeetingStatus() {
+        return meetingStatus;
+    }
+
+    public void setMeetingStatus(String meetingStatus) {
+        this.meetingStatus = meetingStatus;
     }
 
     public Date getDate() {

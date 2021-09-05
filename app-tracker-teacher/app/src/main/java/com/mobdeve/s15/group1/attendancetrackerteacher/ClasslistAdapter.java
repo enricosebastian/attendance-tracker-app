@@ -38,6 +38,7 @@ public class ClasslistAdapter extends RecyclerView.Adapter<ClasslistVH> {
         holder.setTxtClassCode(data.get(position).getCourseCode());
         holder.setTxtSectionCode(data.get(position).getSectionCode());
 
+        //When an item is clicked
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
