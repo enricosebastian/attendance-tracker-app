@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -45,7 +44,7 @@ public class EditAccountSecurityActivity extends AppCompatActivity {
         this.inputNewPassword           = findViewById(R.id.inputNewPassword);
         this.inputConfirmNewPassword    = findViewById(R.id.inputConfirmNewPassword);
         this.btnSave                    = findViewById(R.id.btnSave);
-        this.btnCancel                  = findViewById(R.id.btnCancel);
+        this.btnCancel                  = findViewById(R.id.btnDeleteRequest);
 
 
         btnSave.setOnClickListener(new View.OnClickListener() {

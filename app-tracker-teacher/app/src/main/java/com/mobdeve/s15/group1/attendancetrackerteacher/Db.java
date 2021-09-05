@@ -120,7 +120,7 @@ public class Db {
         COLLECTION_MEETINGS     = "Meetings",   //has same fields as collection courses
         FIELD_MEETINGCODE       = "meetingCode",
         FIELD_MEETINGSTART      = "meetingStart",
-        FIELD_MEETINGSTATUS     = "meetingStatus"
+        FIELD_MEETINGSTATUS     = "meetingStatus",
 
         COLLECTION_MEETINGHISTORY       = "MeetingHistory",   //has same fields as collection courses
         FIELD_ISPRESENT                 = "isPresent",
