@@ -34,19 +34,6 @@
         app:layout_constraintTop_toBottomOf="@+id/inputIdNumber" />
 
     <EditText
-        android:id="@+id/inputUsername"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/custom_input"
-        android:drawableStart="@drawable/ic_person"
-        android:hint="username"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputEmail" />
-
-    <EditText
         android:id="@+id/inputPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,7 +45,7 @@
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputUsername" />
+        app:layout_constraintTop_toBottomOf="@id/inputEmail" />
 
     <EditText
         android:id="@+id/inputEmail"

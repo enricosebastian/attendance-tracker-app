@@ -114,6 +114,9 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     List<DocumentSnapshot> result = Db.getDocuments(task);
+                    Log.d(TAG,"result size is "+email);
+                    Log.d(TAG,"result size is "+result.size());
+
                     String firstName = result.get(0).getString(Db.FIELD_FIRSTNAME);
                     String lastName = result.get(0).getString(Db.FIELD_LASTNAME);
                     String idNumber = result.get(0).getString(Db.FIELD_IDNUMBER);
