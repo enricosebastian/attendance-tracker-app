@@ -3,85 +3,102 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <EditText
-        android:id="@+id/etCourseName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="212dp"
-        android:ems="10"
-        android:fontFamily="@font/roboto"
-        android:hint="Course Name"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btnCreateCourse"
-        android:layout_width="98dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="38dp"
-        android:layout_marginEnd="100dp"
-        android:fontFamily="@font/roboto"
-        android:text="@string/btnCreateCourse"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnCancelCreate"
-        app:layout_constraintTop_toBottomOf="@+id/etCourseSection" />
-
-    <Button
-        android:id="@+id/btnCancelCreate"
-        android:layout_width="98dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="101dp"
-        android:layout_marginTop="38dp"
-        android:backgroundTint="@color/gray"
-        android:fontFamily="@font/roboto"
-        android:text="@string/btnCancelCreate"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etCourseSection" />
-
-
-
-    <EditText
-        android:id="@+id/etCourseSection"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:fontFamily="@font/roboto"
-        android:hint="Section"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etCourseName"
-        app:layout_constraintVertical_bias="0.011" />
+    android:layout_height="match_parent"
+    android:padding="50dp">
 
     <TextView
         android:id="@+id/tvCreateCourseHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="126dp"
-        android:layout_marginTop="119dp"
-        android:layout_marginEnd="126dp"
-        android:layout_marginBottom="30dp"
         android:fontFamily="@font/roboto"
         android:text="@string/tvCreateCourseHeader"
         android:textColor="#004D40"
         android:textSize="24dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/etCourseName"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <EditText
+        android:id="@+id/etCourseName"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:hint="Course Name"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCreateCourseHeader"
+        />
+
+    <EditText
+        android:id="@+id/etCourseCode"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:hint="Course code"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etCourseName"
+        />
+
+    <EditText
+        android:id="@+id/etCourseSection"
+        android:layout_width="match_parent"
+        android:layout_marginTop="30dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:hint="Section code"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etCourseCode"
+        />
+
+    <Switch
+        android:id="@+id/switchIsPublished"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#004D40"
+        android:checked="false"
+        android:text="Publish"
+        app:layout_constraintTop_toBottomOf="@id/etCourseSection"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <Button
+        android:id="@+id/btnCreateCourse"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:text="@string/btnCreateCourse"
+        app:layout_constraintTop_toBottomOf="@id/switchIsPublished"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnCancelCreate"/>
+
+    <Button
+        android:id="@+id/btnCancelCreate"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/gray"
+        android:fontFamily="@font/roboto"
+        android:text="@string/btnCancelCreate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnCreateCourse"
+        app:layout_constraintTop_toBottomOf="@id/switchIsPublished"/>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

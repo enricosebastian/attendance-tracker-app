@@ -69,7 +69,6 @@ public class EditCourseActivity extends AppCompatActivity {
                 } else {
                     updateCourseName(courseName);
                 }
-
             }
         });
     }

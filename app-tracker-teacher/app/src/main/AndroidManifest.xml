@@ -23,7 +23,7 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".RegistrationView"
+            android:name=".RegistrationActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
@@ -47,7 +47,7 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".CreateCourse"
+            android:name=".CreateCourseActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity

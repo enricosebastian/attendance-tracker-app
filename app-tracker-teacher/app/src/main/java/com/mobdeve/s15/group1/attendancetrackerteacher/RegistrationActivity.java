@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RegistrationView extends AppCompatActivity {
+public class RegistrationActivity extends AppCompatActivity {
 
     public final String TAG = "Registration";
     private static String USERNAME_STATE_KEY = "USERNAME_KEY";
@@ -114,7 +114,7 @@ public class RegistrationView extends AppCompatActivity {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {
                                                         Log.d(TAG, "Input added succesfully");
-                                                        Intent intent = new Intent(RegistrationView.this, ClasslistActivity.class);
+                                                        Intent intent = new Intent(RegistrationActivity.this, ClasslistActivity.class);
                                                         intent.putExtra(EMAIL_STATE_KEY,email);
                                                         startActivity(intent);
                                                         finish();

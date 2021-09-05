@@ -28,13 +28,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText inputEmail, inputPassword;
     private Button btnLogin, btnRegister;
-
-
-    //junk shit to delete later
-    private static String SP_USERNAME_KEY = "SP_USERNAME_KEY"; //delete
-    private static String USERNAME_STATE_KEY = "USERNAME_KEY"; //delete
-    private static String EMAIL_STATE_KEY = "EMAIL_KEY"; //delete
-    ///////////////junk shit to delete later
+    private static String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,16 +42,13 @@ public class LoginActivity extends AppCompatActivity {
 
         this.sp = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
         this.editor = sp.edit();
-
-        String previousEmailEntry = sp.getString(Keys.SP_EMAIL_KEY, "");
-
-        Log.d(TAG,"previous email entry is "+previousEmailEntry); //delete
+        this.email = sp.getString(Keys.SP_EMAIL_KEY, "");
 
         //initializing shared preference file
-        if(!previousEmailEntry.isEmpty()) {
+        if(!email.isEmpty()) {
             //login screen
             Intent intent = new Intent(LoginActivity.this, ClasslistActivity.class);
-            intent.putExtra(Keys.SP_EMAIL_KEY,previousEmailEntry);
+            intent.putExtra(Keys.SP_EMAIL_KEY,email);
             startActivity(intent);
             finish();
         }
@@ -82,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegistrationView.class);
+                Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
                 startActivity(intent);
             }
         });
@@ -90,30 +81,33 @@ public class LoginActivity extends AppCompatActivity {
 
     protected void login(String email, String password) {
         Db.getDocumentsWith(Db.COLLECTION_USERS,
-            Db.FIELD_EMAIL, email,
-            Db.FIELD_USERTYPE, Db.VALUE_USERTYPE).
-            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    List<DocumentSnapshot> result = Db.getDocuments(task);
-                    if(!result.isEmpty()) {
-                        if(result.get(0).getString(Db.FIELD_PASSWORD).equals(password)) {
-                            Log.d(TAG,"User exists");
-                            editor.putString(Keys.SP_EMAIL_KEY, email);
-                            editor.commit();
-                            Intent loginIntent = new Intent(LoginActivity.this, ClasslistActivity.class);
-                            startActivity(loginIntent);
-                            finish();
-                        } else {
-                            Log.d(TAG,"Incorrect password entry");
-                            Toast.makeText(getApplicationContext(), "Incorrect password!", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Log.d(TAG,"Account does not exist");
+        Db.FIELD_EMAIL, email).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<DocumentSnapshot> result = Db.getDocuments(task);
+                if(!result.isEmpty()) {
+                    if(result.get(0).getString(Db.FIELD_USERTYPE).equals("student")) {
+                        Log.d(TAG,"Student tried logging in");
                         Toast.makeText(getApplicationContext(), "Account does not exist!", Toast.LENGTH_SHORT).show();
+                    } else if (result.get(0).getString(Db.FIELD_PASSWORD).equals(password)) {
+                        Log.d(TAG,"User exists");
+                        editor.putString(Keys.SP_EMAIL_KEY, email);
+                        editor.putString(Keys.SP_USERTYPE_KEY, result.get(0).getString(Db.FIELD_USERTYPE));
+                        editor.commit();
+                        Intent loginIntent = new Intent(LoginActivity.this, ClasslistActivity.class);
+                        startActivity(loginIntent);
+                        finish();
+                    } else {
+                        Log.d(TAG,"Incorrect password entry");
+                        Toast.makeText(getApplicationContext(), "Incorrect password!", Toast.LENGTH_SHORT).show();
                     }
-
+                } else {
+                    Log.d(TAG,"Account does not exist");
+                    Toast.makeText(getApplicationContext(), "Account does not exist!", Toast.LENGTH_SHORT).show();
                 }
-            });
+
+            }
+        });
     }
 }

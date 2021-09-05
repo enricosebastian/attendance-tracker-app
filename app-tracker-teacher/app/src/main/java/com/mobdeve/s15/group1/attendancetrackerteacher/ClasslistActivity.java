@@ -66,15 +66,11 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
         this.btnAddCourse   = findViewById(R.id.btnAddCourse);
         this.imgProfilePic  = findViewById(R.id.img_profilePic);
 
-
-        Log.d(TAG,"Received: "+email);
-        initializeViews(email);
-
         btnAddCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ClasslistActivity.this, CreateCourse.class);
-                startActivity(intent);
+                Intent createCourseIntent = new Intent(ClasslistActivity.this, CreateCourseActivity.class);
+                startActivity(createCourseIntent);
             }
         });
     }
@@ -112,7 +108,7 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
     }
 
     //initializes views
-    protected void initializeViews(String email) {
+    protected void initializeViews() {
         Db.getDocumentsWith(Db.COLLECTION_USERS,
             Db.FIELD_EMAIL, email).
             addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -141,47 +137,27 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
             });
 
         Db.getDocumentsWith(Db.COLLECTION_COURSES,
-            Db.FIELD_HANDLEDBY, email).
-            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    classModels.clear(); //always clear when initializing
+        Db.FIELD_HANDLEDBY, email).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                classModels.clear(); //always clear when initializing
 
-                    classModels.addAll(Db.toClassModel(Db.getDocuments(task)));
-                    Log.d(TAG,"classModel size is "+classModels.size());
+                classModels.addAll(Db.toClassModel(Db.getDocuments(task)));
+                Log.d(TAG,"classModel size is "+classModels.size());
 
-                    recyclerView = findViewById(R.id.recyclerView);
-                    layoutManager = new LinearLayoutManager(getApplicationContext());
-                    recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
-                    classlistAdapter = new ClasslistAdapter(classModels);
-                    recyclerView.setAdapter(classlistAdapter);
-                }
-            });
+                recyclerView = findViewById(R.id.recyclerView);
+                layoutManager = new LinearLayoutManager(getApplicationContext());
+                recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+                classlistAdapter = new ClasslistAdapter(classModels);
+                recyclerView.setAdapter(classlistAdapter);
+            }
+        });
     }//initializes views
-
-    //you can delete these
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "we are in on stop");
-    }
-
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG,"we are in on destroy");
-    }
 
     protected void onResume() {
         super.onResume();
+        initializeViews();
         Log.d(TAG,"we are in on resume");
-    }
-
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "we are in on start");
-    }
-
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "we are in on pause");
     }
 }
