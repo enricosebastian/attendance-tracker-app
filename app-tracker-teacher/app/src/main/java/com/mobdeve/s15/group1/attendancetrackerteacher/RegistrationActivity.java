@@ -3,6 +3,7 @@ package com.mobdeve.s15.group1.attendancetrackerteacher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -26,31 +27,43 @@ import java.util.List;
 import java.util.Map;
 
 public class RegistrationActivity extends AppCompatActivity {
-    private static final String TAG = "RegistrationActivity.java";
+    private static final String TAG = "RegistrationActivity";
 
-
-    private static String USERNAME_STATE_KEY = "USERNAME_KEY";
-    private static String EMAIL_STATE_KEY = "EMAIL_KEY";
+    //shared pref initialization
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
 
+    //widget initialization
     private EditText    inputFirstName,
                         inputLastName,
                         inputEmail,
                         inputPassword,
                         inputIdNumber;
+    private Button      btnSubmit,
+                        btnCancelRegistration;
 
-    private Button btnSubmit, btnCancelRegistration;
 
-    private FirebaseFirestore db;
+    //delete this LMFAO VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+    //delete this LMFAO VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+    //delete this LMFAO VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+    //delete this LMFAO VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+    private static String USERNAME_STATE_KEY = "USERNAME_KEY";
+    private static String EMAIL_STATE_KEY = "EMAIL_KEY";
+    //delete this ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    //delete this ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    //delete this ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    //delete this ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_view);
 
-        //get firestore instance
-        this.db = FirebaseFirestore.getInstance();
+
+        this.sp = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
+        this.editor = sp.edit();
+
 
         this.btnSubmit = findViewById(R.id.btnSubmit);
         this.btnCancelRegistration = findViewById(R.id.btnCancelRegistration);
@@ -60,80 +73,40 @@ public class RegistrationActivity extends AppCompatActivity {
         this.inputPassword = findViewById(R.id.inputPassword);
         this.inputIdNumber = findViewById(R.id.inputIdNumber);
 
+
         // When User registers
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = inputEmail.getText().toString();
-                String firstName = inputFirstName.getText().toString();
-                String idNumber = inputIdNumber.getText().toString();
-                String lastName = inputLastName.getText().toString();
-                String password = inputPassword.getText().toString();
-                String userType = "teacher";
+                String email        = inputEmail.getText().toString();
+                String firstName    = inputFirstName.getText().toString();
+                String idNumber     = inputIdNumber.getText().toString();
+                String lastName     = inputLastName.getText().toString();
+                String password     = inputPassword.getText().toString();
 
                 // If not all entries are filled
                 if(!doAllFieldsHaveEntries()) {
                     Log.d(TAG, "Not all fields have entries");
                     Toast.makeText(getApplicationContext(), "Please fill up all the fields", Toast.LENGTH_SHORT).show();
                 } else {
-
-                    // Get the user collection
-                    Db.getUsersCollectionReference().
-                        whereEqualTo(Db.EMAIL_FIELD, email).
-                        get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-
+                    //checks id for BOTH teachers and students, just in case
+                    Db.getDocumentsWith(Db.COLLECTION_USERS,
+                    Db.FIELD_IDNUMBER, idNumber).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            QuerySnapshot emailQuery = task.getResult();
-                            List<DocumentSnapshot> emailResult = emailQuery.getDocuments();
+                            List<DocumentSnapshot> result = Db.getDocuments(task);
+                            if(result.size()==0) {
+                                createNewUser(email, firstName, idNumber, lastName, password);
 
-                            //If email is unique
-                            if(emailResult.isEmpty()) {
+                                editor.putString(Keys.SP_EMAIL_KEY, email);
+                                editor.putString(Keys.SP_USERTYPE_KEY, "teacher");
+                                editor.commit();
 
-                                Db.getUsersCollectionReference().
-                                    whereEqualTo(Db.IDNUMBER_FIELD, idNumber).
-                                    get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        QuerySnapshot idNumberQuery = task.getResult();
-                                        List<DocumentSnapshot> idNumberResult = idNumberQuery.getDocuments();
-
-                                        // If id number is unique
-                                        if(idNumberResult.isEmpty()) {
-                                            Map<String, Object> input = new HashMap<>();
-                                            input.put(Db.EMAIL_FIELD,email);
-                                            input.put(Db.FIRSTNAME_FIELD,firstName);
-                                            input.put(Db.IDNUMBER_FIELD,idNumber);
-                                            input.put(Db.LASTNAME_FIELD,lastName);
-                                            input.put(Db.PASSWORD_FIELD,password);
-                                            input.put(Db.USERTYPE_FIELD,userType);
-
-                                            Db.
-                                                getUsersCollectionReference().
-                                                add(input).
-                                                addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                    @Override
-                                                    public void onSuccess(DocumentReference documentReference) {
-                                                        Log.d(TAG, "Input added succesfully");
-                                                        Intent intent = new Intent(RegistrationActivity.this, ClasslistActivity.class);
-                                                        intent.putExtra(EMAIL_STATE_KEY,email);
-                                                        startActivity(intent);
-                                                        finish();
-                                                    }
-                                                }).addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        String error = e.getMessage();
-                                                        Log.w(TAG, "Error adding document: "+ error);
-                                                    }
-                                                });
-                                        } else {
-                                            Toast.makeText(getApplicationContext(), "Account already exists", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
+                                Intent intent = new Intent(RegistrationActivity.this, ClasslistActivity.class);
+                                startActivity(intent);
+                                finish();
                             } else {
-                                Toast.makeText(getApplicationContext(), "Account already exists", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Account exists already!", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -150,6 +123,7 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
+
     /*  This method was created for code readability. It checks if the fields have completely been
      *  filled up by the user
      **/
@@ -158,5 +132,20 @@ public class RegistrationActivity extends AppCompatActivity {
                 !inputIdNumber.getText().toString().isEmpty() &&
                 !inputLastName.getText().toString().isEmpty() &&
                 !inputPassword.getText().toString().isEmpty();
+    }
+
+    protected void createNewUser(String email, String firstName, String idNumber, String lastName, String password) {
+        Map<String, Object> input = new HashMap<>();
+
+        input.put(Db.FIELD_EMAIL, email);
+        input.put(Db.FIELD_FIRSTNAME, firstName);
+        input.put(Db.FIELD_IDNUMBER, idNumber);
+        input.put(Db.FIELD_LASTNAME, lastName);
+        input.put(Db.FIELD_PASSWORD, password);
+        input.put(Db.FIELD_USERTYPE, "teacher");
+
+        Db.addDocument(Db.COLLECTION_USERS, input);
+
+        Toast.makeText(getApplicationContext(), "Account successfully created!", Toast.LENGTH_SHORT).show();
     }
 }

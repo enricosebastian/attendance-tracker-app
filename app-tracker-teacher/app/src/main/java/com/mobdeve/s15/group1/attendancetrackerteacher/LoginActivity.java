@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
 
+
         //logging in
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
         //registering a new account
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 
     protected void login(String email, String password) {
         Db.getDocumentsWith(Db.COLLECTION_USERS,

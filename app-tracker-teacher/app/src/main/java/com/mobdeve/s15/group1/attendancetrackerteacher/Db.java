@@ -51,7 +51,10 @@ public class Db {
 
     private static ArrayList<ClassModel> classModels                            = new ArrayList<>();
     private static ArrayList<MeetingModel> meetingModels                        = new ArrayList<>();
+    private static ArrayList<CourseRequestModel> courseRequestModels            = new ArrayList<>();
     private static ArrayList<StudentPresentListModel> studentPresentListModels  = new ArrayList<>();
+
+    public static String id = null;
     ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
     ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
     ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
@@ -118,6 +121,16 @@ public class Db {
         FIELD_MEETINGCODE       = "meetingCode",
         FIELD_MEETINGSTART      = "meetingStart",
         FIELD_MEETINGSTATUS     = "meetingStatus"
+
+        COLLECTION_MEETINGHISTORY       = "MeetingHistory",   //has same fields as collection courses
+        FIELD_ISPRESENT                 = "isPresent",
+        FIELD_STUDENTATTENDED           = "studentAttended",
+
+        COLLECTION_COURSEREQUEST    = "CourseRequest",
+
+        COLLECTION_CLASSLIST        = "ClassList"
+
+
         ; //no need for username here
 
 
@@ -176,6 +189,19 @@ public class Db {
     }
 
     public static Task<QuerySnapshot> getDocumentsWith(
+            String tableName, String field1,
+            String value1, String field2,
+            String value2, String field3,
+            String value3) {
+        return  getFirestoreInstance().
+                collection(tableName).
+                whereEqualTo(field1, value1).
+                whereEqualTo(field2, value2).
+                whereEqualTo(field3, value3).
+                get();
+    }
+
+    public static Task<QuerySnapshot> getDocumentsWith(
         String tableName, String field1,
         String value1, String field2,
         String value2, String sortingField,
@@ -197,7 +223,13 @@ public class Db {
 
     public static String getIdFromTask(Task<QuerySnapshot> task) {
         QuerySnapshot qs = task.getResult();
-        String id = qs.getDocuments().get(0).getId();
+        if(qs.isEmpty()) {
+            id = null;
+            Log.d(TAG,"getIdFromTask finds no existing ID");
+        } else {
+            id = qs.getDocuments().get(0).getId();
+            Log.d(TAG,"getIdFromTask found an ID of "+id);
+        }
         return id;
     }
 
@@ -241,6 +273,20 @@ public class Db {
         return classModels;
     }
 
+    public static ArrayList<CourseRequestModel> toCourseRequestModel(List<DocumentSnapshot> result) {
+        courseRequestModels.clear();
+        for(DocumentSnapshot ds:result) {
+            courseRequestModels.add(new CourseRequestModel(
+                    ds.getString(Db.FIELD_COURSECODE),
+                    ds.getString(Db.FIELD_FIRSTNAME),
+                    ds.getString(Db.FIELD_IDNUMBER),
+                    ds.getString(FIELD_LASTNAME),
+                    ds.getString(FIELD_SECTIONCODE)
+            ));
+        }
+        return courseRequestModels;
+    }
+
     public static ArrayList<MeetingModel> toMeetingModel(List<DocumentSnapshot> result) {
         meetingModels.clear();
         for(DocumentSnapshot ds:result) {
@@ -254,6 +300,88 @@ public class Db {
             );
         }
         return meetingModels;
+    }
+
+    public static void deleteDocument(String tableName, String field, String value) {
+        getDocumentsWith(tableName, field, value).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String id = Db.getIdFromTask(task);
+                Db.getCollection(tableName).
+                document(id).
+                delete().
+                addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            Log.d(TAG,"Successfully deleted a "+tableName+" document");
+                        } else {
+                            Log.d(TAG,"Failed: "+task.getException());
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public static void deleteDocument(String tableName, String field1, String value1, String field2, String value2) {
+        getDocumentsWith(tableName, field1, value1, field2, value2).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String id = Db.getIdFromTask(task);
+                Log.d(TAG,"you are in deleteDcoument function. Here is the id: "+id);
+                if(id == null) {
+                    Log.d(TAG,"Such a document in collections \""+tableName+"\" does not exist");
+                } else {
+                    Db.getCollection(tableName).
+                    document(id).
+                    delete().
+                    addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()) {
+                                Log.d(TAG,"Successfully deleted a document in \" "+tableName+"\" collection");
+                            } else {
+                                Log.d(TAG,"Failed: "+task.getException());
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    public static void deleteDocument(String tableName,
+        String field1, String value1,
+        String field2, String value2,
+        String field3, String value3) {
+        getDocumentsWith(tableName, field1, value1, field2, value2, field3, value3).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String id = Db.getIdFromTask(task);
+                Log.d(TAG,"you are in deleteDcoument function. Here is the id: "+id);
+                if(id == null) {
+                    Log.d(TAG,"Such a document in collections \""+tableName+"\" does not exist");
+                } else {
+                    Db.getCollection(tableName).
+                    document(id).
+                    delete().
+                    addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()) {
+                                Log.d(TAG,"Successfully deleted a document in \" "+tableName+"\" collection");
+                            } else {
+                                Log.d(TAG,"Failed: "+task.getException());
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 
 
@@ -429,50 +557,6 @@ public class Db {
             .collection(collection)
             .whereEqualTo(fieldName1,fieldValue1)
             .whereEqualTo(fieldName2, fieldValue2);
-    }
-
-    public static void deleteDocument(String collection, String fieldName, String fieldValue) {
-        getFirestoreInstance().collection(collection).whereEqualTo(fieldName,fieldValue).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                String id = getIdFromTask(task);
-                getFirestoreInstance().collection(collection).document(id).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()) {
-                            Log.d(TAG,"Successfully deleted a "+collection+" document");
-                        } else {
-                            Log.d(TAG,"Failed: "+task.getException());
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    public static void deleteDocumentWithTwoParameters(String collection, String fieldName1, String fieldValue1, String fieldName2, String fieldValue2) {
-        getFirestoreInstance().collection(collection)
-            .whereEqualTo(fieldName1,fieldValue1)
-            .whereEqualTo(fieldName2,fieldValue2)
-            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                String id = getIdFromTask(task);
-                Log.d(TAG,"Successfully deleted an "+id+" document");
-                getFirestoreInstance().collection(collection).document(id).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()) {
-                            Log.d(TAG,"Successfully deleted a "+collection+" document");
-                        } else {
-                            Log.d(TAG,"Failed: "+task.getException());
-                        }
-                    }
-                });
-
-            }
-        });
-
     }
 
     public static Task<Uri> getImageUri(String username) {

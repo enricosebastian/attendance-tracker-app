@@ -27,9 +27,11 @@ public class ClasslistVH extends RecyclerView.ViewHolder implements View.OnClick
         this.btnMoreOptions.setOnClickListener(this);
     }
 
+
     public void setTxtClassCode(String txtClassCode) {
         this.txtClassCode.setText(txtClassCode);
     }
+
 
     public void setTxtSectionCode(String txtName) {
         this.txtSectionCode.setText(txtName);
@@ -40,6 +42,7 @@ public class ClasslistVH extends RecyclerView.ViewHolder implements View.OnClick
         Log.d(TAG, "onCLick: " + getAdapterPosition());
         showPopupMenu(v);
     }
+
 
     //  Attribution: https://youtu.be/hKyjb4b19YM
     private void showPopupMenu(View view)  {
@@ -70,8 +73,36 @@ public class ClasslistVH extends RecyclerView.ViewHolder implements View.OnClick
                         // The dialog is automatically dismissed when a dialog button is clicked.
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                // Continue with delete operation
-                                //Toast.makeText(itemView.getContext(), txtClassCode.getText().toString(), Toast.LENGTH_SHORT).show();
+                                //deletes all info from courses
+                                Db.deleteDocument(Db.COLLECTION_COURSES,
+                                Db.FIELD_SECTIONCODE, txtSectionCode.getText().toString(),
+                                Db.FIELD_COURSECODE, txtClassCode.getText().toString()); //DAT NAMING INCONSISTENCY THO LMAO
+                                Log.d(TAG,"deleted collection course");
+
+                                //deletes all info from meetings
+                                Db.deleteDocument(Db.COLLECTION_MEETINGS,
+                                Db.FIELD_SECTIONCODE, txtSectionCode.getText().toString(),
+                                Db.FIELD_COURSECODE, txtClassCode.getText().toString()); //DAT NAMING INCONSISTENCY THO LMAO
+                                Log.d(TAG,"deleted collection meetings");
+//
+//                              //deletes all info from meeting history
+                                Db.deleteDocument(Db.COLLECTION_MEETINGHISTORY,
+                                Db.FIELD_SECTIONCODE, txtSectionCode.getText().toString(),
+                                Db.FIELD_COURSECODE, txtClassCode.getText().toString()); //DAT NAMING INCONSISTENCY THO LMAO
+                                Log.d(TAG,"deleted collection meeting history");
+
+                                //how to update recycler view VVVVVVVVVVVVVVVVVV
+                                //how to update recycler view VVVVVVVVVVVVVVVVVV
+                                //how to update recycler view VVVVVVVVVVVVVVVVVV
+                                //how to update recycler view VVVVVVVVVVVVVVVVVV
+                                //how to update recycler view VVVVVVVVVVVVVVVVVV
+
+                                //how to update recycler view ^^^^^^^^^^^^^^^^^^
+                                //how to update recycler view ^^^^^^^^^^^^^^^^^^
+                                //how to update recycler view ^^^^^^^^^^^^^^^^^^
+                                //how to update recycler view ^^^^^^^^^^^^^^^^^^
+                                //how to update recycler view ^^^^^^^^^^^^^^^^^^
+
                                 Toast.makeText(itemView.getContext(), "Course has been successfully deleted", Toast.LENGTH_SHORT).show();
                             }
                         })
@@ -86,4 +117,5 @@ public class ClasslistVH extends RecyclerView.ViewHolder implements View.OnClick
         }
 
     }
+
 }
