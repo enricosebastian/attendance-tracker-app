@@ -129,8 +129,12 @@ public class EditProfileActivity extends AppCompatActivity {
                     Db.getProfilePic(documentId).addOnCompleteListener(new OnCompleteListener<Uri>() {
                         @Override
                         public void onComplete(@NonNull Task<Uri> task) {
-                            Uri imgUri = task.getResult();
-                            Picasso.get().load(imgUri).into(img_profilePic);
+                            if(task.isSuccessful()) {
+                                Uri imgUri = task.getResult();
+                                Picasso.get().load(imgUri).into(img_profilePic);
+                            } else {
+                                Log.d(TAG,"No profile image found. Switching to default");
+                            }
                         }
                     });
                 }

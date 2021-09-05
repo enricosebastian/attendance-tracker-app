@@ -129,8 +129,12 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
                     Db.getProfilePic(documentId).addOnCompleteListener(new OnCompleteListener<Uri>() {
                         @Override
                         public void onComplete(@NonNull Task<Uri> task) {
-                            Uri imgUri = task.getResult();
-                            Picasso.get().load(imgUri).into(imgProfilePic);
+                            if(task.isSuccessful()) {
+                                Uri imgUri = task.getResult();
+                                Picasso.get().load(imgUri).into(imgProfilePic);
+                            } else {
+                                Log.d(TAG,"No profile image found. Switching to default");
+                            }
                         }
                     });
                 }
