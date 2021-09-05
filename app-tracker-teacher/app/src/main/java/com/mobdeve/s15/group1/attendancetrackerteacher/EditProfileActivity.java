@@ -38,7 +38,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private SharedPreferences sp;
 
     private Uri imageUri = null;
-    private EditText inputPassword, inputFirstName, inputLastname, inputEmail;
+    private EditText inputFirstName, inputLastname;
     private Button btnSelectImage, btnSaveEditProfile, btnCancelEditProfile;
     private ImageView img_profilePic; //DAT NAMING INCONSISTENCY THO
 

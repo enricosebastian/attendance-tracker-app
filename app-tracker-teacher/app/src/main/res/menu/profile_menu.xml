@@ -4,7 +4,7 @@
         android:id="@+id/editProfile"
         android:title="@string/itemEditProfile"/>
     <item
-        android:id="@+id/accountSecurity"
+        android:id="@+id/editAccountSecurity"
         android:title="@string/accountSecurity"/>
     <item
         android:id="@+id/logout"

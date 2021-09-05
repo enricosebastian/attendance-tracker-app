@@ -67,7 +67,7 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
         this.imgProfilePic  = findViewById(R.id.img_profilePic);
 
 
-        Log.d(TAG,"received: "+email);
+        Log.d(TAG,"Received: "+email);
         initializeViews(email);
 
         btnAddCourse.setOnClickListener(new View.OnClickListener() {
@@ -87,17 +87,17 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
        popup.show();
    }
 
-
    //Handles the clicks on the items
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.editProfile:
-                Intent intent = new Intent (ClasslistActivity.this, EditProfileActivity.class);
-                startActivity(intent);
+                Intent editProfileIntent = new Intent (ClasslistActivity.this, EditProfileActivity.class);
+                startActivity(editProfileIntent);
                 return true;
-            case R.id.accountSecurity:
-                Log.d(TAG,"account security selected");
+            case R.id.editAccountSecurity:
+                Intent editAccountSecurityIntent = new Intent (ClasslistActivity.this, EditAccountSecurityActivity.class);
+                startActivity(editAccountSecurityIntent);
                 return true;
             case R.id.logout:
                 editor.clear();
