@@ -6,39 +6,71 @@
     android:layout_height="match_parent"
     tools:context=".EditProfileActivity">
 
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/img_profilePic"
+        android:src="@drawable/img_tempimage"
+        app:layout_constraintTop_toBottomOf="@id/editProfileHeader"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/template_rounded_corner"
+        />
 
-    <EditText
-        android:id="@+id/inputPassword"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/editProfileHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="142dp"
+        android:fontFamily="@font/roboto"
+        android:text="Edit Profile"
+        android:textColor="#004D40"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvEditProfilePic"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
+        android:text="Edit Profile Picture:"
+        android:textColor="#004D40"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_profilePic" />
+
+    <Button
+        android:id="@+id/btnSelectImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:backgroundTint="#004D40"
+        android:text="Select Image"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvEditProfilePic" />
+
+    <EditText
+        android:id="@+id/inputFirstName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/custom_input"
-        android:drawableStart="@drawable/ic_lock"
-        android:hint="password"
-        android:inputType="textPassword"
+        android:drawableStart="@drawable/ic_person"
+        android:hint="first name"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnSelectImage" />
-
-    <EditText
-        android:id="@+id/inputEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="24dp"
-        android:background="@drawable/custom_input"
-        android:drawableStart="@drawable/ic_email"
-        android:hint="email"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLastName" />
 
     <EditText
         android:id="@+id/inputLastName"
@@ -56,60 +88,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inputFirstName" />
 
-    <EditText
-        android:id="@+id/inputFirstName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="24dp"
-        android:background="@drawable/custom_input"
-        android:drawableStart="@drawable/ic_person"
-        android:hint="first name"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputPassword" />
-
-    <TextView
-        android:id="@+id/editProfileHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="78dp"
-        android:layout_marginEnd="142dp"
-        android:fontFamily="@font/roboto"
-        android:text="Edit Profile"
-        android:textColor="#004D40"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvEditProfilePic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="45dp"
-        android:text="Edit Profile Picture:"
-        android:textColor="#004D40"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editProfileHeader" />
-
-    <Button
-        android:id="@+id/btnSelectImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:backgroundTint="#004D40"
-        android:text="Select Image"
-        android:textSize="10sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvEditProfilePic" />
-
     <Button
         android:id="@+id/btnSaveEditProfile"
         android:layout_width="wrap_content"
@@ -120,7 +98,7 @@
         android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnCancelEditProfile"
-        app:layout_constraintTop_toBottomOf="@+id/inputEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/inputLastName" />
 
     <Button
         android:id="@+id/btnCancelEditProfile"
@@ -131,7 +109,7 @@
         android:backgroundTint="@color/gray"
         android:text="@android:string/cancel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/inputLastName" />
 
 
 

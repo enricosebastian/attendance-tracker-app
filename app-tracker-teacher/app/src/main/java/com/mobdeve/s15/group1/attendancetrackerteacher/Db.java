@@ -101,6 +101,10 @@ public class Db {
         return getFirestoreInstance().collection(tableName).get();
     }
 
+    public static CollectionReference getCollection(String collectionName) {
+        return getFirestoreInstance().collection(collectionName);
+    }
+
     public static List<DocumentSnapshot> getDocuments(Task<QuerySnapshot> task) {
         return task.getResult().getDocuments();
     }
@@ -128,6 +132,21 @@ public class Db {
                 whereEqualTo(field3, value3).
                 get();
     }
+
+    public static String getIdFromTask(Task<QuerySnapshot> task) {
+        QuerySnapshot qs = task.getResult();
+        String id = qs.getDocuments().get(0).getId();
+        return id;
+    }
+
+    public static Task uploadImage(String documentId, Uri imgUri) {
+        return getStorageReferenceInstance().child(documentId).putFile(imgUri);
+    }
+
+    public static Task<Uri> getProfilePic(String documentId) {
+        return Db.getStorageReferenceInstance().child(documentId).getDownloadUrl();
+    }
+
 
     ////////////////////NEW AS OF 2021, 09, 04
 
@@ -236,12 +255,6 @@ public class Db {
                 Integer.parseInt(ds.get("studentCount").toString())));
         }
         return classModels;
-    }
-
-    public static String getIdFromTask(Task<QuerySnapshot> task) {
-        QuerySnapshot qs = task.getResult();
-        String id = qs.getDocuments().get(0).getId();
-        return id;
     }
 
     public static void updateSingleStudent(String entry, String query, UserModel initialInfo) {
@@ -357,10 +370,6 @@ public class Db {
             }
         });
 
-    }
-
-    public static Task uploadImage(String username, Uri imgUri) {
-        return getStorageReferenceInstance().child(username).putFile(imgUri);
     }
 
     public static Task<Uri> getImageUri(String username) {

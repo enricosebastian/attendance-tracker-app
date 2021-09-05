@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,6 +123,15 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
                     String idNumber = result.get(0).getString(Db.FIELD_IDNUMBER);
                     txtName.setText(firstName+" "+lastName);
                     txtIdNumber.setText(idNumber);
+
+                    String documentId = Db.getIdFromTask(task);
+                    Db.getProfilePic(documentId).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            Uri imgUri = task.getResult();
+                            Picasso.get().load(imgUri).into(imgProfilePic);
+                        }
+                    });
                 }
             });
 
