@@ -291,12 +291,12 @@ public class Db {
         meetingModels.clear();
         for(DocumentSnapshot ds:result) {
             meetingModels.add(new MeetingModel(
-                ds.get("courseCode").toString(),
-                ds.get("sectionCode").toString(),
-                ds.get("meetingCode").toString(),
+                ds.getString("courseCode"),
+                ds.getString("sectionCode"),
+                ds.getString("meetingCode"),
                 ds.getTimestamp("meetingStart").toDate(), //this is how to convert timestamp to Date
                 Integer.parseInt(ds.get("studentCount").toString()),
-                ds.get("meetingStatus").toString())
+                ds.getString("meetingStatus"))
             );
         }
         return meetingModels;
@@ -331,7 +331,7 @@ public class Db {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 String id = Db.getIdFromTask(task);
-                Log.d(TAG,"you are in deleteDcoument function. Here is the id: "+id);
+                Log.d(TAG,"you are in deleteDocument function. Here is the id: "+id);
                 if(id == null) {
                     Log.d(TAG,"Such a document in collections \""+tableName+"\" does not exist");
                 } else {
