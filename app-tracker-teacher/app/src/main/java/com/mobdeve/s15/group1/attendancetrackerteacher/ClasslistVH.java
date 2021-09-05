@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,7 +56,9 @@ public class ClasslistVH extends RecyclerView.ViewHolder implements View.OnClick
         switch (item.getItemId()) {
             case R.id.editCourse:
                 Log.d(TAG, "Action edit course @ position: " + getAdapterPosition());
-                Intent intent = new Intent(itemView.getContext(), EditCourse.class);
+                Intent intent = new Intent(itemView.getContext(), EditCourseActivity.class);
+                intent.putExtra(Keys.INTENT_COURSECODE, txtClassCode.getText().toString());
+                intent.putExtra(Keys.INTENT_SECTIONCODE, txtSectionCode.getText().toString());
                 itemView.getContext().startActivity(intent);
                 return true;
             case R.id.deleteCourse:
