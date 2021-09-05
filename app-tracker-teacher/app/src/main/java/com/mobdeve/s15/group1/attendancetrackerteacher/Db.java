@@ -258,6 +258,7 @@ public class Db {
                     if(initialInfo.getIdNumber().equals("")) initialInfo.setIdNumber(ds.getString("idNumber"));
                     if(initialInfo.getUserType().equals("")) initialInfo.setUserType(ds.getString("userType"));
 
+
                     String id = Db.getIdFromTask(task);
                     Db.getUsersCollectionReference()
                         .document(id)

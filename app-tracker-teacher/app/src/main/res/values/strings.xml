@@ -28,4 +28,6 @@
     <string name="itemEditProfile">Edit profile</string>
     <string name="itemLogout">Logout</string>
 
+    <string name="accountSecurity">Account security</string>
+
 </resources>

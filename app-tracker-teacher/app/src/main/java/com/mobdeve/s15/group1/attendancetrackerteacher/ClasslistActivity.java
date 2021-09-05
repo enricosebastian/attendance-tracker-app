@@ -21,7 +21,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -77,21 +76,25 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
         });
     }
 
+    //handles the pop up button
    public void showPopup (View v) {
        PopupMenu popup = new PopupMenu(this, v);
        popup.setOnMenuItemClickListener(this);
        popup.inflate(R.menu.profile_menu);
        popup.show();
-
    }
+
 
    //Handles the clicks on the items
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.editProfile:
-                Intent intent = new Intent (ClasslistActivity.this, EditProfile.class);
+                Intent intent = new Intent (ClasslistActivity.this, EditProfileActivity.class);
                 startActivity(intent);
+                return true;
+            case R.id.accountSecurity:
+                Log.d(TAG,"account security selected");
                 return true;
             case R.id.logout:
                 editor.clear();
@@ -114,7 +117,7 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     List<DocumentSnapshot> result = Db.getDocuments(task);
                     String firstName = result.get(0).getString(Db.FIELD_FIRSTNAME);
-                    String lastName = result.get(0).getString(Db.FIELD_FIRSTNAME);
+                    String lastName = result.get(0).getString(Db.FIELD_LASTNAME);
                     String idNumber = result.get(0).getString(Db.FIELD_IDNUMBER);
                     txtName.setText(firstName+" "+lastName);
                     txtIdNumber.setText(idNumber);

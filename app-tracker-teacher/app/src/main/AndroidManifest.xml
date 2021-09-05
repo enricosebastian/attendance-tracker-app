@@ -16,7 +16,7 @@
             android:exported="true"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".EditProfile"
+            android:name=".EditProfileActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
         <activity

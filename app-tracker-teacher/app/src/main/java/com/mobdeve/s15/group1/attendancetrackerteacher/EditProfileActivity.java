@@ -28,11 +28,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
-public class EditProfile extends AppCompatActivity {
+public class EditProfileActivity extends AppCompatActivity {
 
+    //DELETE THIS
     private static String SP_FILE_NAME = "LoginPreferences";
     private static String SP_EMAIL_KEY = "SP_EMAIL_KEY";
     private static String SP_USERNAME_KEY = "SP_USERNAME_KEY";
+    ////////////////////////DELETE THIS
 
     EditText inputPassword, inputFirstName, inputLastname, inputEmail;
     Button btnSelectImage, btnSaveEditProfile, btnCancelEditProfile;
@@ -116,7 +118,7 @@ public class EditProfile extends AppCompatActivity {
         btnSaveEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(EditProfile.this, "Changes saved", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditProfileActivity.this, "Changes saved", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
