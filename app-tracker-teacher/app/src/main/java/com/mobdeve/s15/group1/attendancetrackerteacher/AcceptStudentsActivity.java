@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 import java.util.ArrayList;
 
-public class AcceptStudents extends AppCompatActivity {
+public class AcceptStudentsActivity extends AppCompatActivity {
 
     private ArrayList<StudentModel> students = new ArrayList<>();
 

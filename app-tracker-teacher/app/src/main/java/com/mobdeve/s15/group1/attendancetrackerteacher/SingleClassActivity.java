@@ -74,7 +74,7 @@ public class SingleClassActivity extends AppCompatActivity {
         btnAcceptStudents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SingleClassActivity.this, AcceptStudents.class);
+                Intent intent = new Intent(SingleClassActivity.this, AcceptStudentsActivity.class);
                 startActivity(intent);
             }
         });

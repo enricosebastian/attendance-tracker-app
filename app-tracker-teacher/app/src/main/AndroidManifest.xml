@@ -43,7 +43,7 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AcceptStudents"
+            android:name=".AcceptStudentsActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
