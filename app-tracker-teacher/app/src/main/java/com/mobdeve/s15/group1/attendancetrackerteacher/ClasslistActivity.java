@@ -36,6 +36,7 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
     //shared preferences initialization
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
+    private String email;
     ////////////
 
     //recycler view initialization
@@ -58,7 +59,7 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
 
         this.sp             = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
         this.editor         = sp.edit();
-        String email        = sp.getString(Keys.SP_EMAIL_KEY,"");
+        this.email          = sp.getString(Keys.SP_EMAIL_KEY,"");
 
         this.txtName        = findViewById(R.id.tvName);
         this.txtIdNumber    = findViewById(R.id.tvIdName);
@@ -140,6 +141,8 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
             addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    classModels.clear(); //always clear when initializing
+
                     classModels.addAll(Db.toClassModel(Db.getDocuments(task)));
                     Log.d(TAG,"classModel size is "+classModels.size());
 
@@ -151,49 +154,30 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
                 }
             });
     }//initializes views
+
+    //you can delete these
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "we are in on stop");
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG,"we are in on destroy");
+    }
+
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG,"we are in on resume");
+    }
+
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "we are in on start");
+    }
+
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "we are in on pause");
+    }
 }
-
-//////////////////////////////////////////////////////FUCK//////////////////////////////////////////
-
-//delete when everything is done
-//        Db.getDocumentsWith("email","ben@dlsu.edu.ph", Db.USERS_COLLECTION).
-//            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                    List<DocumentSnapshot> results = Db.getDocuments(task);
-//                    Log.d("what",""+results.get(0).toString());
-//                }
-//            });
-
-
-
-
-//        upload image
-//        Query q = FirestoreReferences.findDocuments(FirestoreReferences.USERS_COLLECTION,FirestoreReferences.USERNAME_FIELD,previousUsernameEntry);
-//        q.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                String id = FirestoreReferences.getIdFromTask(task);
-//
-//                Task<Uri> getImageTask = FirestoreReferences
-//                    .getImageUri(id)
-//                    .addOnCompleteListener(new OnCompleteListener<Uri>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Uri> task) {
-//                            Uri imgUri = task.getResult();
-//                            Picasso.get().load(imgUri).into(imgTest);
-//                        }
-//                    });
-//            }
-//        });
-
-
-//        StorageReference fs = FirebaseStorage.getInstance().getReference();
-//        Task <Uri> taskUri = fs.child("thanos").getDownloadUrl();
-//        taskUri.addOnCompleteListener(new OnCompleteListener<Uri>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Uri> task) {
-//                Uri test = task.getResult()
-//                //Picasso.get().load(test).into(imgTest);
-//            }
-//        });

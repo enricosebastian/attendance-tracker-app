@@ -108,7 +108,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 updateAccount(firstName, lastName);
 
                 Toast.makeText(EditProfileActivity.this, "Changes saved!", Toast.LENGTH_SHORT).show();
-                finish();
             }
         });
     }
@@ -171,4 +170,5 @@ public class EditProfileActivity extends AppCompatActivity {
             });
 
     }
+
 }
