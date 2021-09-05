@@ -51,6 +51,7 @@ public class Db {
 
     private static ArrayList<ClassModel> classModels                            = new ArrayList<>();
     private static ArrayList<MeetingModel> meetingModels                        = new ArrayList<>();
+    private static ArrayList<CourseRequestModel> courseRequestModels            = new ArrayList<>();
     private static ArrayList<StudentPresentListModel> studentPresentListModels  = new ArrayList<>();
 
     public static String id = null;
@@ -122,7 +123,10 @@ public class Db {
 
         COLLECTION_MEETINGHISTORY       = "MeetingHistory",   //has same fields as collection courses
         FIELD_ISPRESENT                 = "isPresent",
-        FIELD_STUDENTATTENDED           = "studentAttended"
+        FIELD_STUDENTATTENDED           = "studentAttended",
+
+        COLLECTION_COURSEREQUEST    = "CourseRequest"
+
 
         ; //no need for username here
 
@@ -251,6 +255,20 @@ public class Db {
             );
         }
         return classModels;
+    }
+
+    public static ArrayList<CourseRequestModel> toCourseRequestModel(List<DocumentSnapshot> result) {
+        courseRequestModels.clear();
+        for(DocumentSnapshot ds:result) {
+            courseRequestModels.add(new CourseRequestModel(
+                    ds.getString(Db.FIELD_COURSECODE),
+                    ds.getString(Db.FIELD_FIRSTNAME),
+                    ds.getString(Db.FIELD_IDNUMBER),
+                    ds.getString(FIELD_LASTNAME),
+                    ds.getString(FIELD_SECTIONCODE)
+            ));
+        }
+        return courseRequestModels;
     }
 
     public static ArrayList<MeetingModel> toMeetingModel(List<DocumentSnapshot> result) {

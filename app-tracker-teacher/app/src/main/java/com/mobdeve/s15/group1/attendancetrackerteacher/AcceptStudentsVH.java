@@ -1,42 +1,73 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
+import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
 public class AcceptStudentsVH extends RecyclerView.ViewHolder {
 
-    private ImageView ivDisplayPicture;
-    private TextView tvStudentName;
-    //private Button btnConfirm, btnDelete;
+    private static final String TAG = "AcceptStudentsVH.java";
+    private TextView txtStudentName, txtIdNo;
+    private Button btnConfirm, btnCancel;
+    private ImageView imgProfilePic;
 
-    /** This constructor initializes the views for the Accept Student recycler view */
-    public AcceptStudentsVH (@NonNull View itemView) {
+
+    public AcceptStudentsVH(@NonNull View itemView) {
         super(itemView);
-        this.ivDisplayPicture = itemView.findViewById(R.id.ivDisplayPicture);
-        this.tvStudentName = itemView.findViewById(R.id.tvStudentName);
-        //this.btnConfirm = itemView.findViewById(R.id.tvStudentName);
-        //this.btnDelete = itemView.findViewById(R.id.btnDelete);
+        this.txtStudentName = itemView.findViewById(R.id.txtStudentName);
+        this.txtIdNo = itemView.findViewById(R.id.txtIdNo);
+        this.btnConfirm = itemView.findViewById(R.id.btnConfirm);
+        this.btnCancel = itemView.findViewById(R.id.btnCancel);
+        this.imgProfilePic = itemView.findViewById(R.id.imgProfilePic);
     }
 
-    /**
-     *  This method sets the value for the display picture
-     * @param ivDisplayPicture the display picture of a particular student
-     * */
-    public void setIvDisplayPicture(int ivDisplayPicture) {
-        this.ivDisplayPicture.setImageResource(ivDisplayPicture);
+    public void setTxtStudentName(String txtStudentName) {
+        this.txtStudentName.setText(txtStudentName);
     }
 
-    /**
-     * This method sets the value for the name of the student requesting to join a course
-     * @param tvStudentName the name of the student
-     * */
-    public void setTvStudentName(String tvStudentName) {
-        this.tvStudentName.setText(tvStudentName);
+    public void setTxtIdNo(String txtIdNo) {
+        this.txtIdNo.setText(txtIdNo);
     }
+
+    public void setImgProfilePic(String idNumber) {
+        Db.getDocumentsWith(Db.COLLECTION_USERS,
+        Db.FIELD_IDNUMBER, idNumber).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String documentId = Db.getIdFromTask(task);
+
+                Db.getProfilePic(documentId).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if(task.isSuccessful()) {
+                            Uri imgUri = task.getResult();
+                            Picasso.get().load(imgUri).into(imgProfilePic);
+                        } else {
+                            Log.d(TAG,"No profile image found. Switching to default");
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+
+
 
 }

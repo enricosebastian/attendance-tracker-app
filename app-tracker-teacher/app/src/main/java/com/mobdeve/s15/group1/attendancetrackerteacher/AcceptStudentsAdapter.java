@@ -1,8 +1,11 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,42 +14,43 @@ import java.util.ArrayList;
 
 public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH> {
 
+    private static final String TAG = "AcceptStudentsAdapter";
+    private ArrayList<CourseRequestModel> data;
 
-    private ArrayList<StudentModel> data;
+    public AcceptStudentsAdapter(ArrayList data) {
+        this.data = data;
+        Log.d(TAG, "Adapter is initialized");
+    }
 
-    /**
-     * This method creates the view holder for the accept students view
-     * @param parent the recycler view
-     * @param viewType the viewType
-     * */
     @NonNull
     @Override
     public AcceptStudentsVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.layout_student_requests, parent, false);
+        View view = inflater.inflate(R.layout.layout_course_request, parent, false);
 
         AcceptStudentsVH acceptStudentsVH = new AcceptStudentsVH(view);
         return acceptStudentsVH;
     }
 
-    /**
-     * This method binds the data once the view holder has been created
-     * @param holder the view holder
-     * @param position the point in the model's list
-     * */
     @Override
     public void onBindViewHolder(@NonNull AcceptStudentsVH holder, int position) {
-        holder.setIvDisplayPicture(data.get(position).getImageId());
-        holder.setTvStudentName(data.get(position).getStudentName());
+
+        holder.setTxtStudentName(data.get(position).getFirstName()+" "+data.get(position).getLastName());
+        holder.setTxtIdNo(data.get(position).getIdNumber());
+        holder.setImgProfilePic(data.get(position).getIdNumber()); //needs id number to get image
+
+        Button btnConfirm = holder.itemView.findViewById(R.id.btnConfirm);
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), "confirming...", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
-    /**
-     * This method returns the size/length of the data
-     * @return size/length of the data
-     * */
     @Override
-    public int getItemCount(){
+    public int getItemCount() {
         return data.size();
     }
-
 }
