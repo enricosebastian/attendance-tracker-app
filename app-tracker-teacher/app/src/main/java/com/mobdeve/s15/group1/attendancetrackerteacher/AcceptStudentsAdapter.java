@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -59,15 +60,17 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
             }
         });
 
-//        Button btnCancel = holder.itemView.findViewById(R.id.btnCancel);
-//        btnConfirm.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(view.getContext(), "disconfirmed, bitch...", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-
+        Button btnCancel = holder.itemView.findViewById(R.id.btnCancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rejectStudentRequest(
+                data.get(position).getIdNumber(),
+                data.get(position).getCourseCode(),
+                data.get(position).getSectionCode(),
+                position);
+            }
+        });
 
     }
 
@@ -100,7 +103,49 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
                 Db.FIELD_COURSECODE, courseCode,
                 Db.FIELD_SECTIONCODE, sectionCode,
                 Db.FIELD_IDNUMBER, idNumber);
+            }
+        });
+    }
 
+    protected void rejectStudentRequest(String idNumber, String courseCode, String sectionCode, int position) {
+
+        Db.getDocumentsWith(Db.COLLECTION_COURSEREQUEST, Db.FIELD_COURSECODE, courseCode, Db.FIELD_SECTIONCODE, sectionCode, Db.FIELD_IDNUMBER, idNumber).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String id = Db.getIdFromTask(task);
+                Log.d(TAG,"you are in deleteDcoument function. Here is the id: "+id);
+                if(id == null) {
+                    Log.d(TAG,"Such a document in collections \""+Db.COLLECTION_COURSEREQUEST+"\" does not exist");
+                } else {
+                    Db.getCollection(Db.COLLECTION_COURSEREQUEST).
+                    document(id).
+                    delete().
+                    addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()) {
+                                Log.d(TAG,"Successfully deleted a document in \" "+Db.COLLECTION_COURSEREQUEST+"\" collection");
+                                Db.getDocumentsWith(Db.COLLECTION_COURSEREQUEST,
+                                Db.FIELD_COURSECODE, courseCode,
+                                Db.FIELD_SECTIONCODE, sectionCode).
+                                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        List<DocumentSnapshot> result = Db.getDocuments(task);
+                                        data.clear();
+                                        data.addAll(Db.toCourseRequestModel(result));
+                                        Log.d(TAG,""+data.size());
+                                        //notifyItemRemoved(position);
+                                        notifyDataSetChanged();
+                                    }
+                                });
+                            } else {
+                                Log.d(TAG,"Failed: "+task.getException());
+                            }
+                        }
+                    });
+                }
             }
         });
     }
