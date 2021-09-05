@@ -106,7 +106,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 String firstName = inputFirstName.getText().toString();
                 String lastName = inputLastname.getText().toString();
                 updateAccount(firstName, lastName);
-
+                finish();
                 Toast.makeText(EditProfileActivity.this, "Changes saved!", Toast.LENGTH_SHORT).show();
             }
         });

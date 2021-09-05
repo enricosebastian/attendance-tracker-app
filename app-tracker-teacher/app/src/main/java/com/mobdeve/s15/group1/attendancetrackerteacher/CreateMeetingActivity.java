@@ -23,12 +23,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class CreateMeetingActivity extends AppCompatActivity {
     private static final String TAG = "CreateMeetingActivity";
 
-    private String courseCode, sectionCode;
-
+    private String courseCode, sectionCode, meetingStatus;
     private TextView tvDisplayDate;
     private DatePickerDialog.OnDateSetListener dsl;
 
@@ -39,13 +39,16 @@ public class CreateMeetingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_meeting_view);
+
         this.btnCancel = findViewById(R.id.btnCancelCreateMeeting);
         this.btnCreate = findViewById(R.id.btnConfirmCreateMeeting);
         this.tvDisplayDate = findViewById(R.id.tvSelectDate);
 
+
         Intent intent = getIntent();
         this.courseCode = intent.getStringExtra(Keys.INTENT_COURSECODE);
         this.sectionCode = intent.getStringExtra(Keys.INTENT_SECTIONCODE);
+        this.meetingStatus = "OPEN";
 
         //clean this lmao
         dsl = new DatePickerDialog.OnDateSetListener() {
@@ -113,15 +116,48 @@ public class CreateMeetingActivity extends AppCompatActivity {
         });
     }
 
+    //This calls the firebase function to create the meeting
     protected void createNewMeeting(Timestamp timestamp, String dateString) {
         Map<String, Object> input = new HashMap<>();
 
         input.put(Db.FIELD_COURSECODE, courseCode);
-        input.put(Db.FIELD_MEETINGCODE, courseCode+"-"+sectionCode+"-"+dateString);
+        input.put(Db.FIELD_MEETINGCODE, courseCode+"-"+sectionCode+"-"+genMeetingCode());
         input.put(Db.FIELD_MEETINGSTART, timestamp);
         input.put(Db.FIELD_SECTIONCODE, sectionCode);
         input.put(Db.FIELD_STUDENTCOUNT, 0);
-
+        input.put(Db.FIELD_MEETINGSTATUS, meetingStatus);
+        Log.d(TAG, "Meeting Status: " + meetingStatus);
         Db.addDocument(Db.COLLECTION_MEETINGS, input);
+    }
+
+
+    /** This method generates a randomly generated password for the user.
+     *  @return returns the randomly generated password of the user
+     */
+    public String genMeetingCode() {
+        String possibleLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "abcdefghijklmnopqrstuvwxyz"; //possible letters
+        String possibleSpec = "0123456789" + "!@#$%^&*()_+{[}];:',./?"; //possible special character
+        String possibleVals = possibleLetters + possibleSpec;
+
+        int i, currIdx;
+        Random randomize = new Random();
+        int length = 6;
+
+        char [] codeTemp = new char [length];
+
+        for(i = 0; i < length /2; i++)
+            codeTemp [i] = possibleLetters.charAt(randomize.nextInt(possibleLetters.length()));
+        currIdx = i;
+        for (i = currIdx; i < length /2+2; i++)//to ensure that there is always a special character
+            codeTemp[i] = possibleSpec.charAt(randomize.nextInt( possibleSpec.length()));
+
+        currIdx = i;
+        for (i = currIdx; i < length ; i++)
+            codeTemp[i] = possibleVals.charAt(randomize.nextInt(possibleVals.length()));
+
+        String genCode = new String (codeTemp);
+        codeTemp = null;
+
+        return genCode;
     }
 }

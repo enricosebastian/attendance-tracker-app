@@ -65,6 +65,7 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
         this.btnAddCourse   = findViewById(R.id.btnAddCourse);
         this.imgProfilePic  = findViewById(R.id.img_profilePic);
 
+        // When user clicks on add course button
         btnAddCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,7 +75,7 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
         });
     }
 
-    //handles the pop up button
+    //handles the pop up button for the profile tab
    public void showPopup (View v) {
        PopupMenu popup = new PopupMenu(this, v);
        popup.setOnMenuItemClickListener(this);
@@ -82,7 +83,7 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
        popup.show();
    }
 
-   //Handles the clicks on the items
+   // When user clicks on one of the items
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()) {
