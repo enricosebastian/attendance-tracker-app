@@ -125,7 +125,9 @@ public class Db {
         FIELD_ISPRESENT                 = "isPresent",
         FIELD_STUDENTATTENDED           = "studentAttended",
 
-        COLLECTION_COURSEREQUEST    = "CourseRequest"
+        COLLECTION_COURSEREQUEST    = "CourseRequest",
+
+        COLLECTION_CLASSLIST        = "ClassList"
 
 
         ; //no need for username here
@@ -182,6 +184,19 @@ public class Db {
                 collection(tableName).
                 whereEqualTo(field1, value1).
                 whereEqualTo(field2, value2).
+                get();
+    }
+
+    public static Task<QuerySnapshot> getDocumentsWith(
+            String tableName, String field1,
+            String value1, String field2,
+            String value2, String field3,
+            String value3) {
+        return  getFirestoreInstance().
+                collection(tableName).
+                whereEqualTo(field1, value1).
+                whereEqualTo(field2, value2).
+                whereEqualTo(field3, value3).
                 get();
     }
 
@@ -310,6 +325,37 @@ public class Db {
 
     public static void deleteDocument(String tableName, String field1, String value1, String field2, String value2) {
         getDocumentsWith(tableName, field1, value1, field2, value2).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String id = Db.getIdFromTask(task);
+                Log.d(TAG,"you are in deleteDcoument function. Here is the id: "+id);
+                if(id == null) {
+                    Log.d(TAG,"Such a document in collections \""+tableName+"\" does not exist");
+                } else {
+                    Db.getCollection(tableName).
+                    document(id).
+                    delete().
+                    addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()) {
+                                Log.d(TAG,"Successfully deleted a document in \" "+tableName+"\" collection");
+                            } else {
+                                Log.d(TAG,"Failed: "+task.getException());
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    public static void deleteDocument(String tableName,
+        String field1, String value1,
+        String field2, String value2,
+        String field3, String value3) {
+        getDocumentsWith(tableName, field1, value1, field2, value2, field3, value3).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
