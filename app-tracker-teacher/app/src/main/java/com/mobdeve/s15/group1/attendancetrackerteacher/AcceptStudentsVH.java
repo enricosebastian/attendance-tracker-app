@@ -4,7 +4,6 @@ import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,11 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 public class AcceptStudentsVH extends RecyclerView.ViewHolder {
 
@@ -29,10 +25,10 @@ public class AcceptStudentsVH extends RecyclerView.ViewHolder {
 
     public AcceptStudentsVH(@NonNull View itemView) {
         super(itemView);
-        this.txtStudentName = itemView.findViewById(R.id.txtStudentName);
-        this.txtIdNo = itemView.findViewById(R.id.txtIdNo);
+        this.txtStudentName = itemView.findViewById(R.id.txtAcceptStudentName);
+        this.txtIdNo = itemView.findViewById(R.id.txtAcceptIdNo);
         this.btnConfirm = itemView.findViewById(R.id.btnConfirm);
-        this.btnCancel = itemView.findViewById(R.id.btnCancel);
+        this.btnCancel = itemView.findViewById(R.id.btnDeleteRequest);
         this.imgProfilePic = itemView.findViewById(R.id.imgProfilePic);
     }
 

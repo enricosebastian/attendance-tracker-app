@@ -95,7 +95,6 @@ public class SingleClassActivity extends AppCompatActivity {
 
                 meetingModels.clear();
                 meetingModels.addAll(Db.toMeetingModel(results));
-
                 singleClassRecyclerView = findViewById(R.id.SingleClassRecyclerView);
                 layoutManager = new LinearLayoutManager(getApplicationContext());
                 singleClassRecyclerView.setLayoutManager(layoutManager);
