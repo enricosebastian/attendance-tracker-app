@@ -162,4 +162,16 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
         initializeViews();
         Log.d(TAG,"we are in on resume");
     }
+
+    protected void onStart() {
+        super.onStart();
+        initializeViews();
+        Log.d(TAG, "we are in on start");
+    }
+
+    protected void onPause() {
+        super.onPause();
+        initializeViews();
+        Log.d(TAG, "we are in on pause");
+    }
 }
