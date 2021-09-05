@@ -18,15 +18,19 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.w3c.dom.Document;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class Db {
+    //KEEP THIS VVVVVVVVVVVVVVVVVVVVV
     public static String TAG = "Db.java";
+    //KEEP THIS ^^^^^^^^^^^^^^^^^^^^^^
 
-    private static FirebaseFirestore firebaseFirestoreInstance = null;
-    private static StorageReference storageReferenceInstance = null;
+
+
     private static CollectionReference usersRef = null;
     private static CollectionReference meetingCollection = null;
     private static CollectionReference coursesRef = null;
@@ -36,10 +40,34 @@ public class Db {
 
     private static List<DocumentSnapshot> resultList = null;
 
-    private static ArrayList<StudentPresentListModel> studentPresentListModels = new ArrayList<>();
-    private static ArrayList<ClassModel> classModels = new ArrayList<>();
 
-    public final static String //DELETE SOON
+    //KEEP THIS HERE::::::::::::::::::::::::
+    //KEEP THIS HERE::::::::::::::::::::::::
+    //KEEP THIS HERE::::::::::::::::::::::::
+    //KEEP THIS HERE::::::::::::::::::::::::
+    //KEEP THIS HERE::::::::::::::::::::::::
+    private static FirebaseFirestore firebaseFirestoreInstance                  = null;
+    private static StorageReference storageReferenceInstance                    = null;
+
+    private static ArrayList<ClassModel> classModels                            = new ArrayList<>();
+    private static ArrayList<MeetingModel> meetingModels                        = new ArrayList<>();
+    private static ArrayList<StudentPresentListModel> studentPresentListModels  = new ArrayList<>();
+    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
+    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
+    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
+    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
+    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
+    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
+
+
+
+    //DELETE SOON:::::::::::::::::::::::::::::::::::
+    //DELETE SOON:::::::::::::::::::::::::::::::::::
+    //DELETE SOON:::::::::::::::::::::::::::::::::::
+    //DELETE SOON:::::::::::::::::::::::::::::::::::
+    //DELETE SOON:::::::::::::::::::::::::::::::::::
+    //DELETE SOON:::::::::::::::::::::::::::::::::::
+    public final static String
         USERS_COLLECTION        = "Users",
             USERNAME_FIELD      = "username",
             IDNUMBER_FIELD      = "idNumber",
@@ -58,26 +86,39 @@ public class Db {
         MEETINGS_COLLECTION         = "Meetings",
             MEETINGCODE_FIELD         = "meetingCode",
         MEETINGHISTORY_COLLECTION       = "MeetingHistory";
-    ////////////DELETE SOON
+    ////////////DELETE SOON////////////////////////////////////////
+    ////////////DELETE SOON////////////////////////////////////////
+    ////////////DELETE SOON////////////////////////////////////////
+    ////////////DELETE SOON////////////////////////////////////////
+    ////////////DELETE SOON////////////////////////////////////////
+    ////////////DELETE SOON////////////////////////////////////////
+    ////////////DELETE SOON////////////////////////////////////////
+
+
 
     //new version
     public final static String
-        COLLECTION_USERS = "Users",
-        FIELD_EMAIL = "email",
-        FIELD_FIRSTNAME = "firstName",
-        FIELD_IDNUMBER = "idNumber",
-        FIELD_LASTNAME = "lastName",
-        FIELD_PASSWORD = "password",
-        FIELD_USERTYPE = "userType",
-        VALUE_USERTYPE = "teacher",
+        COLLECTION_USERS        = "Users",
+        FIELD_EMAIL             = "email",
+        FIELD_FIRSTNAME         = "firstName",
+        FIELD_IDNUMBER          = "idNumber",
+        FIELD_LASTNAME          = "lastName",
+        FIELD_PASSWORD          = "password",
+        FIELD_USERTYPE          = "userType",
 
-        COLLECTION_COURSES = "Courses",
-        FIELD_COURSECODE = "courseCode",
-        FIELD_COURSENAME = "courseName",
-        FIELD_HANDLEDBY = "handledBy",
-        FIELD_ISPUBLISHED = "isPublished",
-        FIELD_SECTIONCODE = "sectionCode",
-        FIELD_STUDENTCOUNT = "studentCount"; //no need for username here
+        COLLECTION_COURSES      = "Courses",
+        FIELD_COURSECODE        = "courseCode",
+        FIELD_COURSENAME        = "courseName",
+        FIELD_HANDLEDBY         = "handledBy",
+        FIELD_ISPUBLISHED       = "isPublished",
+        FIELD_SECTIONCODE       = "sectionCode",
+        FIELD_STUDENTCOUNT      = "studentCount",
+
+        COLLECTION_MEETINGS     = "Meetings",   //has same fields as collection courses
+        FIELD_MEETINGCODE       = "meetingCode",
+        FIELD_MEETINGSTART      = "meetingStart"
+
+        ; //no need for username here
 
 
     ////////////////////////new version
@@ -98,6 +139,14 @@ public class Db {
         return storageReferenceInstance;
     }
 
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
     /////NEW AS OF 2021, 09, 04
     public static Task<QuerySnapshot> getTable(String tableName) {
         return getFirestoreInstance().collection(tableName).get();
@@ -126,12 +175,16 @@ public class Db {
                 get();
     }
 
-    public static Task<QuerySnapshot> getDocumentsWith(String tableName, String field1, String value1, String field2, String value2, String field3, String value3) {
+    public static Task<QuerySnapshot> getDocumentsWith(
+        String tableName, String field1,
+        String value1, String field2,
+        String value2, String sortingField,
+        Query.Direction direction) {
         return  getFirestoreInstance().
                 collection(tableName).
                 whereEqualTo(field1, value1).
                 whereEqualTo(field2, value2).
-                whereEqualTo(field3, value3).
+                orderBy(sortingField, direction).
                 get();
     }
 
@@ -171,6 +224,35 @@ public class Db {
                 Log.w(TAG, "Error adding document due to "+ e.getMessage());
             }
         });
+    }
+
+    public static ArrayList<ClassModel> toClassModel(List<DocumentSnapshot> result) {
+        classModels.clear();
+        for(DocumentSnapshot ds:result) {
+            classModels.add(new ClassModel(
+                ds.getString("courseCode"),
+                ds.getString("courseName"),
+                ds.getString("handledBy"),
+                ds.getBoolean("isPublished"),
+                ds.getString("sectionCode"),
+                Integer.parseInt(ds.get("studentCount").toString()))
+            );
+        }
+        return classModels;
+    }
+
+    public static ArrayList<MeetingModel> toMeetingModel(List<DocumentSnapshot> result) {
+        meetingModels.clear();
+        for(DocumentSnapshot ds:result) {
+            meetingModels.add(new MeetingModel(
+                ds.get("courseCode").toString(),
+                ds.get("sectionCode").toString(),
+                ds.get("meetingCode").toString(),
+                ds.getTimestamp("meetingStart").toDate(), //this is how to convert timestamp to Date
+                Integer.parseInt(ds.get("studentCount").toString()))
+            );
+        }
+        return meetingModels;
     }
 
 
@@ -277,19 +359,7 @@ public class Db {
         return studentPresentListModels;
     }
 
-    public static ArrayList<ClassModel> toClassModel(List<DocumentSnapshot> result) {
-        classModels.clear();
-        for(DocumentSnapshot ds:result) {
-            classModels.add(new ClassModel(
-                ds.getString("courseCode"),
-                ds.getString("courseName"),
-                ds.getString("handledBy"),
-                ds.getBoolean("isPublished"),
-                ds.getString("sectionCode"),
-                Integer.parseInt(ds.get("studentCount").toString())));
-        }
-        return classModels;
-    }
+
 
     public static void updateSingleStudent(String entry, String query, UserModel initialInfo) {
         Db.getUsersCollectionReference()

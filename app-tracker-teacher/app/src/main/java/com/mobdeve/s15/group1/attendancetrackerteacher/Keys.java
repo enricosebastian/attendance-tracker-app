@@ -7,4 +7,5 @@ public class Keys {
 
     public static String INTENT_SECTIONCODE     = "INTENT_SECTIONCODE";
     public static String INTENT_COURSECODE      = "INTENT_COURSECODE";
+    public static String INTENT_COURSENAME      = "INTENT_COURSENAME";
 }

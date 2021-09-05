@@ -15,7 +15,7 @@
             android:name=".EditAccountSecurityActivity"
             android:exported="true" />
         <activity
-            android:name=".CreateMeetingView"
+            android:name=".CreateMeetingActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
@@ -39,7 +39,7 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SingleMeetingView"
+            android:name=".SingleMeetingActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
@@ -51,7 +51,7 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SingleClassView"
+            android:name=".SingleClassActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity

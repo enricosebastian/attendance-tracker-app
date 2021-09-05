@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -18,24 +20,41 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingleMeetingView extends AppCompatActivity {
-    
-    private TextView txtStatus;
-    private TextView txtDate;
-    private TextView txtClassTitle;
+public class SingleMeetingActivity extends AppCompatActivity {
 
-    private ArrayList<StudentPresentListModel> studentPresentListModels = new ArrayList<>();
+    private static final String TAG = "SingleMeetingActivity.java";
 
+    //shared preferences initialization
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
+    private String email;
+    ////////////
+
+    //recycler view initialization
     private RecyclerView studentListRecyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private SingleMeetingAdapter singleMeetingAdapter;
+    private ArrayList<StudentPresentListModel> studentPresentListModels = new ArrayList<>();
+    ////////////////////
+
+    //widget initialization
+    private TextView txtStatus;
+    private TextView txtDate;
+    private TextView txtClassTitle;
+    ////////////
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_meeting_view);
 
-        Intent intent = getIntent();
+        this.sp             = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
+        this.editor         = sp.edit();
+        this.email          = sp.getString(Keys.SP_EMAIL_KEY,"");
+
+        Intent intent = getIntent(); //delete lmao
 
         this.txtDate = findViewById(R.id.txtDate);
         txtDate.setText(intent.getStringExtra(MyKeys.DATE_KEY.name()));

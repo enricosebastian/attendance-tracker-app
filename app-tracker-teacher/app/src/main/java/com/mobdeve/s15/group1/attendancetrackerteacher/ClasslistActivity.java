@@ -31,8 +31,6 @@ import java.util.List;
 public class ClasslistActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     private static final String TAG = "ClasslistActivity.java";
 
-    private ArrayList<ClassModel> classModels = new ArrayList<>();
-
     //shared preferences initialization
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
@@ -43,6 +41,7 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ClasslistAdapter classlistAdapter;
+    private ArrayList<ClassModel> classModels = new ArrayList<>();
     ////////////
 
     //widget initialization

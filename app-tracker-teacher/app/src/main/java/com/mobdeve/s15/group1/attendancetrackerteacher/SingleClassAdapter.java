@@ -1,22 +1,17 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
     private static final String TAG = "Class Adapter";
@@ -56,7 +51,7 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(holder.itemView.getContext(), SingleMeetingView.class);
+                Intent intent = new Intent(holder.itemView.getContext(), SingleMeetingActivity.class);
 
                 //get the course code somehow
                 intent.putExtra(MyKeys.COURSE_CODE_KEY.name(), data.get(position).getCourseCode());
