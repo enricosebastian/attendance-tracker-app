@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="20dp">
+
+    <ImageView
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:id="@+id/imgProfilePic"
+        android:src="@drawable/img_tempimage"
+        android:background="@drawable/template_rounded_corner"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtStudentName"
+        android:text="FirstName C. LastName"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imgProfilePic"
+        android:layout_marginStart="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtIdNo"
+        android:textSize="25sp"
+        android:text="11839260"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toBottomOf="@id/txtStudentName"
+        app:layout_constraintStart_toEndOf="@id/imgProfilePic"
+        />
+
+
+    <Button
+        android:id="@+id/btnConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnConfirm"
+        app:layout_constraintTop_toBottomOf="@id/txtIdNo"
+        app:layout_constraintStart_toEndOf="@id/imgProfilePic"
+        app:layout_constraintEnd_toStartOf="@id/btnCancel"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"/>
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="cancel"
+        android:backgroundTint="@color/gray"
+        app:layout_constraintStart_toEndOf="@id/btnConfirm"
+        app:layout_constraintTop_toBottomOf="@id/txtIdNo"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
