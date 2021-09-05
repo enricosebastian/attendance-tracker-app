@@ -26,8 +26,9 @@ import java.util.List;
 import java.util.Map;
 
 public class RegistrationActivity extends AppCompatActivity {
+    private static final String TAG = "RegistrationActivity.java";
 
-    public final String TAG = "Registration";
+
     private static String USERNAME_STATE_KEY = "USERNAME_KEY";
     private static String EMAIL_STATE_KEY = "EMAIL_KEY";
     private SharedPreferences sp;

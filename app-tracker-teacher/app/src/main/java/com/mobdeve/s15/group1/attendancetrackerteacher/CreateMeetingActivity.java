@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -15,15 +16,23 @@ import android.widget.Toast;
 
 import com.google.firebase.Timestamp;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateMeetingActivity extends AppCompatActivity {
+    private static final String TAG = "CreateMeetingActivity";
+
     private String courseCode, sectionCode;
 
     private TextView tvDisplayDate;
     private DatePickerDialog.OnDateSetListener dsl;
-    private int meetingMonth, meetingDay, meetingYear;
+
+    private int meetingMonth, meetingDay, meetingYear, meetingHour, meetingMinute;
 
     private Button btnCancel, btnCreate;
     @Override
@@ -35,9 +44,10 @@ public class CreateMeetingActivity extends AppCompatActivity {
         this.tvDisplayDate = findViewById(R.id.tvSelectDate);
 
         Intent intent = getIntent();
-        this.courseCode = intent.getStringExtra(MyKeys.COURSE_CODE_KEY.name());
-        this.sectionCode = intent.getStringExtra(MyKeys.SECTION_CODE_KEY.name());
+        this.courseCode = intent.getStringExtra(Keys.INTENT_COURSECODE);
+        this.sectionCode = intent.getStringExtra(Keys.INTENT_SECTIONCODE);
 
+        //clean this lmao
         dsl = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
@@ -53,11 +63,10 @@ public class CreateMeetingActivity extends AppCompatActivity {
             }
         };
 
+        //clean this too lmao
         this.tvDisplayDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "im here", Toast.LENGTH_SHORT).show();
-
                 Calendar cal = Calendar.getInstance();
                 int year = cal.get(Calendar.YEAR);
                 int month = cal.get(Calendar.MONTH);
@@ -80,17 +89,39 @@ public class CreateMeetingActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         this.btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //future feature
+                meetingHour = 12; //to be dynamic if we have time
+                meetingMinute = 45; //to be dynamic if we have time
 
-                Date inputDate = new Date(meetingYear, meetingMonth, meetingDay);
+                String dateString = (meetingMonth+1)+"."+meetingDay+"."+meetingYear+"-"+meetingHour+"."+meetingMinute;
 
-                Timestamp parsedDate = new Timestamp(inputDate);
-                Toast.makeText(v.getContext(),
-                        parsedDate.toDate().toString(),
-                        Toast.LENGTH_SHORT).show();
+                Date date = null;
+                try {
+                    date = new SimpleDateFormat("M.d.yyyy-HH.mm").parse(dateString);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Timestamp meetingStart = new Timestamp(date);
+                createNewMeeting(meetingStart, dateString);
+                Toast.makeText(getApplicationContext(), "new meeting created", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
+    }
+
+    protected void createNewMeeting(Timestamp timestamp, String dateString) {
+        Map<String, Object> input = new HashMap<>();
+
+        input.put(Db.FIELD_COURSECODE, courseCode);
+        input.put(Db.FIELD_MEETINGCODE, courseCode+"-"+sectionCode+"-"+dateString);
+        input.put(Db.FIELD_MEETINGSTART, timestamp);
+        input.put(Db.FIELD_SECTIONCODE, sectionCode);
+        input.put(Db.FIELD_STUDENTCOUNT, 0);
+
+        Db.addDocument(Db.COLLECTION_MEETINGS, input);
     }
 }
