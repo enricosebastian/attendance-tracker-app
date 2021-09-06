@@ -18,8 +18,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.w3c.dom.Document;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +47,7 @@ public class Db {
     private static FirebaseFirestore firebaseFirestoreInstance                  = null;
     private static StorageReference storageReferenceInstance                    = null;
 
-    private static ArrayList<ClassModel> classModels                            = new ArrayList<>();
+    private static ArrayList<CourseModel> courseModels = new ArrayList<>();
     private static ArrayList<MeetingModel> meetingModels                        = new ArrayList<>();
     private static ArrayList<CourseRequestModel> courseRequestModels            = new ArrayList<>();
     private static ArrayList<StudentPresentListModel> studentPresentListModels  = new ArrayList<>();
@@ -119,9 +117,9 @@ public class Db {
         FIELD_STUDENTCOUNT      = "studentCount",
 
         COLLECTION_MEETINGS     = "Meetings",   //has same fields as collection courses
+        FIELD_ISOPEN            = "isOpen",
         FIELD_MEETINGCODE       = "meetingCode",
         FIELD_MEETINGSTART      = "meetingStart",
-        FIELD_MEETINGSTATUS     = "meetingStatus",
 
         COLLECTION_MEETINGHISTORY       = "MeetingHistory",   //has same fields as collection courses
         FIELD_ISPRESENT                 = "isPresent",
@@ -132,7 +130,10 @@ public class Db {
         COLLECTION_CLASSLIST        = "ClassList"
 
 
+
         ; //no need for username here
+
+    //FIELD_MEETINGSTATUS     = "meetingStatus", //<-------------- lmao useless delete this later
 
 
     ////////////////////////new version
@@ -274,10 +275,10 @@ public class Db {
         });
     }
 
-    public static ArrayList<ClassModel> toClassModel(List<DocumentSnapshot> result) {
-        classModels.clear();
+    public static ArrayList<CourseModel> toClassModel(List<DocumentSnapshot> result) {
+        courseModels.clear();
         for(DocumentSnapshot ds:result) {
-            classModels.add(new ClassModel(
+            courseModels.add(new CourseModel(
                 ds.getString("courseCode"),
                 ds.getString("courseName"),
                 ds.getString("handledBy"),
@@ -286,7 +287,7 @@ public class Db {
                 Integer.parseInt(ds.get("studentCount").toString()))
             );
         }
-        return classModels;
+        return courseModels;
     }
 
     public static ArrayList<CourseRequestModel> toCourseRequestModel(List<DocumentSnapshot> result) {
@@ -319,13 +320,14 @@ public class Db {
     public static ArrayList<MeetingModel> toMeetingModel(List<DocumentSnapshot> result) {
         meetingModels.clear();
         for(DocumentSnapshot ds:result) {
+            //(String courseCode, boolean isOpen, String meetingCode, Date meetingStart, String sectionCode, int studentCount)
             meetingModels.add(new MeetingModel(
-                ds.getString("courseCode"),
-                ds.getString("sectionCode"),
-                ds.getString("meetingCode"),
-                ds.getTimestamp("meetingStart").toDate(), //this is how to convert timestamp to Date
-                Integer.parseInt(ds.get("studentCount").toString()),
-                ds.getString("meetingStatus"))
+                ds.getString(Db.FIELD_COURSECODE),
+                ds.getBoolean(Db.FIELD_ISOPEN),
+                ds.getString(Db.FIELD_MEETINGCODE),
+                ds.getTimestamp(Db.FIELD_MEETINGSTART).toDate(), //this is how to convert timestamp to Date
+                ds.getString(Db.FIELD_SECTIONCODE),
+                Integer.parseInt(ds.get(Db.FIELD_STUDENTCOUNT).toString()))
             );
         }
         return meetingModels;
@@ -548,7 +550,7 @@ public class Db {
             });
     }
 
-    public static void updateSingleCourse(String courseCode, String sectionCode, ClassModel initialInfo) {
+    public static void updateSingleCourse(String courseCode, String sectionCode, CourseModel initialInfo) {
         Db.getCoursesCollectionReference()
                 .whereEqualTo(COURSECODE_FIELD, courseCode)
                 .whereEqualTo(SECTIONCODE_FIELD,sectionCode)

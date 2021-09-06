@@ -41,7 +41,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private CourseListAdapter courseListAdapter;
-    private ArrayList<ClassModel> classModels = new ArrayList<>();
+    private ArrayList<CourseModel> courseModels = new ArrayList<>();
     ////////////
 
     //widget initialization
@@ -144,15 +144,15 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                classModels.clear(); //always clear when initializing
+                courseModels.clear(); //always clear when initializing
 
-                classModels.addAll(Db.toClassModel(Db.getDocuments(task)));
-                Log.d(TAG,"classModel size is "+classModels.size());
+                courseModels.addAll(Db.toClassModel(Db.getDocuments(task)));
+                Log.d(TAG,"classModel size is "+ courseModels.size());
 
                 recyclerView = findViewById(R.id.recyclerView);
                 layoutManager = new LinearLayoutManager(getApplicationContext());
                 recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
-                courseListAdapter = new CourseListAdapter(classModels);
+                courseListAdapter = new CourseListAdapter(courseModels);
                 recyclerView.setAdapter(courseListAdapter);
             }
         });

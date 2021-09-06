@@ -34,7 +34,7 @@ public class SingleClassActivity extends AppCompatActivity {
     //recycler view initialization
     private ArrayList<MeetingModel> meetingModels = new ArrayList<>();
     private RecyclerView singleClassRecyclerView;
-    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.LayoutManager singleClassLayoutManager;
     private SingleClassAdapter singleClassAdapter;
 
     //widget initialization
@@ -95,6 +95,17 @@ public class SingleClassActivity extends AppCompatActivity {
 
 
     protected void initializeViews() {
+        Db.getDocumentsWith(Db.COLLECTION_CLASSLIST,
+        Db.FIELD_COURSECODE, courseCode,
+        Db.FIELD_SECTIONCODE, sectionCode).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<DocumentSnapshot> results = Db.getDocuments(task);
+                txtStudentCount.setText(results.size()+" students");
+            }
+        });
+
         Db.getDocumentsWith(Db.COLLECTION_MEETINGS,
         Db.FIELD_COURSECODE, courseCode,
         Db.FIELD_SECTIONCODE, sectionCode,
@@ -107,8 +118,8 @@ public class SingleClassActivity extends AppCompatActivity {
                 meetingModels.clear();
                 meetingModels.addAll(Db.toMeetingModel(results));
                 singleClassRecyclerView = findViewById(R.id.SingleClassRecyclerView);
-                layoutManager = new LinearLayoutManager(getApplicationContext());
-                singleClassRecyclerView.setLayoutManager(layoutManager);
+                singleClassLayoutManager = new LinearLayoutManager(getApplicationContext());
+                singleClassRecyclerView.setLayoutManager(singleClassLayoutManager);
                 singleClassAdapter = new SingleClassAdapter(meetingModels);
                 singleClassRecyclerView.setAdapter(singleClassAdapter);
             }

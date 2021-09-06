@@ -1,16 +1,16 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
-public class ClassModel {
+public class CourseModel {
 
     private String courseCode, courseName, handledBy, sectionCode;
     private boolean isPublished;
     private int studentCount;
 
-    public ClassModel() {
+    public CourseModel() {
 
     }
 
-    public ClassModel(String courseCode, String courseName, String handledBy, boolean isPublished, String sectionCode, int studentCount) {
+    public CourseModel(String courseCode, String courseName, String handledBy, boolean isPublished, String sectionCode, int studentCount) {
         this.courseCode = courseCode;
         this.courseName = courseName;
         this.handledBy = handledBy;

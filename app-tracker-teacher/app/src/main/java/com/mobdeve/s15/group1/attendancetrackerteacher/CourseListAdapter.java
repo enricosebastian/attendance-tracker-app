@@ -16,7 +16,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
     private static final String TAG = "ClasslistAdapter.java";
 
     //store data here
-    private ArrayList<ClassModel> data;
+    private ArrayList<CourseModel> data;
 
     public CourseListAdapter(ArrayList data) {
         this.data = data;

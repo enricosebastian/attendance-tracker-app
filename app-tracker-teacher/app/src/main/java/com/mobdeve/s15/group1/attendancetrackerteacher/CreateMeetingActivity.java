@@ -125,7 +125,7 @@ public class CreateMeetingActivity extends AppCompatActivity {
         input.put(Db.FIELD_MEETINGSTART, timestamp);
         input.put(Db.FIELD_SECTIONCODE, sectionCode);
         input.put(Db.FIELD_STUDENTCOUNT, 0);
-        input.put(Db.FIELD_MEETINGSTATUS, meetingStatus);
+        input.put(Db.FIELD_ISOPEN, meetingStatus);
         Log.d(TAG, "Meeting Status: " + meetingStatus);
         Db.addDocument(Db.COLLECTION_MEETINGS, input);
     }

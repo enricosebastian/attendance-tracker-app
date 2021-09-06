@@ -8,4 +8,7 @@ public class Keys {
     public static String INTENT_SECTIONCODE     = "INTENT_SECTIONCODE";
     public static String INTENT_COURSECODE      = "INTENT_COURSECODE";
     public static String INTENT_COURSENAME      = "INTENT_COURSENAME";
+    public static String INTENT_MEETINGCODE     = "INTENT_MEETINGCODE";
+    public static String INTENT_MEETINGSTART    = "INTENT_MEETINGSTART";
+    public static String INTENT_ISOPEN           = "INTENT_ISOPEN";
 }
