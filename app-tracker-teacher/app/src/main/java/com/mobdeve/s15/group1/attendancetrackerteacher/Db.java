@@ -283,9 +283,8 @@ public class Db {
                 ds.getString("courseName"),
                 ds.getString("handledBy"),
                 ds.getBoolean("isPublished"),
-                ds.getString("sectionCode"),
-                Integer.parseInt(ds.get("studentCount").toString()))
-            );
+                ds.getString("sectionCode")
+            ));
         }
         return courseModels;
     }
@@ -562,7 +561,6 @@ public class Db {
                     if(initialInfo.getCourseName().equals("")) initialInfo.setCourseName(ds.getString("courseName"));
                     if(initialInfo.getHandledBy().equals("")) initialInfo.setHandledBy(ds.getString("handledBy"));
                     if(initialInfo.getSectionCode().equals("")) initialInfo.setSectionCode(ds.getString("sectionCode"));
-                    if(initialInfo.getStudentCount() <= 0) initialInfo.setStudentCount(Integer.parseInt(ds.getString("studentCount")));
 
                     String id = Db.getIdFromTask(task);
                     Log.d("main","id is "+id);
