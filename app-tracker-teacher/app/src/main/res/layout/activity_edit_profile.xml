@@ -7,16 +7,16 @@
     tools:context=".EditProfileActivity">
 
     <ImageView
+        android:id="@+id/img_profilePic"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:id="@+id/img_profilePic"
-        android:src="@drawable/img_tempimage"
-        app:layout_constraintTop_toBottomOf="@id/editProfileHeader"
         android:layout_marginTop="20dp"
+        android:background="@drawable/template_rounded_corner"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_tempimage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:background="@drawable/template_rounded_corner"
-        />
+        app:layout_constraintTop_toBottomOf="@id/editProfileHeader" />
 
     <TextView
         android:id="@+id/editProfileHeader"
@@ -38,10 +38,12 @@
         android:id="@+id/tvEditProfilePic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="1dp"
         android:text="Edit Profile Picture:"
         android:textColor="#004D40"
+        app:layout_constraintBottom_toTopOf="@+id/btnSelectImage"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_profilePic" />
 
@@ -49,10 +51,13 @@
         android:id="@+id/btnSelectImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+
+        android:layout_marginBottom="14dp"
         android:backgroundTint="#004D40"
         android:text="Select Image"
         android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/inputFirstName"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvEditProfilePic" />
 
@@ -92,9 +97,9 @@
         android:id="@+id/btnSaveEditProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="13dp"
+
         android:layout_marginTop="60dp"
-        android:layout_marginEnd="118dp"
+
         android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnCancelEditProfile"
@@ -104,10 +109,10 @@
         android:id="@+id/btnCancelEditProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="99dp"
         android:layout_marginTop="60dp"
         android:backgroundTint="@color/gray"
         android:text="@string/btnExit"
+        app:layout_constraintEnd_toStartOf="@+id/btnSaveEditProfile"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inputLastName" />
 

@@ -96,14 +96,15 @@
 
         <TextView
             android:id="@+id/tvName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="30dp"
             android:fontFamily="@font/roboto_bold"
-            android:text="JOHN DOE"
+            android:text="NAME"
             android:textColor="#004D40"
             android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@+id/ivProfileSettings"
             app:layout_constraintStart_toEndOf="@+id/circular"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -114,7 +115,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginBottom="15dp"
             android:fontFamily="@font/roboto"
-            android:text="11844930"
+            android:text="IDNUM"
             android:textColor="#009688"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -30,5 +30,9 @@
     <string name="itemLogout">Logout</string>
 
     <string name="accountSecurity">Account security</string>
-
+    <string name="oldPassword">Old password</string>
+    <string name="newPassword">New password</string>
+    <string name="confirmPassword">Confirm new password</string>
+    <string name="save">Save</string>
+    <string name="exit">Exit</string>
 </resources>

@@ -32,7 +32,7 @@
         android:layout_marginEnd="24dp"
         android:background="@drawable/custom_input"
         android:drawableStart="@drawable/ic_lock"
-        android:hint="Old password"
+        android:hint="@string/oldPassword"
         android:inputType="textPassword"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,9 +48,9 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/custom_input"
-        android:inputType="textPassword"
         android:drawableStart="@drawable/ic_lock"
-        android:hint="New pasword"
+        android:hint="@string/newPassword"
+        android:inputType="textPassword"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -61,13 +61,13 @@
         android:id="@+id/inputConfirmNewPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
         android:layout_marginStart="24dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/custom_input"
         android:drawableStart="@drawable/ic_lock"
-        android:hint="Confirm new password"
+        android:hint="@string/confirmPassword"
+        android:inputType="textPassword"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -78,25 +78,46 @@
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="118dp"
-        android:text="Save"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/roboto"
+        android:text="@string/save"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnDeleteRequest"
+        app:layout_constraintStart_toEndOf="@id/btnDeleteRequest"
         app:layout_constraintTop_toBottomOf="@+id/inputConfirmNewPassword" />
 
     <Button
         android:id="@+id/btnDeleteRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="99dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:backgroundTint="@color/gray"
+        android:fontFamily="@font/roboto"
         android:text="@string/btnExit"
+        app:layout_constraintEnd_toStartOf="@+id/btnSave"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inputConfirmNewPassword" />
 
+<!--    <Button-->
+<!--        android:id="@+id/btnCreateCourse"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:fontFamily="@font/roboto"-->
+<!--        android:text="@string/btnCreateCourse"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/switchIsPublished"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@id/btnCancelCreate"/>-->
 
+<!--    <Button-->
+<!--        android:id="@+id/btnCancelCreate"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:backgroundTint="@color/gray"-->
+<!--        android:fontFamily="@font/roboto"-->
+<!--        android:text="@string/btnCancelCreate"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/btnCreateCourse"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/switchIsPublished"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
