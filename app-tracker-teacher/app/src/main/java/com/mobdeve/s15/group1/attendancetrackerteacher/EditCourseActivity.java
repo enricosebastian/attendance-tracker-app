@@ -3,6 +3,7 @@ package com.mobdeve.s15.group1.attendancetrackerteacher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -65,9 +66,11 @@ public class EditCourseActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String courseName = etEditCourse.getText().toString();
                 if(courseName.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Entry field is empty!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Entry field is empty, please try again.", Toast.LENGTH_SHORT).show();
                 } else {
                     updateCourseName(courseName);
+                    setResult(Activity.RESULT_OK);
+                    finish();
                 }
             }
         });
