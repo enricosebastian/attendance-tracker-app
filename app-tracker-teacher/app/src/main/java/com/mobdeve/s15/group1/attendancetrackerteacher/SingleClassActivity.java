@@ -38,7 +38,7 @@ public class SingleClassActivity extends AppCompatActivity {
     private SingleClassAdapter singleClassAdapter;
 
     //widget initialization
-    TextView txtClassTitle, txtCreateMeeting;
+    TextView txtClassTitle, txtCreateMeeting, txtStudentCount;
     ImageButton btnAcceptStudents;
     private String courseCode, sectionCode, courseName;
 
@@ -53,6 +53,7 @@ public class SingleClassActivity extends AppCompatActivity {
         this.courseName         = getIntent.getStringExtra(Keys.INTENT_COURSENAME);
 
         this.txtClassTitle      = findViewById(R.id.txtClassTitle);
+        this.txtStudentCount    = findViewById(R.id.txtStudentCount);
         this.txtCreateMeeting   = findViewById(R.id.txtCreateMeeting);
         this.btnAcceptStudents  = findViewById(R.id.btnAcceptStudents);
 
@@ -78,6 +79,16 @@ public class SingleClassActivity extends AppCompatActivity {
                 acceptStudentsActivityIntent.putExtra(Keys.INTENT_COURSECODE, courseCode);
                 acceptStudentsActivityIntent.putExtra(Keys.INTENT_SECTIONCODE, sectionCode);
                 startActivity(acceptStudentsActivityIntent);
+            }
+        });
+        
+        txtStudentCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent getStudentsListActivity = new Intent(SingleClassActivity.this, ClassListActivity.class);
+                getStudentsListActivity.putExtra(Keys.INTENT_COURSECODE, courseCode);
+                getStudentsListActivity.putExtra(Keys.INTENT_SECTIONCODE, sectionCode);
+                startActivity(getStudentsListActivity);
             }
         });
     }

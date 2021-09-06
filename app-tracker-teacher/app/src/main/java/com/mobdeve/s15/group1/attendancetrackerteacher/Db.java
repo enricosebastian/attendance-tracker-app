@@ -53,6 +53,7 @@ public class Db {
     private static ArrayList<MeetingModel> meetingModels                        = new ArrayList<>();
     private static ArrayList<CourseRequestModel> courseRequestModels            = new ArrayList<>();
     private static ArrayList<StudentPresentListModel> studentPresentListModels  = new ArrayList<>();
+    private static ArrayList<ClassListModel> classListModels                    = new ArrayList<>();
 
     public static String id = null;
     ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
@@ -201,6 +202,21 @@ public class Db {
                 get();
     }
 
+    //EXCLUSIVELY ONLY FOR CLASSLISTVH.JAVA
+    public static Task<QuerySnapshot> getDocumentsWith(
+            String tableName, String field1,
+            String value1, String field2,
+            String value2, String field3,
+            String value3, String field4, Boolean value4) {
+        return  getFirestoreInstance().
+                collection(tableName).
+                whereEqualTo(field1, value1).
+                whereEqualTo(field2, value2).
+                whereEqualTo(field3, value3).
+                whereEqualTo(field4, value4).
+                get();
+    }
+
     public static Task<QuerySnapshot> getDocumentsWith(
         String tableName, String field1,
         String value1, String field2,
@@ -228,7 +244,7 @@ public class Db {
             Log.d(TAG,"getIdFromTask finds no existing ID");
         } else {
             id = qs.getDocuments().get(0).getId();
-            Log.d(TAG,"getIdFromTask found an ID of "+id);
+            Log.d(TAG,"getIdFromTask found an ID of \""+id+"\"");
         }
         return id;
     }
@@ -287,6 +303,19 @@ public class Db {
         return courseRequestModels;
     }
 
+    public static ArrayList<ClassListModel> toClassListModel(List<DocumentSnapshot> result) {
+        classListModels.clear();
+        for(DocumentSnapshot ds:result) {
+            classListModels.add(new ClassListModel(
+                    ds.getString(Db.FIELD_COURSECODE),
+                    ds.getString(Db.FIELD_EMAIL),
+                    ds.getString(Db.FIELD_IDNUMBER),
+                    ds.getString(FIELD_SECTIONCODE)
+            ));
+        }
+        return classListModels;
+    }
+
     public static ArrayList<MeetingModel> toMeetingModel(List<DocumentSnapshot> result) {
         meetingModels.clear();
         for(DocumentSnapshot ds:result) {
@@ -325,13 +354,15 @@ public class Db {
         });
     }
 
-    public static void deleteDocument(String tableName, String field1, String value1, String field2, String value2) {
+    public static void deleteDocument(String tableName,
+        String field1, String value1,
+        String field2, String value2) {
         getDocumentsWith(tableName, field1, value1, field2, value2).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 String id = Db.getIdFromTask(task);
-                Log.d(TAG,"you are in deleteDocument function. Here is the id: "+id);
+                Log.d(TAG,"Deleting document with an id of \""+id+"\"");
                 if(id == null) {
                     Log.d(TAG,"Such a document in collections \""+tableName+"\" does not exist");
                 } else {
@@ -362,7 +393,7 @@ public class Db {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 String id = Db.getIdFromTask(task);
-                Log.d(TAG,"you are in deleteDcoument function. Here is the id: "+id);
+                Log.d(TAG,"Deleting document with an id of \""+id+"\"");
                 if(id == null) {
                     Log.d(TAG,"Such a document in collections \""+tableName+"\" does not exist");
                 } else {

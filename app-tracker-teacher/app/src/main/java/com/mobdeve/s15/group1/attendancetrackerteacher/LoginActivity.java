@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         //initializing shared preference file
         if(!email.isEmpty()) {
             //login screen
-            Intent intent = new Intent(LoginActivity.this, ClasslistActivity.class);
+            Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
             intent.putExtra(Keys.SP_EMAIL_KEY,email);
             startActivity(intent);
             finish();
@@ -98,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString(Keys.SP_EMAIL_KEY, email);
                         editor.putString(Keys.SP_USERTYPE_KEY, result.get(0).getString(Db.FIELD_USERTYPE));
                         editor.commit();
-                        Intent loginIntent = new Intent(LoginActivity.this, ClasslistActivity.class);
+                        Intent loginIntent = new Intent(LoginActivity.this, CourseListActivity.class);
                         startActivity(loginIntent);
                         finish();
                     } else {

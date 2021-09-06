@@ -106,7 +106,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 String firstName = inputFirstName.getText().toString();
                 String lastName = inputLastname.getText().toString();
                 updateAccount(firstName, lastName);
-                finish();
+                //finish(); //i TOLD YOU finish() doesn't work nga potangina di ka nakikinig. unless you find da solution for this, don't add finish() lmao. i need to debug everytime
                 Toast.makeText(EditProfileActivity.this, "Changes saved!", Toast.LENGTH_SHORT).show();
             }
         });

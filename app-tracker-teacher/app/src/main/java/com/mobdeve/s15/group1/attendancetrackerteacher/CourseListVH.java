@@ -14,12 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ClasslistVH extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
+public class CourseListVH extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
     private static final String TAG = "ClasslistVH.java";
     private TextView txtClassCode, txtSectionCode;
     private ImageButton btnMoreOptions;
 
-    public ClasslistVH(@NonNull View itemView) {
+    public CourseListVH(@NonNull View itemView) {
         super(itemView);
         this.txtClassCode = itemView.findViewById(R.id.txtClassCode);
         this.txtSectionCode = itemView.findViewById(R.id.txtSectionCode);

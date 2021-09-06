@@ -12,29 +12,29 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class ClasslistAdapter extends RecyclerView.Adapter<ClasslistVH> {
+public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
     private static final String TAG = "ClasslistAdapter.java";
 
     //store data here
     private ArrayList<ClassModel> data;
 
-    public ClasslistAdapter(ArrayList data) {
+    public CourseListAdapter(ArrayList data) {
         this.data = data;
         Log.d(TAG, "Adapter is initialized");
     }
 
     @NonNull
     @Override
-    public ClasslistVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CourseListVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.layout_class, parent, false);
 
-        ClasslistVH classlistVH = new ClasslistVH(view);
-        return classlistVH;
+        CourseListVH courseListVH = new CourseListVH(view);
+        return courseListVH;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ClasslistVH holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull CourseListVH holder, @SuppressLint("RecyclerView") int position) {
         holder.setTxtClassCode(data.get(position).getCourseCode());
         holder.setTxtSectionCode(data.get(position).getSectionCode());
 

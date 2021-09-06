@@ -60,7 +60,7 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
             }
         });
 
-        Button btnCancel = holder.itemView.findViewById(R.id.btnCancel);
+        Button btnCancel = holder.itemView.findViewById(R.id.btnDeleteRequest);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,12 +109,14 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
 
     protected void rejectStudentRequest(String idNumber, String courseCode, String sectionCode, int position) {
 
-        Db.getDocumentsWith(Db.COLLECTION_COURSEREQUEST, Db.FIELD_COURSECODE, courseCode, Db.FIELD_SECTIONCODE, sectionCode, Db.FIELD_IDNUMBER, idNumber).
+        Db.getDocumentsWith(Db.COLLECTION_COURSEREQUEST,
+        Db.FIELD_COURSECODE, courseCode,
+        Db.FIELD_SECTIONCODE, sectionCode,
+        Db.FIELD_IDNUMBER, idNumber).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 String id = Db.getIdFromTask(task);
-                Log.d(TAG,"you are in deleteDcoument function. Here is the id: "+id);
                 if(id == null) {
                     Log.d(TAG,"Such a document in collections \""+Db.COLLECTION_COURSEREQUEST+"\" does not exist");
                 } else {
@@ -133,10 +135,9 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                         List<DocumentSnapshot> result = Db.getDocuments(task);
-                                        data.clear();
+                                        data.clear(); //clears data set, and builds anew
                                         data.addAll(Db.toCourseRequestModel(result));
                                         Log.d(TAG,""+data.size());
-                                        //notifyItemRemoved(position);
                                         notifyDataSetChanged();
                                     }
                                 });

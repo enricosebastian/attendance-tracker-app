@@ -14,12 +14,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
@@ -102,7 +98,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 editor.putString(Keys.SP_USERTYPE_KEY, "teacher");
                                 editor.commit();
 
-                                Intent intent = new Intent(RegistrationActivity.this, ClasslistActivity.class);
+                                Intent intent = new Intent(RegistrationActivity.this, CourseListActivity.class);
                                 startActivity(intent);
                                 finish();
                             } else {
