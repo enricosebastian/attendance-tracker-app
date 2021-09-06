@@ -42,6 +42,15 @@ public class CourseListVH extends RecyclerView.ViewHolder {
         this.btnMoreOptions.setOnClickListener(onClickListener);
     }
 
+    public TextView getTxtClassCode() {
+
+        return txtClassCode;
+    }
+
+    public TextView getTxtSectionCode() {
+        return txtSectionCode;
+    }
+
 //    @Override
 //    public void onClick(View v) {
 //        Log.d(TAG, "onCLick: " + getAdapterPosition());

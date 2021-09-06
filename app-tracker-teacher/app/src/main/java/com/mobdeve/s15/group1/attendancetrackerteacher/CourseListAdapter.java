@@ -34,29 +34,32 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
     public CourseListVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.layout_class, parent, false);
-        CourseListVH classlistVH = new CourseListVH(view);
+        CourseListVH courseListVH = new CourseListVH(view);
 
-        classlistVH.setBtnMoreOptionsOnClickListener(new View.OnClickListener() {
+        courseListVH.setBtnMoreOptionsOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Action edit course @ position: " + classlistVH.getAdapterPosition());
-                PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
-                popupMenu.inflate(R.menu.course_menu);
+                Log.d(TAG, "Action edit course @ position: " + courseListVH.getAdapterPosition());
+                PopupMenu popupMenu = new PopupMenu(parent.getContext(), view);
+                popupMenu.getMenuInflater().inflate(R.menu.course_menu, popupMenu.getMenu());
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
+                        String courseCode = courseListVH.getTxtClassCode().getText().toString();
+                        String sectionCode =  courseListVH.getTxtSectionCode().getText().toString();
+                        Log.d(TAG,"course and sec: " + courseCode + " " + sectionCode);
                         switch (item.getItemId()) {
                             case R.id.editCourse:
-                                Log.d(TAG, "Action edit course @ position: " + classlistVH.getAdapterPosition());
-//                                Intent intent = new Intent(itemView.getContext(), EditCourseActivity.class);
-//                                intent.putExtra(Keys.INTENT_COURSECODE, txtClassCode.getText().toString());
-//                                intent.putExtra(Keys.INTENT_SECTIONCODE, txtSectionCode.getText().toString());
-//                                itemView.getContext().startActivity(intent);
+                                Log.d(TAG, "Action edit course @ position: " + courseListVH.getAdapterPosition());
+                                Intent intent = new Intent(courseListVH.itemView.getContext(), EditCourseActivity.class);
+                                intent.putExtra(Keys.INTENT_COURSECODE, courseCode);
+                                intent.putExtra(Keys.INTENT_SECTIONCODE, sectionCode);
+                                courseListVH.itemView.getContext().startActivity(intent);
                                 return true;
                             case R.id.deleteCourse:
-                                Log.d(TAG, "Action delete course @ position: " + classlistVH.getAdapterPosition());
-                                new AlertDialog.Builder(classlistVH.itemView.getContext())
+                                Log.d(TAG, "Action delete course @ position: " + courseListVH.getAdapterPosition());
+                                new AlertDialog.Builder(courseListVH.itemView.getContext())
                                         .setTitle("Delete course")
                                         .setMessage("Are you sure you want to delete this entry?")
 
@@ -64,25 +67,25 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
                                         // The dialog is automatically dismissed when a dialog button is clicked.
                                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int which) {
-//                                                //deletes all info from courses
-//                                                Db.deleteDocument(Db.COLLECTION_COURSES,
-//                                                        Db.FIELD_SECTIONCODE, txtSectionCode.getText().toString(),
-//                                                        Db.FIELD_COURSECODE, txtClassCode.getText().toString()); //DAT NAMING INCONSISTENCY THO LMAO
-//                                                Log.d(TAG,"deleted collection course");
-//
-//                                                //deletes all info from meetings
-//                                                Db.deleteDocument(Db.COLLECTION_MEETINGS,
-//                                                        Db.FIELD_SECTIONCODE, txtSectionCode.getText().toString(),
-//                                                        Db.FIELD_COURSECODE, txtClassCode.getText().toString()); //DAT NAMING INCONSISTENCY THO LMAO
-//                                                Log.d(TAG,"deleted collection meetings");
-////
-////                              //deletes all info from meeting history
-//                                                Db.deleteDocument(Db.COLLECTION_MEETINGHISTORY,
-//                                                        Db.FIELD_SECTIONCODE, txtSectionCode.getText().toString(),
-//                                                        Db.FIELD_COURSECODE, txtClassCode.getText().toString()); //DAT NAMING INCONSISTENCY THO LMAO
-//                                                Log.d(TAG,"deleted collection meeting history");
+                                                //deletes all info from courses
+                                                Db.deleteDocument(Db.COLLECTION_COURSES,
+                                                        Db.FIELD_SECTIONCODE, sectionCode,
+                                                        Db.FIELD_COURSECODE, courseCode);
+                                                Log.d(TAG,"deleted collection course: " + courseCode + " " + sectionCode);
 
-                                                Toast.makeText(classlistVH.itemView.getContext(), "Course has been successfully deleted", Toast.LENGTH_SHORT).show();
+                                                //deletes all info from meetings
+                                                Db.deleteDocument(Db.COLLECTION_MEETINGS,
+                                                        Db.FIELD_SECTIONCODE, sectionCode,
+                                                        Db.FIELD_COURSECODE, courseCode);
+                                                Log.d(TAG,"deleted collection meetings");
+
+                                                //deletes all info from meeting history
+                                                Db.deleteDocument(Db.COLLECTION_MEETINGHISTORY,
+                                                        Db.FIELD_SECTIONCODE, sectionCode,
+                                                        Db.FIELD_COURSECODE, courseCode);
+                                                Log.d(TAG,"deleted collection meeting history");
+
+                                                Toast.makeText(courseListVH.itemView.getContext(), "Course has been successfully deleted", Toast.LENGTH_SHORT).show();
                                             }
                                         })
 
@@ -94,9 +97,11 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
                         }
                     }
                 });
+                popupMenu.show();
             }
+
         });
-        return classlistVH;
+        return courseListVH;
     }
 
     @Override
