@@ -1,11 +1,16 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -51,6 +56,22 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
     private ImageView imgProfilePic;
     ////////////
 
+    private ActivityResultLauncher<Intent> createCourseActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if(result.getResultCode() == Activity.RESULT_OK) {
+                        Log.d(TAG, "Add success so now we finna initialize them views");
+                        initializeViews();
+                    } else {
+                        Log.d(TAG, "Nothing happened");
+                    }
+                }
+            }
+
+    );
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,20 +91,20 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
             @Override
             public void onClick(View v) {
                 Intent createCourseIntent = new Intent(CourseListActivity.this, CreateCourseActivity.class);
-                startActivity(createCourseIntent);
+                createCourseActivityResultLauncher.launch(createCourseIntent);
             }
         });
     }
 
     //handles the pop up button for the profile tab
-   public void showPopup (View v) {
-       PopupMenu popup = new PopupMenu(this, v);
-       popup.setOnMenuItemClickListener(this);
-       popup.inflate(R.menu.profile_menu);
-       popup.show();
-   }
+    public void showPopup (View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        popup.setOnMenuItemClickListener(this);
+        popup.inflate(R.menu.profile_menu);
+        popup.show();
+    }
 
-   // When user clicks on one of the items
+    // When user clicks on one of the items
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()) {
@@ -110,52 +131,53 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
     //initializes views
     protected void initializeViews() {
         Db.getDocumentsWith(Db.COLLECTION_USERS,
-            Db.FIELD_EMAIL, email).
-            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    List<DocumentSnapshot> result = Db.getDocuments(task);
-                    Log.d(TAG,"result size is "+email);
-                    Log.d(TAG,"result size is "+result.size());
+                Db.FIELD_EMAIL, email).
+                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<DocumentSnapshot> result = Db.getDocuments(task);
+                        Log.d(TAG,"result size is "+email);
+                        Log.d(TAG,"result size is "+result.size());
 
-                    String firstName = result.get(0).getString(Db.FIELD_FIRSTNAME);
-                    String lastName = result.get(0).getString(Db.FIELD_LASTNAME);
-                    String idNumber = result.get(0).getString(Db.FIELD_IDNUMBER);
-                    txtName.setText(firstName+" "+lastName);
-                    txtIdNumber.setText(idNumber);
+                        String firstName = result.get(0).getString(Db.FIELD_FIRSTNAME).toUpperCase();
+                        String lastName = result.get(0).getString(Db.FIELD_LASTNAME).toUpperCase();
 
-                    String documentId = Db.getIdFromTask(task);
-                    Db.getProfilePic(documentId).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            if(task.isSuccessful()) {
-                                Uri imgUri = task.getResult();
-                                Picasso.get().load(imgUri).into(imgProfilePic);
-                            } else {
-                                Log.d(TAG,"No profile image found. Switching to default");
+                        String idNumber = result.get(0).getString(Db.FIELD_IDNUMBER);
+                        txtName.setText(firstName+" "+lastName);
+                        txtIdNumber.setText(idNumber);
+
+                        String documentId = Db.getIdFromTask(task);
+                        Db.getProfilePic(documentId).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+                                if(task.isSuccessful()) {
+                                    Uri imgUri = task.getResult();
+                                    Picasso.get().load(imgUri).into(imgProfilePic);
+                                } else {
+                                    Log.d(TAG,"No profile image found. Switching to default");
+                                }
                             }
-                        }
-                    });
-                }
-            });
+                        });
+                    }
+                });
 
         Db.getDocumentsWith(Db.COLLECTION_COURSES,
-        Db.FIELD_HANDLEDBY, email).
-        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                courseModels.clear(); //always clear when initializing
+                Db.FIELD_HANDLEDBY, email).
+                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        courseModels.clear(); //always clear when initializing
 
-                courseModels.addAll(Db.toClassModel(Db.getDocuments(task)));
-                Log.d(TAG,"classModel size is "+ courseModels.size());
+                        courseModels.addAll(Db.toClassModel(Db.getDocuments(task)));
+                        Log.d(TAG,"classModel size is "+ courseModels.size());
 
-                recyclerView = findViewById(R.id.recyclerView);
-                layoutManager = new LinearLayoutManager(getApplicationContext());
-                recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
-                courseListAdapter = new CourseListAdapter(courseModels);
-                recyclerView.setAdapter(courseListAdapter);
-            }
-        });
+                        recyclerView = findViewById(R.id.recyclerView);
+                        layoutManager = new LinearLayoutManager(getApplicationContext());
+                        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+                        courseListAdapter = new CourseListAdapter(courseModels);
+                        recyclerView.setAdapter(courseListAdapter);
+                    }
+                });
     }//initializes views
 
     protected void onResume() {

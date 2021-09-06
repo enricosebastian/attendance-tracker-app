@@ -2,6 +2,7 @@ package com.mobdeve.s15.group1.attendancetrackerteacher;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -67,6 +68,7 @@ public class CreateCourseActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Entry field is empty", Toast.LENGTH_SHORT).show();
                 } else {
                     addClass(courseName, courseCode, sectionCode, isPublished);
+                    setResult(Activity.RESULT_OK);
                     finish();
                 }
             }
