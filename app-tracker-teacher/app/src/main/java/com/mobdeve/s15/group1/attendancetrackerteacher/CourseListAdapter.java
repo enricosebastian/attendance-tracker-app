@@ -1,6 +1,7 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
@@ -12,6 +13,10 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,14 +56,14 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
                         Log.d(TAG,"course and sec: " + courseCode + " " + sectionCode);
                         switch (item.getItemId()) {
                             case R.id.editCourse:
-                                Log.d(TAG, "Action edit course @ position: " + courseListVH.getAdapterPosition());
+                                Log.d(TAG, "Action edit course @ position: " + courseListVH.getBindingAdapterPosition());
                                 Intent intent = new Intent(courseListVH.itemView.getContext(), EditCourseActivity.class);
                                 intent.putExtra(Keys.INTENT_COURSECODE, courseCode);
                                 intent.putExtra(Keys.INTENT_SECTIONCODE, sectionCode);
                                 courseListVH.itemView.getContext().startActivity(intent);
                                 return true;
                             case R.id.deleteCourse:
-                                Log.d(TAG, "Action delete course @ position: " + courseListVH.getAdapterPosition());
+                                Log.d(TAG, "Action delete course @ position: " + courseListVH.getBindingAdapterPosition());
                                 new AlertDialog.Builder(courseListVH.itemView.getContext())
                                         .setTitle("Delete course")
                                         .setMessage("Are you sure you want to delete this entry?")
@@ -84,7 +89,8 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
                                                         Db.FIELD_SECTIONCODE, sectionCode,
                                                         Db.FIELD_COURSECODE, courseCode);
                                                 Log.d(TAG,"deleted collection meeting history");
-
+                                                data.remove(courseListVH.getBindingAdapterPosition());
+                                                notifyItemRemoved(courseListVH.getBindingAdapterPosition());
                                                 Toast.makeText(courseListVH.itemView.getContext(), "Course has been successfully deleted", Toast.LENGTH_SHORT).show();
                                             }
                                         })
@@ -124,8 +130,6 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
 
 
     }
-
-
 
     @Override
     public int getItemCount() {

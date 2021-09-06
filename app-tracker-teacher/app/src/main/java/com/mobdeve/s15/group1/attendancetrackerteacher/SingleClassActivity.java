@@ -129,6 +129,7 @@ public class SingleClassActivity extends AppCompatActivity {
 
     protected void onResume() {
         super.onResume();
+        initializeViews();
         Log.d(TAG, "you are on resume");
     }
 

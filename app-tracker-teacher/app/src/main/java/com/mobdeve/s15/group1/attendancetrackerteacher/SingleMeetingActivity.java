@@ -1,5 +1,6 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
+import androidx.activity.result.ActivityResult;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -189,6 +190,7 @@ public class SingleMeetingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Db.deleteDocument(Db.COLLECTION_MEETINGS, Db.FIELD_MEETINGCODE, meetingCode);
+
                 finish();
             }
         });
