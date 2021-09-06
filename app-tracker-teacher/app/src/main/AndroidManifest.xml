@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AttendanceTrackerTeacher">
         <activity
+            android:name=".ClassListActivity"
+            android:exported="true" />
+        <activity
             android:name=".EditAccountSecurityActivity"
             android:exported="true" />
         <activity
@@ -55,7 +58,7 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ClasslistActivity"
+            android:name=".CourseListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".LoginActivity"

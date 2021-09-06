@@ -18,8 +18,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.w3c.dom.Document;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,10 +47,11 @@ public class Db {
     private static FirebaseFirestore firebaseFirestoreInstance                  = null;
     private static StorageReference storageReferenceInstance                    = null;
 
-    private static ArrayList<ClassModel> classModels                            = new ArrayList<>();
+    private static ArrayList<CourseModel> courseModels = new ArrayList<>();
     private static ArrayList<MeetingModel> meetingModels                        = new ArrayList<>();
     private static ArrayList<CourseRequestModel> courseRequestModels            = new ArrayList<>();
     private static ArrayList<StudentPresentListModel> studentPresentListModels  = new ArrayList<>();
+    private static ArrayList<ClassListModel> classListModels                    = new ArrayList<>();
 
     public static String id = null;
     ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
@@ -118,9 +117,9 @@ public class Db {
         FIELD_STUDENTCOUNT      = "studentCount",
 
         COLLECTION_MEETINGS     = "Meetings",   //has same fields as collection courses
+        FIELD_ISOPEN            = "isOpen",
         FIELD_MEETINGCODE       = "meetingCode",
         FIELD_MEETINGSTART      = "meetingStart",
-        FIELD_MEETINGSTATUS     = "meetingStatus",
 
         COLLECTION_MEETINGHISTORY       = "MeetingHistory",   //has same fields as collection courses
         FIELD_ISPRESENT                 = "isPresent",
@@ -131,7 +130,10 @@ public class Db {
         COLLECTION_CLASSLIST        = "ClassList"
 
 
+
         ; //no need for username here
+
+    //FIELD_MEETINGSTATUS     = "meetingStatus", //<-------------- lmao useless delete this later
 
 
     ////////////////////////new version
@@ -201,6 +203,21 @@ public class Db {
                 get();
     }
 
+    //EXCLUSIVELY ONLY FOR CLASSLISTVH.JAVA
+    public static Task<QuerySnapshot> getDocumentsWith(
+            String tableName, String field1,
+            String value1, String field2,
+            String value2, String field3,
+            String value3, String field4, Boolean value4) {
+        return  getFirestoreInstance().
+                collection(tableName).
+                whereEqualTo(field1, value1).
+                whereEqualTo(field2, value2).
+                whereEqualTo(field3, value3).
+                whereEqualTo(field4, value4).
+                get();
+    }
+
     public static Task<QuerySnapshot> getDocumentsWith(
         String tableName, String field1,
         String value1, String field2,
@@ -228,7 +245,7 @@ public class Db {
             Log.d(TAG,"getIdFromTask finds no existing ID");
         } else {
             id = qs.getDocuments().get(0).getId();
-            Log.d(TAG,"getIdFromTask found an ID of "+id);
+            Log.d(TAG,"getIdFromTask found an ID of \""+id+"\"");
         }
         return id;
     }
@@ -258,19 +275,18 @@ public class Db {
         });
     }
 
-    public static ArrayList<ClassModel> toClassModel(List<DocumentSnapshot> result) {
-        classModels.clear();
+    public static ArrayList<CourseModel> toClassModel(List<DocumentSnapshot> result) {
+        courseModels.clear();
         for(DocumentSnapshot ds:result) {
-            classModels.add(new ClassModel(
+            courseModels.add(new CourseModel(
                 ds.getString("courseCode"),
                 ds.getString("courseName"),
                 ds.getString("handledBy"),
                 ds.getBoolean("isPublished"),
-                ds.getString("sectionCode"),
-                Integer.parseInt(ds.get("studentCount").toString()))
-            );
+                ds.getString("sectionCode")
+            ));
         }
-        return classModels;
+        return courseModels;
     }
 
     public static ArrayList<CourseRequestModel> toCourseRequestModel(List<DocumentSnapshot> result) {
@@ -287,19 +303,48 @@ public class Db {
         return courseRequestModels;
     }
 
+    public static ArrayList<ClassListModel> toClassListModel(List<DocumentSnapshot> result) {
+        classListModels.clear();
+        for(DocumentSnapshot ds:result) {
+            classListModels.add(new ClassListModel(
+                    ds.getString(Db.FIELD_COURSECODE),
+                    ds.getString(Db.FIELD_EMAIL),
+                    ds.getString(Db.FIELD_IDNUMBER),
+                    ds.getString(FIELD_SECTIONCODE)
+            ));
+        }
+        return classListModels;
+    }
+
     public static ArrayList<MeetingModel> toMeetingModel(List<DocumentSnapshot> result) {
         meetingModels.clear();
         for(DocumentSnapshot ds:result) {
+            //(String courseCode, boolean isOpen, String meetingCode, Date meetingStart, String sectionCode, int studentCount)
             meetingModels.add(new MeetingModel(
-                ds.getString("courseCode"),
-                ds.getString("sectionCode"),
-                ds.getString("meetingCode"),
-                ds.getTimestamp("meetingStart").toDate(), //this is how to convert timestamp to Date
-                Integer.parseInt(ds.get("studentCount").toString()),
-                ds.getString("meetingStatus"))
+                ds.getString(Db.FIELD_COURSECODE),
+                ds.getBoolean(Db.FIELD_ISOPEN),
+                ds.getString(Db.FIELD_MEETINGCODE),
+                ds.getTimestamp(Db.FIELD_MEETINGSTART).toDate(), //this is how to convert timestamp to Date
+                ds.getString(Db.FIELD_SECTIONCODE),
+                Integer.parseInt(ds.get(Db.FIELD_STUDENTCOUNT).toString()))
             );
         }
         return meetingModels;
+    }
+
+    public static ArrayList<StudentPresentListModel> toStudentPresentListModel(List<DocumentSnapshot> result) {
+        studentPresentListModels.clear();
+        for(DocumentSnapshot ds:result) {
+            studentPresentListModels.add(new StudentPresentListModel(
+                    ds.getString(FIELD_COURSECODE),
+                    ds.getString(FIELD_MEETINGCODE),
+                    ds.getString(FIELD_SECTIONCODE),
+                    ds.getString(FIELD_STUDENTATTENDED),
+                    ds.getString(FIELD_FIRSTNAME),
+                    ds.getString(FIELD_LASTNAME),
+                    ds.getBoolean(FIELD_ISPRESENT)));
+        }
+        return studentPresentListModels;
     }
 
     public static void deleteDocument(String tableName, String field, String value) {
@@ -325,13 +370,15 @@ public class Db {
         });
     }
 
-    public static void deleteDocument(String tableName, String field1, String value1, String field2, String value2) {
+    public static void deleteDocument(String tableName,
+        String field1, String value1,
+        String field2, String value2) {
         getDocumentsWith(tableName, field1, value1, field2, value2).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 String id = Db.getIdFromTask(task);
-                Log.d(TAG,"you are in deleteDocument function. Here is the id: "+id);
+                Log.d(TAG,"Deleting document with an id of \""+id+"\"");
                 if(id == null) {
                     Log.d(TAG,"Such a document in collections \""+tableName+"\" does not exist");
                 } else {
@@ -362,7 +409,7 @@ public class Db {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 String id = Db.getIdFromTask(task);
-                Log.d(TAG,"you are in deleteDcoument function. Here is the id: "+id);
+                Log.d(TAG,"Deleting document with an id of \""+id+"\"");
                 if(id == null) {
                     Log.d(TAG,"Such a document in collections \""+tableName+"\" does not exist");
                 } else {
@@ -473,21 +520,6 @@ public class Db {
         return resultList;
     }
 
-    public static ArrayList<StudentPresentListModel> toStudentPresentListModel(List<DocumentSnapshot> result) {
-        studentPresentListModels.clear();
-        for(DocumentSnapshot ds:result) {
-            studentPresentListModels.add(new StudentPresentListModel(
-                    ds.getString("courseCode"),
-                    ds.getString("meetingCode"),
-                    ds.getString("sectionCode"),
-                    ds.getString("studentAttended"),
-                    ds.getString("firstName"),
-                    ds.getString("lastName"),
-                    ds.getBoolean("isPresent")));
-        }
-        return studentPresentListModels;
-    }
-
     public static void updateSingleStudent(String entry, String query, UserModel initialInfo) {
         Db.getUsersCollectionReference()
             .whereEqualTo(entry, query)
@@ -517,7 +549,7 @@ public class Db {
             });
     }
 
-    public static void updateSingleCourse(String courseCode, String sectionCode, ClassModel initialInfo) {
+    public static void updateSingleCourse(String courseCode, String sectionCode, CourseModel initialInfo) {
         Db.getCoursesCollectionReference()
                 .whereEqualTo(COURSECODE_FIELD, courseCode)
                 .whereEqualTo(SECTIONCODE_FIELD,sectionCode)
@@ -529,19 +561,18 @@ public class Db {
                     if(initialInfo.getCourseName().equals("")) initialInfo.setCourseName(ds.getString("courseName"));
                     if(initialInfo.getHandledBy().equals("")) initialInfo.setHandledBy(ds.getString("handledBy"));
                     if(initialInfo.getSectionCode().equals("")) initialInfo.setSectionCode(ds.getString("sectionCode"));
-                    if(initialInfo.getStudentCount() <= 0) initialInfo.setStudentCount(Integer.parseInt(ds.getString("studentCount")));
 
                     String id = Db.getIdFromTask(task);
                     Log.d("main","id is "+id);
                     Db.getCoursesCollectionReference()
-                            .document(id)
-                            .set(initialInfo)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Log.d("main","Single course document updated successfully.");
-                                }
-                            });
+                    .document(id)
+                    .set(initialInfo)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Log.d("main","Single course document updated successfully.");
+                        }
+                    });
                 }
             });
     }

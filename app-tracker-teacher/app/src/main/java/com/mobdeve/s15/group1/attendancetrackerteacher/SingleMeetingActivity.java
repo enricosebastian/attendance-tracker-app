@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,12 +19,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.w3c.dom.Document;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SingleMeetingActivity extends AppCompatActivity {
 
-    private static final String TAG = "SingleMeeting";
+    private static final String TAG = "SingleMeetingActivity";
 
     //shared preferences initialization
     private SharedPreferences sp;
@@ -33,7 +39,7 @@ public class SingleMeetingActivity extends AppCompatActivity {
 
     //recycler view initialization
     private RecyclerView studentListRecyclerView;
-    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.LayoutManager studentListLayoutManager;
     private SingleMeetingAdapter singleMeetingAdapter;
     private ArrayList<StudentPresentListModel> studentPresentListModels = new ArrayList<>();
     ////////////////////
@@ -43,10 +49,12 @@ public class SingleMeetingActivity extends AppCompatActivity {
     private TextView txtDate;
     private TextView txtClassTitle;
     private TextView txtMeetingCode;
+    private Button btnDelete;
     ////////////
 
-//    private String courseCode, sectionCode, meetingCode, meetingStatus;
-
+    private String courseCode, sectionCode, meetingCode, courseName;
+    private boolean isOpen;
+    private Date meetingStart;
 
 
     @Override
@@ -54,28 +62,55 @@ public class SingleMeetingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_meeting_view);
 
-        this.sp             = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
-        this.editor         = sp.edit();
-        this.email          = sp.getString(Keys.SP_EMAIL_KEY,"");
+        this.sp = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
+        this.editor = sp.edit();
+        this.email = sp.getString(Keys.SP_EMAIL_KEY, "");
 
-        Intent intent = getIntent(); //delete lmao
+        Intent getIntent = getIntent();
+        this.courseCode = getIntent.getStringExtra(Keys.INTENT_COURSECODE);
+        this.sectionCode = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
+        this.meetingCode = getIntent.getStringExtra(Keys.INTENT_MEETINGCODE);
+        this.isOpen = getIntent.getBooleanExtra(Keys.INTENT_ISOPEN, false);
+        String stringDate = getIntent.getStringExtra(Keys.INTENT_MEETINGSTART);
 
-        this.txtDate = findViewById(R.id.txtDate);
-        txtDate.setText(intent.getStringExtra(MyKeys.DATE_KEY.name()));
+        Log.d(TAG, meetingCode);
 
+        try {
+            meetingStart = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss").parse(stringDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        String courseCode = intent.getStringExtra(MyKeys.COURSE_CODE_KEY.name());
-        String sectionCode = intent.getStringExtra(MyKeys.SECTION_CODE_KEY.name());
-        String meetingCode = intent.getStringExtra(MyKeys.MEETING_CODE_KEY.name());
-        String meetingStatus = intent.getStringExtra(MyKeys.MEETING_STATUS_KEY.name());
-        Log.d(TAG, "hello: " +  meetingStatus);
-
-        this.txtClassTitle = findViewById(R.id.txtClassTitle);
-        txtClassTitle.setText(courseCode +" - "+sectionCode);
-        
         this.txtStatus = findViewById(R.id.txtStatus);
+        this.txtDate = findViewById(R.id.txtDate);
+        this.txtClassTitle = findViewById(R.id.txtClassTitle);
+        this.txtMeetingCode = findViewById(R.id.tvMeetingCode); //LMAO THIS NAMING INCONSISTENCY SMH WHAT A DEV JESUS FOKEN CHRIST
+        this.studentListRecyclerView = findViewById(R.id.studentListRecyclerView);
+        this.btnDelete = findViewById(R.id.btnDelete);
 
-        if(meetingStatus.equals("OPEN")) {
+        initializeViews(); //move to on resume one day
+
+    }
+
+    protected void initializeViews() {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd yyyy | E");
+        txtDate.setText(dateFormat.format(meetingStart));
+
+        Db.getDocumentsWith(Db.COLLECTION_COURSES,
+        Db.FIELD_SECTIONCODE, sectionCode,
+        Db.FIELD_COURSECODE, courseCode).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<DocumentSnapshot> result = Db.getDocuments(task);
+                courseName = result.get(0).getString(Db.FIELD_COURSENAME);
+                txtClassTitle.setText(courseCode+" "+sectionCode+" | \""+courseName+"\"");
+            }
+        });
+        txtMeetingCode.setText(meetingCode);
+
+        if(isOpen) {
             txtStatus.setText("OPEN");
             txtStatus.setBackgroundTintList(this.getResources().getColorStateList(R.color.light_green));
         } else {
@@ -83,46 +118,80 @@ public class SingleMeetingActivity extends AppCompatActivity {
             txtStatus.setBackgroundTintList(this.getResources().getColorStateList(R.color.red_light));
         }
 
-        // When user clicks
+        Db.getDocumentsWith(Db.COLLECTION_MEETINGHISTORY,
+        Db.FIELD_MEETINGCODE, meetingCode).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<DocumentSnapshot> result = Db.getDocuments(task);
+                studentPresentListModels = Db.toStudentPresentListModel(result);
+
+                studentListLayoutManager = new LinearLayoutManager(getApplicationContext());
+                studentListRecyclerView.setLayoutManager(studentListLayoutManager);
+                singleMeetingAdapter = new SingleMeetingAdapter(studentPresentListModels);
+                studentListRecyclerView.setAdapter(singleMeetingAdapter);
+            }
+        });
+
         txtStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(txtStatus.getText().toString().equals("CLOSED")) {
                     txtStatus.setText("OPEN");
                     txtStatus.setBackgroundTintList(v.getContext().getResources().getColorStateList(R.color.light_green));
-                    //update the meeting status to open
 
+                    Db.getDocumentsWith(Db.COLLECTION_MEETINGS,
+                    Db.FIELD_MEETINGCODE, meetingCode).
+                    addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            String documentId = Db.getIdFromTask(task);
+
+                            Db.getCollection(Db.COLLECTION_MEETINGS).document(documentId).
+                            update(Db.FIELD_ISOPEN, true).
+                            addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Log.d(TAG, "Successfully updated db");
+                                }
+                            });
+
+                        }
+                    });
 
                 } else if(txtStatus.getText().toString().equals("OPEN")) {
                     txtStatus.setText("CLOSED");
                     txtStatus.setBackgroundTintList(v.getContext().getResources().getColorStateList(R.color.red_light));
-                    //update meeting status to close
+
+                    Db.getDocumentsWith(Db.COLLECTION_MEETINGS,
+                    Db.FIELD_MEETINGCODE, meetingCode).
+                    addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            String documentId = Db.getIdFromTask(task);
+
+                            Db.getCollection(Db.COLLECTION_MEETINGS).document(documentId).
+                            update(Db.FIELD_ISOPEN, false).
+                            addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Log.d(TAG, "Successfully updated db");
+                                }
+                            });
+
+                        }
+                    });
                 }
             }
         });
 
-        this.txtMeetingCode = findViewById(R.id.tvMeetingCode);
-        txtMeetingCode.setText(meetingCode);
-
-
-        //To get the students in the meeting
-        Task<QuerySnapshot> querySnapshotTask = Db.getStudentsInMeeting(meetingCode);
-        querySnapshotTask.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<DocumentSnapshot> result = Db.toList(task);
-                ArrayList<StudentPresentListModel> studentPresentListModels = Db.toStudentPresentListModel(result);
-
-                studentListRecyclerView = findViewById(R.id.studentListRecyclerView);
-
-                layoutManager = new LinearLayoutManager(getApplicationContext());
-                studentListRecyclerView.setLayoutManager(layoutManager);
-
-                singleMeetingAdapter = new SingleMeetingAdapter(studentPresentListModels);
-                studentListRecyclerView.setAdapter(singleMeetingAdapter);
+            public void onClick(View view) {
+                Db.deleteDocument(Db.COLLECTION_MEETINGS, Db.FIELD_MEETINGCODE, meetingCode);
+                finish();
             }
         });
 
     }
-
 }

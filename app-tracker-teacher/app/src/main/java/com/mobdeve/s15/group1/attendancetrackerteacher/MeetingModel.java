@@ -3,21 +3,22 @@ package com.mobdeve.s15.group1.attendancetrackerteacher;
 import java.util.Date;
 
 public class MeetingModel {
-    String courseCode, sectionCode, meetingCode, meetingStatus; //keys could be int? or long?
-    Date date;
-    int studentsPresent;
+    private String courseCode, sectionCode, meetingCode;
+    Date meetingStart;
+    boolean isOpen;
+    int studentCount;
 
     public MeetingModel() {
 
     }
 
-    public MeetingModel(String courseCode, String sectionCode, String meetingCode, Date date, int studentsPresent, String meetingStatus) {
+    public MeetingModel(String courseCode, boolean isOpen, String meetingCode, Date meetingStart, String sectionCode, int studentCount) {
         this.courseCode = courseCode;
         this.sectionCode = sectionCode;
         this.meetingCode = meetingCode;
-        this.date = date;
-        this.studentsPresent = studentsPresent;
-        this.meetingStatus = meetingStatus;
+        this.meetingStart = meetingStart;
+        this.isOpen = isOpen;
+        this.studentCount = studentCount;
     }
 
     public String getCourseCode() {
@@ -44,27 +45,27 @@ public class MeetingModel {
         this.meetingCode = meetingCode;
     }
 
-    public String getMeetingStatus() {
-        return meetingStatus;
+    public Date getMeetingStart() {
+        return meetingStart;
     }
 
-    public void setMeetingStatus(String meetingStatus) {
-        this.meetingStatus = meetingStatus;
+    public void setMeetingStart(Date meetingStart) {
+        this.meetingStart = meetingStart;
     }
 
-    public Date getDate() {
-        return date;
+    public boolean getIsOpen() {
+        return isOpen;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setOpen(boolean open) {
+        isOpen = open;
     }
 
-    public int getStudentsPresent() {
-        return studentsPresent;
+    public int getStudentCount() {
+        return studentCount;
     }
 
-    public void setStudentsPresent(int studentsPresent) {
-        this.studentsPresent = studentsPresent;
+    public void setStudentCount(int studentCount) {
+        this.studentCount = studentCount;
     }
 }

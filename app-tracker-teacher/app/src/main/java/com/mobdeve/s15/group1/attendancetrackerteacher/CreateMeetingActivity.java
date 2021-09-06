@@ -28,7 +28,7 @@ import java.util.Random;
 public class CreateMeetingActivity extends AppCompatActivity {
     private static final String TAG = "CreateMeetingActivity";
 
-    private String courseCode, sectionCode, meetingStatus;
+    private String courseCode, sectionCode;
     private TextView tvDisplayDate;
     private DatePickerDialog.OnDateSetListener dsl;
 
@@ -44,11 +44,9 @@ public class CreateMeetingActivity extends AppCompatActivity {
         this.btnCreate = findViewById(R.id.btnConfirmCreateMeeting);
         this.tvDisplayDate = findViewById(R.id.tvSelectDate);
 
-
         Intent intent = getIntent();
         this.courseCode = intent.getStringExtra(Keys.INTENT_COURSECODE);
         this.sectionCode = intent.getStringExtra(Keys.INTENT_SECTIONCODE);
-        this.meetingStatus = "OPEN";
 
         //clean this lmao
         dsl = new DatePickerDialog.OnDateSetListener() {
@@ -125,8 +123,7 @@ public class CreateMeetingActivity extends AppCompatActivity {
         input.put(Db.FIELD_MEETINGSTART, timestamp);
         input.put(Db.FIELD_SECTIONCODE, sectionCode);
         input.put(Db.FIELD_STUDENTCOUNT, 0);
-        input.put(Db.FIELD_MEETINGSTATUS, meetingStatus);
-        Log.d(TAG, "Meeting Status: " + meetingStatus);
+        input.put(Db.FIELD_ISOPEN, false);
         Db.addDocument(Db.COLLECTION_MEETINGS, input);
     }
 

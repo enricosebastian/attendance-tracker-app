@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
     private static final String TAG = "Single Class Adapter";
@@ -45,24 +47,25 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
 
         SimpleDateFormat stringDate = new SimpleDateFormat("MMM dd yyyy | E");
 
-        holder.setTxtStudentsPresent(data.get(position).getStudentsPresent());
-        holder.setTxtDate(stringDate.format(data.get(position).getDate()));
+        holder.setTxtStudentsPresent(data.get(position).getStudentCount());
+        holder.setTxtDate(stringDate.format(data.get(position).getMeetingStart()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(holder.itemView.getContext(), SingleMeetingActivity.class);
+                Intent singleMeetingActivityIntent = new Intent(holder.itemView.getContext(), SingleMeetingActivity.class);
 
                 //get the course code somehow
-                intent.putExtra(MyKeys.COURSE_CODE_KEY.name(), data.get(position).getCourseCode());
-                intent.putExtra(MyKeys.SECTION_CODE_KEY.name(), data.get(position).getSectionCode());
-                intent.putExtra(MyKeys.MEETING_CODE_KEY.name(), data.get(position).getMeetingCode());
-                intent.putExtra(MyKeys.DATE_KEY.name(), stringDate.format(data.get(position).getDate()));
-                intent.putExtra(MyKeys.PRESENT_STUDENTS_KEY.name(), data.get(position).getStudentsPresent());
-                intent.putExtra(MyKeys.MEETING_STATUS_KEY.name(), data.get(position).getMeetingStatus());
-                Log.d(TAG, "Status: " + data.get(position).getMeetingStatus());
-                Log.d(TAG, "Status: " + data.get(position).getCourseCode());
-                holder.itemView.getContext().startActivity(intent);
+                singleMeetingActivityIntent.putExtra(Keys.INTENT_COURSECODE, data.get(position).getCourseCode());
+                singleMeetingActivityIntent.putExtra(Keys.INTENT_SECTIONCODE, data.get(position).getSectionCode());
+                singleMeetingActivityIntent.putExtra(Keys.INTENT_MEETINGCODE, data.get(position).getMeetingCode());
+                singleMeetingActivityIntent.putExtra(Keys.INTENT_ISOPEN, data.get(position).getIsOpen());
+
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+                String stringDate = formatter.format(data.get(position).getMeetingStart());
+                singleMeetingActivityIntent.putExtra(Keys.INTENT_MEETINGSTART, stringDate);
+
+                holder.itemView.getContext().startActivity(singleMeetingActivityIntent);
             }
         });
     }

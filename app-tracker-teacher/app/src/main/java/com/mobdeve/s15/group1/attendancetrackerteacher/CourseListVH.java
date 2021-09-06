@@ -20,7 +20,7 @@ public class ClasslistVH extends RecyclerView.ViewHolder {
     private TextView txtClassCode, txtSectionCode;
     private ImageButton btnMoreOptions;
 
-    public ClasslistVH(@NonNull View itemView) {
+    public CourseListVH(@NonNull View itemView) {
         super(itemView);
         this.txtClassCode = itemView.findViewById(R.id.txtClassCode);
         this.txtSectionCode = itemView.findViewById(R.id.txtSectionCode);

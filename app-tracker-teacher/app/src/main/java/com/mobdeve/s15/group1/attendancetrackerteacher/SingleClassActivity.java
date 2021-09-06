@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -34,11 +35,11 @@ public class SingleClassActivity extends AppCompatActivity {
     //recycler view initialization
     private ArrayList<MeetingModel> meetingModels = new ArrayList<>();
     private RecyclerView singleClassRecyclerView;
-    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.LayoutManager singleClassLayoutManager;
     private SingleClassAdapter singleClassAdapter;
 
     //widget initialization
-    TextView txtClassTitle, txtCreateMeeting;
+    TextView txtClassTitle, txtCreateMeeting, txtStudentCount;
     ImageButton btnAcceptStudents;
     private String courseCode, sectionCode, courseName;
 
@@ -53,6 +54,7 @@ public class SingleClassActivity extends AppCompatActivity {
         this.courseName         = getIntent.getStringExtra(Keys.INTENT_COURSENAME);
 
         this.txtClassTitle      = findViewById(R.id.txtClassTitle);
+        this.txtStudentCount    = findViewById(R.id.txtStudentCount);
         this.txtCreateMeeting   = findViewById(R.id.txtCreateMeeting);
         this.btnAcceptStudents  = findViewById(R.id.btnAcceptStudents);
 
@@ -80,10 +82,31 @@ public class SingleClassActivity extends AppCompatActivity {
                 startActivity(acceptStudentsActivityIntent);
             }
         });
+        
+        txtStudentCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent getStudentsListActivity = new Intent(SingleClassActivity.this, ClassListActivity.class);
+                getStudentsListActivity.putExtra(Keys.INTENT_COURSECODE, courseCode);
+                getStudentsListActivity.putExtra(Keys.INTENT_SECTIONCODE, sectionCode);
+                startActivity(getStudentsListActivity);
+            }
+        });
     }
 
 
     protected void initializeViews() {
+        Db.getDocumentsWith(Db.COLLECTION_CLASSLIST,
+        Db.FIELD_COURSECODE, courseCode,
+        Db.FIELD_SECTIONCODE, sectionCode).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<DocumentSnapshot> results = Db.getDocuments(task);
+                txtStudentCount.setText(results.size()+" students");
+            }
+        });
+
         Db.getDocumentsWith(Db.COLLECTION_MEETINGS,
         Db.FIELD_COURSECODE, courseCode,
         Db.FIELD_SECTIONCODE, sectionCode,
@@ -96,12 +119,17 @@ public class SingleClassActivity extends AppCompatActivity {
                 meetingModels.clear();
                 meetingModels.addAll(Db.toMeetingModel(results));
                 singleClassRecyclerView = findViewById(R.id.SingleClassRecyclerView);
-                layoutManager = new LinearLayoutManager(getApplicationContext());
-                singleClassRecyclerView.setLayoutManager(layoutManager);
+                singleClassLayoutManager = new LinearLayoutManager(getApplicationContext());
+                singleClassRecyclerView.setLayoutManager(singleClassLayoutManager);
                 singleClassAdapter = new SingleClassAdapter(meetingModels);
                 singleClassRecyclerView.setAdapter(singleClassAdapter);
             }
         });
+    }
+
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "you are on resume");
     }
 
 

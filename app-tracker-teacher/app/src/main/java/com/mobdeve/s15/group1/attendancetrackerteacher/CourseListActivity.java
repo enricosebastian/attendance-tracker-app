@@ -28,7 +28,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClasslistActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+public class CourseListActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     private static final String TAG = "ClasslistActivity.java";
 
     //shared preferences initialization
@@ -40,8 +40,8 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
     //recycler view initialization
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private ClasslistAdapter classlistAdapter;
-    private ArrayList<ClassModel> classModels = new ArrayList<>();
+    private CourseListAdapter courseListAdapter;
+    private ArrayList<CourseModel> courseModels = new ArrayList<>();
     ////////////
 
     //widget initialization
@@ -54,7 +54,7 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_classlist);
+        setContentView(R.layout.activity_courselist);
 
         this.sp             = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
         this.editor         = sp.edit();
@@ -69,7 +69,7 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
         btnAddCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent createCourseIntent = new Intent(ClasslistActivity.this, CreateCourseActivity.class);
+                Intent createCourseIntent = new Intent(CourseListActivity.this, CreateCourseActivity.class);
                 startActivity(createCourseIntent);
             }
         });
@@ -88,17 +88,17 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.editProfile:
-                Intent editProfileIntent = new Intent (ClasslistActivity.this, EditProfileActivity.class);
+                Intent editProfileIntent = new Intent (CourseListActivity.this, EditProfileActivity.class);
                 startActivity(editProfileIntent);
                 return true;
             case R.id.editAccountSecurity:
-                Intent editAccountSecurityIntent = new Intent (ClasslistActivity.this, EditAccountSecurityActivity.class);
+                Intent editAccountSecurityIntent = new Intent (CourseListActivity.this, EditAccountSecurityActivity.class);
                 startActivity(editAccountSecurityIntent);
                 return true;
             case R.id.logout:
                 editor.clear();
                 editor.commit();
-                Intent logoutIntent = new Intent (ClasslistActivity.this, LoginActivity.class);
+                Intent logoutIntent = new Intent (CourseListActivity.this, LoginActivity.class);
                 startActivity(logoutIntent);
                 finish();
                 return true;
@@ -144,16 +144,16 @@ public class ClasslistActivity extends AppCompatActivity implements PopupMenu.On
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                classModels.clear(); //always clear when initializing
+                courseModels.clear(); //always clear when initializing
 
-                classModels.addAll(Db.toClassModel(Db.getDocuments(task)));
-                Log.d(TAG,"classModel size is "+classModels.size());
+                courseModels.addAll(Db.toClassModel(Db.getDocuments(task)));
+                Log.d(TAG,"classModel size is "+ courseModels.size());
 
                 recyclerView = findViewById(R.id.recyclerView);
                 layoutManager = new LinearLayoutManager(getApplicationContext());
                 recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
-                classlistAdapter = new ClasslistAdapter(classModels);
-                recyclerView.setAdapter(classlistAdapter);
+                courseListAdapter = new CourseListAdapter(courseModels);
+                recyclerView.setAdapter(courseListAdapter);
             }
         });
     }//initializes views
