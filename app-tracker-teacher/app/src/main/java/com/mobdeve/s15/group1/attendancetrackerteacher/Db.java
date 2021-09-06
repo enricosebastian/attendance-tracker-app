@@ -332,6 +332,21 @@ public class Db {
         return meetingModels;
     }
 
+    public static ArrayList<StudentPresentListModel> toStudentPresentListModel(List<DocumentSnapshot> result) {
+        studentPresentListModels.clear();
+        for(DocumentSnapshot ds:result) {
+            studentPresentListModels.add(new StudentPresentListModel(
+                    ds.getString(FIELD_COURSECODE),
+                    ds.getString(FIELD_MEETINGCODE),
+                    ds.getString(FIELD_SECTIONCODE),
+                    ds.getString(FIELD_STUDENTATTENDED),
+                    ds.getString(FIELD_FIRSTNAME),
+                    ds.getString(FIELD_LASTNAME),
+                    ds.getBoolean(FIELD_ISPRESENT)));
+        }
+        return studentPresentListModels;
+    }
+
     public static void deleteDocument(String tableName, String field, String value) {
         getDocumentsWith(tableName, field, value).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -505,21 +520,6 @@ public class Db {
         return resultList;
     }
 
-    public static ArrayList<StudentPresentListModel> toStudentPresentListModel(List<DocumentSnapshot> result) {
-        studentPresentListModels.clear();
-        for(DocumentSnapshot ds:result) {
-            studentPresentListModels.add(new StudentPresentListModel(
-                    ds.getString("courseCode"),
-                    ds.getString("meetingCode"),
-                    ds.getString("sectionCode"),
-                    ds.getString("studentAttended"),
-                    ds.getString("firstName"),
-                    ds.getString("lastName"),
-                    ds.getBoolean("isPresent")));
-        }
-        return studentPresentListModels;
-    }
-
     public static void updateSingleStudent(String entry, String query, UserModel initialInfo) {
         Db.getUsersCollectionReference()
             .whereEqualTo(entry, query)
@@ -565,14 +565,14 @@ public class Db {
                     String id = Db.getIdFromTask(task);
                     Log.d("main","id is "+id);
                     Db.getCoursesCollectionReference()
-                            .document(id)
-                            .set(initialInfo)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Log.d("main","Single course document updated successfully.");
-                                }
-                            });
+                    .document(id)
+                    .set(initialInfo)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Log.d("main","Single course document updated successfully.");
+                        }
+                    });
                 }
             });
     }
