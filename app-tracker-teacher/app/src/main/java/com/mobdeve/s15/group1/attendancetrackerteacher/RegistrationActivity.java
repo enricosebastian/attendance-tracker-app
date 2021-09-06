@@ -86,26 +86,35 @@ public class RegistrationActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please fill up all the fields", Toast.LENGTH_SHORT).show();
                 } else {
                     //checks id for BOTH teachers and students, just in case
-                    Db.getDocumentsWith(Db.COLLECTION_USERS,
-                    Db.FIELD_IDNUMBER, idNumber).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            List<DocumentSnapshot> result = Db.getDocuments(task);
-                            if(result.size()==0) {
-                                createNewUser(email, firstName, idNumber, lastName, password);
 
-                                editor.putString(Keys.SP_EMAIL_KEY, email);
-                                editor.putString(Keys.SP_USERTYPE_KEY, "teacher");
-                                editor.commit();
+                    // if the ID number is a number, and is 8 length
+                    if(isIDNumberValid(idNumber))
+                    {
+                        Db.getDocumentsWith(Db.COLLECTION_USERS,
+                                Db.FIELD_IDNUMBER, idNumber).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                List<DocumentSnapshot> result = Db.getDocuments(task);
+                                if(result.size()==0) {
+                                    createNewUser(email, firstName, idNumber, lastName, password);
 
-                                Intent intent = new Intent(RegistrationActivity.this, CourseListActivity.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Account exists already!", Toast.LENGTH_SHORT).show();
+                                    editor.putString(Keys.SP_EMAIL_KEY, email);
+                                    editor.putString(Keys.SP_USERTYPE_KEY, "teacher");
+                                    editor.commit();
+
+                                    Intent intent = new Intent(RegistrationActivity.this, CourseListActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Account exists already!", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(), "Wrong ID number format!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -119,7 +128,22 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
+    private boolean isIDNumberValid(String val)
+    {
+        boolean isNumber = false, isLength8 = false;
 
+        if(val.length() == 8)
+            isLength8 = true;
+
+        try {
+            int num = Integer.parseInt(val);
+            isNumber = true;
+        }
+        catch(NumberFormatException e) {
+            Log.d(TAG, "ID number field is a string, not a number");
+        }
+        return isNumber && isLength8;
+    }
     /*  This method was created for code readability. It checks if the fields have completely been
      *  filled up by the user
      **/

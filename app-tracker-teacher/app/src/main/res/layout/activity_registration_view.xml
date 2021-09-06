@@ -67,7 +67,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/custom_input"
         android:drawableStart="@drawable/ic_person"
-        android:hint="DLSU ID number"
+        android:hint="DLSU ID number (e.g. 11812345)"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

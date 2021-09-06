@@ -79,6 +79,7 @@ public class CreateMeetingActivity extends AppCompatActivity {
                         dsl,
                         year, month, day
                 );
+                dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }

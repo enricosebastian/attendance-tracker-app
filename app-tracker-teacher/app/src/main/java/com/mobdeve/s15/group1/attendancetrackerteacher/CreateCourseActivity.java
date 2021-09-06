@@ -1,8 +1,10 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +14,13 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CreateCourseActivity extends AppCompatActivity {
@@ -66,8 +74,21 @@ public class CreateCourseActivity extends AppCompatActivity {
                 if(courseName.isEmpty() || courseCode.isEmpty() || sectionCode.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Entry field is empty", Toast.LENGTH_SHORT).show();
                 } else {
-                    addClass(courseName, courseCode, sectionCode, isPublished);
-                    finish();
+                    Db.getDocumentsWith(Db.COLLECTION_COURSES,
+                            Db.FIELD_COURSECODE, courseCode, Db.FIELD_SECTIONCODE, sectionCode).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            List<DocumentSnapshot> result = Db.getDocuments(task);
+                            if(result.size()==0) {
+                                addClass(courseName, courseCode, sectionCode, isPublished);
+
+                                finish();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "That class already exists!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
                 }
             }
         });
