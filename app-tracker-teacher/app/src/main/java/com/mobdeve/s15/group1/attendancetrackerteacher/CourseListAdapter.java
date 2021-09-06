@@ -34,7 +34,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
     public CourseListVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.layout_class, parent, false);
-        ClasslistVH classlistVH = new ClasslistVH(view);
+        CourseListVH classlistVH = new CourseListVH(view);
 
         classlistVH.setBtnMoreOptionsOnClickListener(new View.OnClickListener() {
 

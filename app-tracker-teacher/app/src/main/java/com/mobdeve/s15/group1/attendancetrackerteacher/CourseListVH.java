@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ClasslistVH extends RecyclerView.ViewHolder {
+public class CourseListVH extends RecyclerView.ViewHolder {
     private static final String TAG = "ClasslistVH.java";
     private TextView txtClassCode, txtSectionCode;
     private ImageButton btnMoreOptions;
