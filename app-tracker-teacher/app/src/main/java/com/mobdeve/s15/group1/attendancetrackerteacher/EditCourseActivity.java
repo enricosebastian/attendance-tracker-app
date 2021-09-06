@@ -2,6 +2,7 @@ package com.mobdeve.s15.group1.attendancetrackerteacher;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -69,8 +70,7 @@ public class EditCourseActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Entry field is empty, please try again.", Toast.LENGTH_SHORT).show();
                 } else {
                     updateCourseName(courseName);
-                    setResult(Activity.RESULT_OK);
-                    finish();
+
                 }
             }
         });
@@ -92,6 +92,7 @@ public class EditCourseActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         Log.d(TAG,"Successfully edited course name");
                         Toast.makeText(EditCourseActivity.this, "Course name successfully edited", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 });
             }

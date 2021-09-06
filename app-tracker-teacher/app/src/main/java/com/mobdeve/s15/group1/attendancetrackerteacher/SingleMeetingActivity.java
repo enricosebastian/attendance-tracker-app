@@ -189,11 +189,36 @@ public class SingleMeetingActivity extends AppCompatActivity {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Db.deleteDocument(Db.COLLECTION_MEETINGS, Db.FIELD_MEETINGCODE, meetingCode);
+                deleteMeeting(Db.COLLECTION_MEETINGS, Db.FIELD_MEETINGCODE, meetingCode);
 
-                finish();
+
             }
         });
 
+    }
+
+    public void deleteMeeting(String tableName, String field, String value) {
+        Db.getDocumentsWith(tableName, field, value).
+                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        String id = Db.getIdFromTask(task);
+                        Db.getCollection(tableName).
+                                document(id).
+                                delete().
+                                addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()) {
+                                            Log.d(TAG,"Successfully deleted a "+tableName+" document");
+
+                                        } else {
+                                            Log.d(TAG,"Failed: "+task.getException());
+                                        }
+                                        finish();
+                                    }
+                                });
+                    }
+                });
     }
 }
