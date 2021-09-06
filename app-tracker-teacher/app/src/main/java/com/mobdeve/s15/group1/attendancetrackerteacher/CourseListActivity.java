@@ -62,10 +62,10 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if(result.getResultCode() == Activity.RESULT_OK) {
-                        Log.d(TAG, "Add success so now we finna initialize them views");
+                        Log.d(TAG, "Add success so reinitialize the views.");
                         initializeViews();
                     } else {
-                        Log.d(TAG, "Nothing happened");
+                        Log.d(TAG, "Nothing returned");
                     }
                 }
             }
@@ -110,7 +110,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         switch(item.getItemId()) {
             case R.id.editProfile:
                 Intent editProfileIntent = new Intent (CourseListActivity.this, EditProfileActivity.class);
-                startActivity(editProfileIntent);
+                createCourseActivityResultLauncher.launch(editProfileIntent);
                 return true;
             case R.id.editAccountSecurity:
                 Intent editAccountSecurityIntent = new Intent (CourseListActivity.this, EditAccountSecurityActivity.class);
