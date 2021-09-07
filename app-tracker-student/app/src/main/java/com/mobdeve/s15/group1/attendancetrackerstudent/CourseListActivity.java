@@ -114,8 +114,12 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.editProfile:
-//                Intent intent = new Intent (CourseListActivity.this, EditProfile.class);
-//                startActivity(intent);
+                Intent editProfileIntent = new Intent (CourseListActivity.this, EditProfileActivity.class);
+                createCourseActivityResultLauncher.launch(editProfileIntent);
+                return true;
+            case R.id.editAccountSecurity:
+                Intent editAccountSecurityIntent = new Intent (CourseListActivity.this, EditAccountSecurityActivity.class);
+                startActivity(editAccountSecurityIntent);
                 return true;
             case R.id.logout:
                 editor.clear();
