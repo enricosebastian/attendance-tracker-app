@@ -33,7 +33,7 @@ public class CreateMeetingActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener dsl;
 
     private int meetingMonth, meetingDay, meetingYear, meetingHour, meetingMinute;
-
+    private boolean isDateSet = false;
     private Button btnCancel, btnCreate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +59,7 @@ public class CreateMeetingActivity extends AppCompatActivity {
 
                 meetingDay = day;
                 meetingYear = year;
+                isDateSet = true;
 
                 tvDisplayDate.setText(date);
             }
@@ -79,7 +80,8 @@ public class CreateMeetingActivity extends AppCompatActivity {
                         dsl,
                         year, month, day
                 );
-                dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                Log.d(TAG, "system time: " + System.currentTimeMillis() + ", cal time: " + cal.getTimeInMillis());
+                dialog.getDatePicker().setMinDate(Calendar.getInstance().getTimeInMillis() - 2000);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
@@ -96,21 +98,29 @@ public class CreateMeetingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //future feature
-                meetingHour = 12; //to be dynamic if we have time
-                meetingMinute = 45; //to be dynamic if we have time
+                if (isDateSet)
+                {
+                    meetingHour = 12; //to be dynamic if we have time
+                    meetingMinute = 45; //to be dynamic if we have time
 
-                String dateString = (meetingMonth+1)+"."+meetingDay+"."+meetingYear+"-"+meetingHour+"."+meetingMinute;
+                    String dateString = (meetingMonth+1)+"."+meetingDay+"."+meetingYear+"-"+meetingHour+"."+meetingMinute;
 
-                Date date = null;
-                try {
-                    date = new SimpleDateFormat("M.d.yyyy-HH.mm").parse(dateString);
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                    Date date = null;
+                    try {
+                        date = new SimpleDateFormat("M.d.yyyy-HH.mm").parse(dateString);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    Timestamp meetingStart = new Timestamp(date);
+                    createNewMeeting(meetingStart, dateString);
+                    Toast.makeText(getApplicationContext(), "new meeting created", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
-                Timestamp meetingStart = new Timestamp(date);
-                createNewMeeting(meetingStart, dateString);
-                Toast.makeText(getApplicationContext(), "new meeting created", Toast.LENGTH_SHORT).show();
-                finish();
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "Please enter a date!", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
