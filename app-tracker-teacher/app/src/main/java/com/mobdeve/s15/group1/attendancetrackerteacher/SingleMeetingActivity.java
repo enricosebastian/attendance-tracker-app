@@ -13,10 +13,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.base.MoreObjects;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -54,8 +58,9 @@ public class SingleMeetingActivity extends AppCompatActivity {
     ////////////
 
     private String courseCode, sectionCode, meetingCode, courseName;
-    private boolean isOpen;
+    private boolean isOpen; //suggestion: what happens if you change boolean (primitive) to Boolean instead?
     private Date meetingStart;
+
 
 
     @Override
@@ -63,16 +68,16 @@ public class SingleMeetingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_meeting_view);
 
-        this.sp = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
-        this.editor = sp.edit();
-        this.email = sp.getString(Keys.SP_EMAIL_KEY, "");
+        this.sp             = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
+        this.editor         = sp.edit();
+        this.email          = sp.getString(Keys.SP_EMAIL_KEY, "");
 
-        Intent getIntent = getIntent();
-        this.courseCode = getIntent.getStringExtra(Keys.INTENT_COURSECODE);
-        this.sectionCode = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
-        this.meetingCode = getIntent.getStringExtra(Keys.INTENT_MEETINGCODE);
-        this.isOpen = getIntent.getBooleanExtra(Keys.INTENT_ISOPEN, false);
-        String stringDate = getIntent.getStringExtra(Keys.INTENT_MEETINGSTART);
+        Intent getIntent    = getIntent();
+        this.courseCode     = getIntent.getStringExtra(Keys.INTENT_COURSECODE);
+        this.sectionCode    = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
+        this.meetingCode    = getIntent.getStringExtra(Keys.INTENT_MEETINGCODE);
+        this.isOpen         = getIntent.getBooleanExtra(Keys.INTENT_ISOPEN, false);
+        String stringDate   = getIntent.getStringExtra(Keys.INTENT_MEETINGSTART);
 
         Log.d(TAG, meetingCode);
 
@@ -82,12 +87,12 @@ public class SingleMeetingActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        this.txtStatus = findViewById(R.id.txtStatus);
-        this.txtDate = findViewById(R.id.txtDate);
-        this.txtClassTitle = findViewById(R.id.txtClassTitle);
-        this.txtMeetingCode = findViewById(R.id.tvMeetingCode); //LMAO THIS NAMING INCONSISTENCY SMH WHAT A DEV JESUS FOKEN CHRIST
-        this.studentListRecyclerView = findViewById(R.id.studentListRecyclerView);
-        this.btnDelete = findViewById(R.id.btnDelete);
+        this.txtStatus                  = findViewById(R.id.txtStatus);
+        this.txtDate                    = findViewById(R.id.txtDate);
+        this.txtClassTitle              = findViewById(R.id.txtClassTitle);
+        this.txtMeetingCode             = findViewById(R.id.tvMeetingCode); //LMAO THIS NAMING INCONSISTENCY SMH WHAT A DEV JESUS FOKEN CHRIST
+        this.studentListRecyclerView    = findViewById(R.id.studentListRecyclerView);
+        this.btnDelete                  = findViewById(R.id.btnDelete);
 
         initializeViews(); //move to on resume one day
 
@@ -95,7 +100,7 @@ public class SingleMeetingActivity extends AppCompatActivity {
 
     protected void initializeViews() {
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd yyyy | E");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy | E");
         txtDate.setText(dateFormat.format(meetingStart));
 
         Db.getDocumentsWith(Db.COLLECTION_COURSES,
@@ -190,35 +195,32 @@ public class SingleMeetingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 deleteMeeting(Db.COLLECTION_MEETINGS, Db.FIELD_MEETINGCODE, meetingCode);
-
-
             }
         });
-
     }
 
     public void deleteMeeting(String tableName, String field, String value) {
         Db.getDocumentsWith(tableName, field, value).
-                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String id = Db.getIdFromTask(task);
+                Db.getCollection(tableName).
+                document(id).
+                delete().
+                addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        String id = Db.getIdFromTask(task);
-                        Db.getCollection(tableName).
-                                document(id).
-                                delete().
-                                addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if(task.isSuccessful()) {
-                                            Log.d(TAG,"Successfully deleted a "+tableName+" document");
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            Log.d(TAG,"Successfully deleted a "+tableName+" document");
 
-                                        } else {
-                                            Log.d(TAG,"Failed: "+task.getException());
-                                        }
-                                        finish();
-                                    }
-                                });
+                        } else {
+                            Log.d(TAG,"Failed: "+task.getException());
+                        }
+                        finish();
                     }
                 });
+            }
+        });
     }
 }

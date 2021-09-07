@@ -190,6 +190,14 @@ public class Db {
                 get();
     }
 
+    public static Task<QuerySnapshot> getDocumentsWith(String tableName, String field1, String value1, String field2, Boolean value2) {
+        return  getFirestoreInstance().
+                collection(tableName).
+                whereEqualTo(field1, value1).
+                whereEqualTo(field2, value2).
+                get();
+    }
+
     public static Task<QuerySnapshot> getDocumentsWith(
             String tableName, String field1,
             String value1, String field2,

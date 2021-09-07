@@ -6,6 +6,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.List;
+
 public class SingleClassVH extends RecyclerView.ViewHolder {
     private static final String TAG = "Class SingleClassViewHolder";
     private TextView txtStudentsPresent, txtDate;
@@ -16,8 +23,17 @@ public class SingleClassVH extends RecyclerView.ViewHolder {
         this.txtDate = itemView.findViewById(R.id.txtDate);
     }
 
-    public void setTxtStudentsPresent(int txtStudentsPresent) {
-        this.txtStudentsPresent.setText(Integer.toString(txtStudentsPresent));
+    public void setTxtStudentsPresent(String meetingCode) {
+        Db.getDocumentsWith(Db.COLLECTION_MEETINGHISTORY,
+        Db.FIELD_MEETINGCODE, meetingCode,
+        Db.FIELD_ISPRESENT, true).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<DocumentSnapshot> result = Db.getDocuments(task);
+                txtStudentsPresent.setText(Integer.toString(result.size()));
+            }
+        });
     }
 
     public void setTxtDate(String txtDate) {

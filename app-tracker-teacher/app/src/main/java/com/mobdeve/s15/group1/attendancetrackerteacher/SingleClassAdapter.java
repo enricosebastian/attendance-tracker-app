@@ -53,9 +53,10 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
     public void onBindViewHolder(@NonNull SingleClassVH holder, @SuppressLint("RecyclerView") int position) {
 
 
-        SimpleDateFormat stringDate = new SimpleDateFormat("MMM dd yyyy | E");
+        SimpleDateFormat stringDate = new SimpleDateFormat("MMM dd, yyyy | E");
 
-        holder.setTxtStudentsPresent(data.get(position).getStudentCount());
+        holder.setTxtStudentsPresent(data.get(position).getMeetingCode()); //gets actual student count
+
         holder.setTxtDate(stringDate.format(data.get(position).getMeetingStart()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +70,7 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
                 singleMeetingActivityIntent.putExtra(Keys.INTENT_MEETINGCODE, data.get(position).getMeetingCode());
                 singleMeetingActivityIntent.putExtra(Keys.INTENT_ISOPEN, data.get(position).getIsOpen());
 
-                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss"); //for data collection -- DO NOT CHANGE YOU BASTARDS
                 String stringDate = formatter.format(data.get(position).getMeetingStart());
                 singleMeetingActivityIntent.putExtra(Keys.INTENT_MEETINGSTART, stringDate);
 
