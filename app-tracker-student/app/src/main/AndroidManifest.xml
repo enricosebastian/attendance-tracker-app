@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mobdeve.s15.group1.attendancetrackerstudent">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,15 +28,15 @@
             android:exported="true"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ClasslistView"
+            android:name=".CourseListActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".RegistrationView"
+            android:name=".RegistrationActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".LoginView"
+            android:name=".LoginActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
