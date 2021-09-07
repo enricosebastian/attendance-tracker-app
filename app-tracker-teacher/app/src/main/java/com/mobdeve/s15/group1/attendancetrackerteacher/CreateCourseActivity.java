@@ -62,14 +62,14 @@ public class CreateCourseActivity extends AppCompatActivity {
             }
         });
 
-        //When user edits the course
+        //When user creates the course
         this.btnCreateCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //insert logic here
                 String courseName   = etCourseName.getText().toString();
                 String courseCode   = etCourseCode.getText().toString();
-                String sectionCode  = etCourseSection.getText().toString(); //FOKEN INCONSISTENT NAMING CONVENTION LMAOOOOOOOOOOO
+                String sectionCode  = etCourseSection.getText().toString();
                 boolean isPublished = switchIsPublished.isChecked();
 
                 if(courseName.isEmpty() || courseCode.isEmpty() || sectionCode.isEmpty()) {
@@ -110,6 +110,5 @@ public class CreateCourseActivity extends AppCompatActivity {
         Db.addDocument(Db.COLLECTION_COURSES, input);
 
         Toast.makeText(CreateCourseActivity.this, "Course successfully created", Toast.LENGTH_SHORT).show();
-
     }
 }
