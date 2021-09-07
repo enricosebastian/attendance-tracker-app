@@ -12,31 +12,54 @@
         android:id="@+id/topBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/txtClassTitle"
-            android:layout_width="wrap_content"
+            android:id="@+id/txtClassCodeTitle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="CLASSNAME - SECTION"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/roboto_bold"
+            android:text="COURSECODE - SECTION"
             android:textColor="#004D40"
-            android:textSize="20sp"
+            android:textSize="24sp"
             android:textStyle="bold"
-            tools:layout_editor_absoluteX="5dp"
-            tools:layout_editor_absoluteY="5dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtClassNameSubtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/roboto"
+            android:text="COURSENAME"
+            android:textColor="#00897B"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/dividerLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtClassCodeTitle" />
 
         <View
             android:id="@+id/dividerLine"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="10dp"
             android:background="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtClassTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/txtClassNameSubtitle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -46,7 +69,7 @@
         android:layout_marginTop="12dp"
         android:text="JULY 31, 2021 | M"
         android:textColor="#004D40"
-        android:textSize="25sp"
+        android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,6 +83,7 @@
         android:fontFamily="sans-serif"
         android:text="CODE:"
         android:textColor="#004D40"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,14 +94,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:fontFamily="@font/roboto"
-        android:text="MOBDEVE+S15+0001"
-        android:textColor="#004D40"
-        app:layout_constraintEnd_toEndOf="parent"
         android:background="@drawable/template_rounded_corner"
         android:backgroundTint="@color/light_gray"
+        android:fontFamily="@font/roboto"
         android:padding="5dp"
+        android:text="MOBDEVE+S15+0001"
+        android:textColor="#004D40"
+        android:textSize="16sp"
 
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvMeeting" />
 
@@ -96,6 +121,7 @@
             android:layout_height="wrap_content"
             android:text="STATUS: "
             android:textColor="#004D40"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -110,7 +136,7 @@
             android:padding="5dp"
             android:text="CLOSED"
             android:textColor="#FFFFFF"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/txtStatusText"
             app:layout_constraintStart_toEndOf="@id/txtStatusText"

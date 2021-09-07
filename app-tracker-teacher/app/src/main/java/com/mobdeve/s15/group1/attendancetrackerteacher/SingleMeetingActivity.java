@@ -1,6 +1,5 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
-import androidx.activity.result.ActivityResult;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,18 +12,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.common.base.MoreObjects;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Document;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,13 +47,13 @@ public class SingleMeetingActivity extends AppCompatActivity {
     private TextView txtDate;
     private TextView txtClassTitle;
     private TextView txtMeetingCode;
+    private TextView txtClassNameSubtitle;
     private Button btnDelete;
     ////////////
 
     private String courseCode, sectionCode, meetingCode, courseName;
     private boolean isOpen; //suggestion: what happens if you change boolean (primitive) to Boolean instead?
     private Date meetingStart;
-
 
 
     @Override
@@ -89,7 +82,8 @@ public class SingleMeetingActivity extends AppCompatActivity {
 
         this.txtStatus                  = findViewById(R.id.txtStatus);
         this.txtDate                    = findViewById(R.id.txtDate);
-        this.txtClassTitle              = findViewById(R.id.txtClassTitle);
+        this.txtClassTitle              = findViewById(R.id.txtClassCodeTitle);
+        this.txtClassNameSubtitle       = findViewById(R.id.txtClassNameSubtitle);
         this.txtMeetingCode             = findViewById(R.id.tvMeetingCode); //LMAO THIS NAMING INCONSISTENCY SMH WHAT A DEV JESUS FOKEN CHRIST
         this.studentListRecyclerView    = findViewById(R.id.studentListRecyclerView);
         this.btnDelete                  = findViewById(R.id.btnDelete);
@@ -98,6 +92,7 @@ public class SingleMeetingActivity extends AppCompatActivity {
 
     }
 
+    // This method initializes the view of the activity
     protected void initializeViews() {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy | E");
@@ -111,11 +106,16 @@ public class SingleMeetingActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<DocumentSnapshot> result = Db.getDocuments(task);
                 courseName = result.get(0).getString(Db.FIELD_COURSENAME);
-                txtClassTitle.setText(courseCode+" "+sectionCode+" | \""+courseName+"\"");
+                String classCodeTitle = courseCode + " - " + sectionCode;
+                String classNameSubtitle = courseName;
+                txtClassTitle.setText(classCodeTitle);
+                txtClassNameSubtitle.setText(classNameSubtitle);
+
             }
         });
         txtMeetingCode.setText(meetingCode);
 
+        // Checks the status adjusts the background based on the current status
         if(isOpen) {
             txtStatus.setText("OPEN");
             txtStatus.setBackgroundTintList(this.getResources().getColorStateList(R.color.light_green));
