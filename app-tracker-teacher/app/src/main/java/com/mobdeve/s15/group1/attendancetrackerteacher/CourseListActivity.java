@@ -188,7 +188,6 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
 
     protected void onStart() {
         super.onStart();
-        initializeViews();
         Log.d(TAG, "we are in on start");
     }
 
