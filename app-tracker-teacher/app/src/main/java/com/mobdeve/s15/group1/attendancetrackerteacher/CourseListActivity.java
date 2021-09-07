@@ -136,8 +136,8 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         List<DocumentSnapshot> result = Db.getDocuments(task);
-                        Log.d(TAG,"result size is "+email);
-                        Log.d(TAG,"result size is "+result.size());
+                        Log.d(TAG,"result size is "+ email);
+                        Log.d(TAG,"result size is "+ result.size());
 
                         String firstName = result.get(0).getString(Db.FIELD_FIRSTNAME).toUpperCase();
                         String lastName = result.get(0).getString(Db.FIELD_LASTNAME).toUpperCase();

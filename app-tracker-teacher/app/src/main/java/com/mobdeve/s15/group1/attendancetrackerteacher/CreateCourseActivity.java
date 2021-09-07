@@ -77,17 +77,18 @@ public class CreateCourseActivity extends AppCompatActivity {
                 } else {
                     Db.getDocumentsWith(Db.COLLECTION_COURSES,
                             Db.FIELD_COURSECODE, courseCode, Db.FIELD_SECTIONCODE, sectionCode).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            List<DocumentSnapshot> result = Db.getDocuments(task);
-                            if(result.size()==0) {
-                                addClass(courseName, courseCode, sectionCode, isPublished);
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                List<DocumentSnapshot> result = Db.getDocuments(task);
 
-                                finish();
-                            } else {
-                                Toast.makeText(getApplicationContext(), "That class already exists!", Toast.LENGTH_SHORT).show();
+                                // If course already exists
+                                if(result.size()==0) {
+                                    addClass(courseName, courseCode, sectionCode, isPublished);
+                                    finish();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "That course already exists!", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
                     });
 
                 }

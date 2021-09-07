@@ -70,6 +70,7 @@ public class ClassListVH extends RecyclerView.ViewHolder {
                             Picasso.get().load(imgUri).into(imgProfilePic);
                         } else {
                             Log.d(TAG,"No profile image found. Switching to default");
+
                         }
                     }
                 });
