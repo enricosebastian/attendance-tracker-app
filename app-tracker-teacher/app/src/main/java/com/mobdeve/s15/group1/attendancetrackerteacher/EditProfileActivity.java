@@ -45,23 +45,23 @@ public class EditProfileActivity extends AppCompatActivity {
     private String email;
 
     private ActivityResultLauncher<Intent> myActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK){
-                        try {
-                            if(result.getData() != null) {
-                                imageUri = result.getData().getData();
-                                Picasso.get().load(imageUri).into(img_profilePic);
-                                Log.d(TAG,"ImgUri is "+imageUri);
-                            }
-                        } catch(Exception exception){
-                            Log.d(TAG,""+exception.getLocalizedMessage());
+        new ActivityResultContracts.StartActivityForResult(),
+        new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == Activity.RESULT_OK){
+                    try {
+                        if(result.getData() != null) {
+                            imageUri = result.getData().getData();
+                            Picasso.get().load(imageUri).into(img_profilePic);
+                            Log.d(TAG,"ImgUri is "+imageUri);
                         }
+                    } catch(Exception exception){
+                        Log.d(TAG,""+exception.getLocalizedMessage());
                     }
                 }
-            });
+            }
+        });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +140,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
             });
     }
-
+    //went to eat
     protected void updateAccount(String firstName, String lastName) {
         Db.getDocumentsWith(Db.COLLECTION_USERS,
             Db.EMAIL_FIELD, email).
