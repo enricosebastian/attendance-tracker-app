@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -21,59 +24,76 @@ import java.util.List;
 
 public class SingleClassActivity extends AppCompatActivity {
 
+    private static final String TAG = "SingleClassActivity";
+
+    //shared preferences initialization
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
+    private String email;
+    ////////////
+
+    //recycler view initialization
     private ArrayList<MeetingModel> meetingModels = new ArrayList<>();
+    private RecyclerView singleClassRecyclerView;
+    private RecyclerView.LayoutManager singleClassLayoutManager;
+    private SingleClassAdapter singleClassAdapter;
 
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    private SingleClassAdapter adapter;
-
-    TextView txtClassTitle;
-    private String classCode, sectionCode;
+    //widget initialization
+    TextView txtClassCodeTitle, txtClassNameSubtitle;
+    private String courseCode, sectionCode, courseName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_class_view);
+        setContentView(R.layout.activity_single_class);
 
-        Intent intent = getIntent();
-        this.classCode = intent.getStringExtra(MyKeys.COURSE_CODE_KEY.name());
-        this.sectionCode = intent.getStringExtra(MyKeys.SECTION_CODE_KEY.name());
+        Intent getIntent        = getIntent();
+        this.courseCode         = getIntent.getStringExtra(Keys.INTENT_COURSECODE);
+        this.sectionCode        = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
+        this.courseName         = getIntent.getStringExtra(Keys.INTENT_COURSENAME);
+
+        this.txtClassCodeTitle      = findViewById(R.id.txtClassCodeTitle);
+        this.txtClassNameSubtitle   = findViewById(R.id.txtClassNameSubtitle);
+        String classCodeTitle = courseCode + " - " + sectionCode;
+        String classNameSubtitle = courseName;
+
+        txtClassCodeTitle.setText(classCodeTitle);
+        txtClassNameSubtitle.setText(classNameSubtitle.toUpperCase());
+
+    }
 
 
+    protected void initializeViews() {
 
-        this.txtClassTitle = findViewById(R.id.txtClassTitle);
-        this.txtClassTitle = findViewById(R.id.txtClassTitle);
-
-        txtClassTitle.setText(classCode+" - "+sectionCode);
-
-        FirestoreReferences.getMeetingsCollectionReference().
-                whereEqualTo(FirestoreReferences.COURSECODE_FIELD, classCode)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        Db.getDocumentsWith(Db.COLLECTION_MEETINGS,
+        Db.FIELD_COURSECODE, courseCode,
+        Db.FIELD_SECTIONCODE, sectionCode,
+        Db.FIELD_MEETINGSTART, Query.Direction.DESCENDING).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                QuerySnapshot querySnapshot = task.getResult();
-                List<DocumentSnapshot> result = querySnapshot.getDocuments();
+                List<DocumentSnapshot> results = Db.getDocuments(task);
 
-                //Log.d("yeet yeet", result.get(0).get("meetingEnd").toString());
-                for(DocumentSnapshot ds:result) {
-                    //MeetingModel(String courseCode, String sectionCode, String meetingCode, Date date, int studentsPresent)
-                    if(ds.get("sectionCode").toString().equals(sectionCode)) {
-                        meetingModels.add(new MeetingModel(
-                                ds.get("courseCode").toString(),
-                                ds.get("sectionCode").toString(),
-                                ds.get("meetingCode").toString(),
-                                ds.getTimestamp("meetingStart").toDate(), //how to convert timestamp to Date?
-                                Integer.parseInt(ds.get("studentCount").toString())));
-                    }
-                }
-                recyclerView = findViewById(R.id.SingleClassRecyclerView);
-
-                layoutManager = new LinearLayoutManager(getApplicationContext());
-                recyclerView.setLayoutManager(layoutManager);
-
-                adapter = new SingleClassAdapter(meetingModels);
-                recyclerView.setAdapter(adapter);
+                meetingModels.clear();
+                meetingModels.addAll(Db.toMeetingModel(results));
+                singleClassRecyclerView = findViewById(R.id.SingleClassRecyclerView);
+                singleClassLayoutManager = new LinearLayoutManager(getApplicationContext());
+                singleClassRecyclerView.setLayoutManager(singleClassLayoutManager);
+                singleClassAdapter = new SingleClassAdapter(meetingModels);
+                singleClassRecyclerView.setAdapter(singleClassAdapter);
             }
         });
     }
+
+    protected void onResume() {
+        super.onResume();
+        initializeViews();
+        Log.d(TAG, "you are on resume");
+    }
+
+//
+//    protected void onStart() {
+//        super.onStart();
+//        initializeViews();
+//    }
 }

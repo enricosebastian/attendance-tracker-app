@@ -18,7 +18,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingleMeetingView extends AppCompatActivity {
+public class SingleMeetingActivity extends AppCompatActivity {
 
     private TextView txtStatus;
     private TextView txtDate;

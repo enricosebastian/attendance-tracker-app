@@ -1,20 +1,30 @@
 package com.mobdeve.s15.group1.attendancetrackerstudent;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
-    private static final String TAG = "Class Adapter";
+    private static final String TAG = "SingleClassAdapter";
+
+    //shared preferences initialization
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
+    private String email;
+    ////////////
 
     //store data here
     private ArrayList<MeetingModel> data;
@@ -32,10 +42,13 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.layout_meeting, parent, false);
 
-        SingleClassVH viewHolder = new SingleClassVH(view);
 
-        int pos = viewHolder.getAdapterPosition();
-        //if(data.get(pos).getClassKey() == data.get(pos).
+        this.sp             = parent.getContext().getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
+        this.editor         = sp.edit();
+        this.email          = sp.getString(Keys.SP_EMAIL_KEY,"");
+
+
+        SingleClassVH viewHolder = new SingleClassVH(view);
 
         return viewHolder;
     }
@@ -43,24 +56,28 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
     @Override
     public void onBindViewHolder(@NonNull SingleClassVH holder, @SuppressLint("RecyclerView") int position) {
 
-        SimpleDateFormat stringDate = new SimpleDateFormat("MMM dd yyyy | E");
+        SimpleDateFormat stringDate = new SimpleDateFormat("MMM dd, yyyy | E");
+        holder.setTxtDate(stringDate.format(data.get(position).getMeetingStart()));
 
-        holder.setTxtStudentsPresent(data.get(position).getStudentsPresent());
-        holder.setTxtDate(stringDate.format(data.get(position).getDate()));
+        holder.setTxtIsPresent(data.get(position).getMeetingCode(), email);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(holder.itemView.getContext(), SingleMeetingView.class);
+                Intent singleMeetingActivityIntent = new Intent(holder.itemView.getContext(), SingleMeetingActivity.class);
 
                 //get the course code somehow
-                intent.putExtra("COURSECODE_KEY",data.get(position).getCourseCode());
-                intent.putExtra("SECTIONCODE_KEY",data.get(position).getSectionCode());
-                intent.putExtra("MEETINGCODE_KEY",data.get(position).getMeetingCode());
-                intent.putExtra("DATE_KEY", stringDate.format(data.get(position).getDate()));
-                intent.putExtra("STUDENTSPRESENT_KEY", data.get(position).getStudentsPresent());
+                singleMeetingActivityIntent.putExtra(Keys.INTENT_COURSECODE, data.get(position).getCourseCode());
+                singleMeetingActivityIntent.putExtra(Keys.INTENT_SECTIONCODE, data.get(position).getSectionCode());
+                singleMeetingActivityIntent.putExtra(Keys.INTENT_MEETINGCODE, data.get(position).getMeetingCode());
+                singleMeetingActivityIntent.putExtra(Keys.INTENT_ISOPEN, data.get(position).getIsOpen());
 
-                holder.itemView.getContext().startActivity(intent);
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss"); //for data collection -- DO NOT CHANGE, YOU BASTARDS
+                String stringDate = formatter.format(data.get(position).getMeetingStart());
+                singleMeetingActivityIntent.putExtra(Keys.INTENT_MEETINGSTART, stringDate);
+
+                holder.itemView.getContext().startActivity(singleMeetingActivityIntent);
+
             }
         });
     }
