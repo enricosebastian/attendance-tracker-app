@@ -1,22 +1,20 @@
 package com.mobdeve.s15.group1.attendancetrackerstudent;
 
-public class ClassModel {
+public class CourseModel {
 
     private String courseCode, courseName, handledBy, sectionCode;
     private boolean isPublished;
-    private int studentCount;
 
-    public ClassModel() {
+    public CourseModel() {
 
     }
 
-    public ClassModel(String courseCode, String courseName, String handledBy, boolean isPublished, String sectionCode, int studentCount) {
+    public CourseModel(String courseCode, String courseName, String handledBy, boolean isPublished, String sectionCode) {
         this.courseCode = courseCode;
         this.courseName = courseName;
         this.handledBy = handledBy;
         this.sectionCode = sectionCode;
         this.isPublished = isPublished;
-        this.studentCount = studentCount;
     }
 
     public String getCourseCode() {
@@ -57,13 +55,5 @@ public class ClassModel {
 
     public void setPublished(boolean published) {
         isPublished = published;
-    }
-
-    public int getStudentCount() {
-        return studentCount;
-    }
-
-    public void setStudentCount(int studentCount) {
-        this.studentCount = studentCount;
     }
 }

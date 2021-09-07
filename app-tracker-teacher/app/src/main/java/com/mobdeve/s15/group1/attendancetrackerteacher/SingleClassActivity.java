@@ -39,7 +39,7 @@ public class SingleClassActivity extends AppCompatActivity {
     private SingleClassAdapter singleClassAdapter;
 
     //widget initialization
-    TextView txtClassTitle, txtCreateMeeting, txtStudentCount;
+    TextView txtClassCodeTitle, txtClassNameSubtitle, txtCreateMeeting, txtStudentCount;
     ImageButton btnAcceptStudents;
     private String courseCode, sectionCode, courseName;
 
@@ -53,15 +53,18 @@ public class SingleClassActivity extends AppCompatActivity {
         this.sectionCode        = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
         this.courseName         = getIntent.getStringExtra(Keys.INTENT_COURSENAME);
 
-        this.txtClassTitle      = findViewById(R.id.txtClassTitle);
-        this.txtStudentCount    = findViewById(R.id.txtStudentCount);
-        this.txtCreateMeeting   = findViewById(R.id.txtCreateMeeting);
-        this.btnAcceptStudents  = findViewById(R.id.btnAcceptStudents);
+        this.txtClassCodeTitle      = findViewById(R.id.txtClassCodeTitle);
+        this.txtClassNameSubtitle   = findViewById(R.id.txtClassNameSubtitle);
+        this.txtStudentCount        = findViewById(R.id.txtStudentCount);
+        this.txtCreateMeeting       = findViewById(R.id.txtCreateMeeting);
+        this.btnAcceptStudents      = findViewById(R.id.btnAcceptStudents);
 
 
-        txtClassTitle.setText(courseCode+" "+sectionCode+" | \""+courseName+"\"");
+        String classCodeTitle = courseCode + " - " + sectionCode;
+        String classNameSubtitle = courseName;
 
-
+        txtClassCodeTitle.setText(classCodeTitle);
+        txtClassNameSubtitle.setText(classNameSubtitle.toUpperCase());
         // Clicking the create button brings the user to the create meeting activity
         txtCreateMeeting.setOnClickListener(new View.OnClickListener() {
             @Override

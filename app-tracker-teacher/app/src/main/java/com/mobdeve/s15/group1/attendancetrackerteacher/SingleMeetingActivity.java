@@ -1,6 +1,5 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
-import androidx.activity.result.ActivityResult;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,8 +18,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Document;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,11 +47,12 @@ public class SingleMeetingActivity extends AppCompatActivity {
     private TextView txtDate;
     private TextView txtClassTitle;
     private TextView txtMeetingCode;
+    private TextView txtClassNameSubtitle;
     private Button btnDelete;
     ////////////
 
     private String courseCode, sectionCode, meetingCode, courseName;
-    private boolean isOpen;
+    private boolean isOpen; //suggestion: what happens if you change boolean (primitive) to Boolean instead?
     private Date meetingStart;
 
 
@@ -63,16 +61,16 @@ public class SingleMeetingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_meeting_view);
 
-        this.sp = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
-        this.editor = sp.edit();
-        this.email = sp.getString(Keys.SP_EMAIL_KEY, "");
+        this.sp             = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
+        this.editor         = sp.edit();
+        this.email          = sp.getString(Keys.SP_EMAIL_KEY, "");
 
-        Intent getIntent = getIntent();
-        this.courseCode = getIntent.getStringExtra(Keys.INTENT_COURSECODE);
-        this.sectionCode = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
-        this.meetingCode = getIntent.getStringExtra(Keys.INTENT_MEETINGCODE);
-        this.isOpen = getIntent.getBooleanExtra(Keys.INTENT_ISOPEN, false);
-        String stringDate = getIntent.getStringExtra(Keys.INTENT_MEETINGSTART);
+        Intent getIntent    = getIntent();
+        this.courseCode     = getIntent.getStringExtra(Keys.INTENT_COURSECODE);
+        this.sectionCode    = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
+        this.meetingCode    = getIntent.getStringExtra(Keys.INTENT_MEETINGCODE);
+        this.isOpen         = getIntent.getBooleanExtra(Keys.INTENT_ISOPEN, false);
+        String stringDate   = getIntent.getStringExtra(Keys.INTENT_MEETINGSTART);
 
         Log.d(TAG, meetingCode);
 
@@ -82,20 +80,22 @@ public class SingleMeetingActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        this.txtStatus = findViewById(R.id.txtStatus);
-        this.txtDate = findViewById(R.id.txtDate);
-        this.txtClassTitle = findViewById(R.id.txtClassTitle);
-        this.txtMeetingCode = findViewById(R.id.tvMeetingCode); //LMAO THIS NAMING INCONSISTENCY SMH WHAT A DEV JESUS FOKEN CHRIST
-        this.studentListRecyclerView = findViewById(R.id.studentListRecyclerView);
-        this.btnDelete = findViewById(R.id.btnDelete);
+        this.txtStatus                  = findViewById(R.id.txtStatus);
+        this.txtDate                    = findViewById(R.id.txtDate);
+        this.txtClassTitle              = findViewById(R.id.txtClassCodeTitle);
+        this.txtClassNameSubtitle       = findViewById(R.id.txtClassNameSubtitle);
+        this.txtMeetingCode             = findViewById(R.id.tvMeetingCode); //LMAO THIS NAMING INCONSISTENCY SMH WHAT A DEV JESUS FOKEN CHRIST
+        this.studentListRecyclerView    = findViewById(R.id.studentListRecyclerView);
+        this.btnDelete                  = findViewById(R.id.btnDelete);
 
         initializeViews(); //move to on resume one day
 
     }
 
+    // This method initializes the view of the activity
     protected void initializeViews() {
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd yyyy | E");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy | E");
         txtDate.setText(dateFormat.format(meetingStart));
 
         Db.getDocumentsWith(Db.COLLECTION_COURSES,
@@ -106,11 +106,16 @@ public class SingleMeetingActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<DocumentSnapshot> result = Db.getDocuments(task);
                 courseName = result.get(0).getString(Db.FIELD_COURSENAME);
-                txtClassTitle.setText(courseCode+" "+sectionCode+" | \""+courseName+"\"");
+                String classCodeTitle = courseCode + " - " + sectionCode;
+                String classNameSubtitle = courseName;
+                txtClassTitle.setText(classCodeTitle);
+                txtClassNameSubtitle.setText(classNameSubtitle);
+
             }
         });
         txtMeetingCode.setText(meetingCode);
 
+        // Checks the status adjusts the background based on the current status
         if(isOpen) {
             txtStatus.setText("OPEN");
             txtStatus.setBackgroundTintList(this.getResources().getColorStateList(R.color.light_green));
@@ -189,11 +194,33 @@ public class SingleMeetingActivity extends AppCompatActivity {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Db.deleteDocument(Db.COLLECTION_MEETINGS, Db.FIELD_MEETINGCODE, meetingCode);
-
-                finish();
+                deleteMeeting(Db.COLLECTION_MEETINGS, Db.FIELD_MEETINGCODE, meetingCode);
             }
         });
+    }
 
+    public void deleteMeeting(String tableName, String field, String value) {
+        Db.getDocumentsWith(tableName, field, value).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String id = Db.getIdFromTask(task);
+                Db.getCollection(tableName).
+                document(id).
+                delete().
+                addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            Log.d(TAG,"Successfully deleted a "+tableName+" document");
+
+                        } else {
+                            Log.d(TAG,"Failed: "+task.getException());
+                        }
+                        finish();
+                    }
+                });
+            }
+        });
     }
 }

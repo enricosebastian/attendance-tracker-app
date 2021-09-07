@@ -1,4 +1,6 @@
 <resources>
+    <string name="tvCreateMeeting">Enter Date</string>
+
     <string name="btnRegister">Register</string>
     <string name="btnConfirmRegister">Confirm</string>
     <string name="formHeader">Teacher Registration</string>
@@ -14,9 +16,10 @@
     <string name="tvReenterPassword">Re-enter Password</string>
 
 
-    <string name="app_name">Attendance Tracker - Student</string>
+    <string name="app_name">Attendance Tracker - Teacher</string>
     <string name="btnCreateCourse">Create</string>
     <string name="btnCancelCreate">Cancel</string>
+    <string name="btnExit">Exit</string>
     <string name="btnConfirm">Confirm</string>
     <string name="btnDelete">Delete</string>
     <string name="tvCreateCourseHeader">CREATE A COURSE</string>
@@ -25,4 +28,11 @@
     <string name="itemDeleteCourse">Delete course</string>
     <string name="itemEditProfile">Edit profile</string>
     <string name="itemLogout">Logout</string>
+
+    <string name="accountSecurity">Account security</string>
+    <string name="oldPassword">Old password</string>
+    <string name="newPassword">New password</string>
+    <string name="confirmPassword">Confirm new password</string>
+    <string name="save">Save</string>
+    <string name="exit">Exit</string>
 </resources>

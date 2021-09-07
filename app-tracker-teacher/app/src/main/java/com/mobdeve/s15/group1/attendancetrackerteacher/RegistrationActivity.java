@@ -3,9 +3,11 @@ package com.mobdeve.s15.group1.attendancetrackerteacher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -90,25 +93,31 @@ public class RegistrationActivity extends AppCompatActivity {
                     // if the ID number is a number, and is 8 length
                     if(isIDNumberValid(idNumber))
                     {
+                        // Check if email exists
                         Db.getDocumentsWith(Db.COLLECTION_USERS,
-                                Db.FIELD_IDNUMBER, idNumber).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                List<DocumentSnapshot> result = Db.getDocuments(task);
-                                if(result.size()==0) {
-                                    createNewUser(email, firstName, idNumber, lastName, password);
+                                Db.FIELD_EMAIL, email).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    List<DocumentSnapshot> emailresult = Db.getDocuments(task);
 
-                                    editor.putString(Keys.SP_EMAIL_KEY, email);
-                                    editor.putString(Keys.SP_USERTYPE_KEY, "teacher");
-                                    editor.commit();
-
-                                    Intent intent = new Intent(RegistrationActivity.this, CourseListActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Account exists already!", Toast.LENGTH_SHORT).show();
+                                    //If the email does not exist in the db yet
+                                    if(emailresult.size() == 0) {
+                                        Db.getDocumentsWith(Db.COLLECTION_USERS,
+                                                Db.FIELD_IDNUMBER, idNumber).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                List<DocumentSnapshot> result = Db.getDocuments(task);
+                                                if (result.size() == 0) {
+                                                    createNewUser(email, firstName, idNumber, lastName, password);
+                                                } else {
+                                                    Toast.makeText(getApplicationContext(), "Account already exists.", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Account already exists. Use another email.", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
                         });
                     }
                     else
@@ -166,6 +175,47 @@ public class RegistrationActivity extends AppCompatActivity {
 
         Db.addDocument(Db.COLLECTION_USERS, input);
 
+        //upload defautlt image
         Toast.makeText(getApplicationContext(), "Account successfully created!", Toast.LENGTH_SHORT).show();
+        uploadDefaultImageandFinishActivity(email);
+
+    }
+
+    // Uploads the default image and finishes the activity
+    protected void uploadDefaultImageandFinishActivity(String email) {
+        Db.getDocumentsWith(Db.COLLECTION_USERS,
+                Db.EMAIL_FIELD, email).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String documentId = Db.getIdFromTask(task);
+                Uri uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
+                        + "://" + getApplicationContext().getResources().getResourcePackageName(R.drawable.img_tempimage)
+                        + "/" + getApplicationContext().getResources().getResourceTypeName(R.drawable.img_tempimage)
+                        + "/" + getApplicationContext().getResources().getResourceEntryName(R.drawable.img_tempimage));
+                Log.d(TAG, "URI in string = " + ContentResolver.SCHEME_ANDROID_RESOURCE
+                        + "://" + getApplicationContext().getResources().getResourcePackageName(R.drawable.img_tempimage)
+                        + "/" + getApplicationContext().getResources().getResourceTypeName(R.drawable.img_tempimage)
+                        + "/" + getApplicationContext().getResources().getResourceEntryName(R.drawable.img_tempimage));
+                if(uri != null) {
+                    Tasks.whenAllSuccess(Db.uploadImage(documentId, uri)).
+                            addOnCompleteListener(new OnCompleteListener<List<Object>>() {
+                                @Override
+                                public void onComplete(@NonNull Task<List<Object>> task) {
+                                    editor.putString(Keys.SP_EMAIL_KEY, email);
+                                    editor.putString(Keys.SP_USERTYPE_KEY, "teacher");
+                                    editor.commit();
+
+                                    Intent intent = new Intent(RegistrationActivity.this, CourseListActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                    Log.d(TAG, "Registration done, called finish activity");
+                                }
+                            });
+                } else {
+                    Log.d(TAG,"Something went wrong in uploading the image");
+                }
+
+            }
+        });
     }
 }

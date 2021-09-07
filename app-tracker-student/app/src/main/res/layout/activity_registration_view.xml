@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:paddingStart="30dp"
     android:paddingEnd="30dp"
-    tools:context=".RegistrationView">
+    tools:context=".RegistrationActivity">
+
     <EditText
         android:id="@+id/inputFirstName"
         android:layout_width="match_parent"
@@ -20,18 +21,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/techerRegistrationHeader" />
 
-    <EditText
-        android:id="@+id/inputUsername"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/custom_input"
-        android:drawableStart="@drawable/ic_person"
-        android:hint="username"
-        android:padding="10dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="69dp"
+        android:text="register"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputEmail" />
+        app:layout_constraintStart_toEndOf="@+id/btnCancelRegistration"
+        app:layout_constraintTop_toBottomOf="@+id/inputIdNumber" />
+
     <EditText
         android:id="@+id/inputPassword"
         android:layout_width="match_parent"
@@ -44,8 +45,7 @@
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputUsername" />
-
+        app:layout_constraintTop_toBottomOf="@id/inputEmail" />
 
     <EditText
         android:id="@+id/inputEmail"
@@ -67,7 +67,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/custom_input"
         android:drawableStart="@drawable/ic_person"
-        android:hint="DLSU ID number"
+        android:hint="DLSU ID number (e.g. 11812345)"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -103,20 +103,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnSubmit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="48dp"
-        android:text="register"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputIdNumber" />
-
-    <Button
         android:id="@+id/btnCancelRegistration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
+        android:layout_marginStart="69dp"
         android:layout_marginTop="52dp"
         android:backgroundTint="@color/gray"
         android:text="@android:string/cancel"

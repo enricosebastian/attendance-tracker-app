@@ -14,21 +14,31 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ClasslistVH extends RecyclerView.ViewHolder {
-    private static final String TAG = "Class ViewHolder";
+public class CourseListVH extends RecyclerView.ViewHolder {
+    private static final String TAG = "ClasslistVH.java";
     private TextView txtClassCode, txtSectionCode;
 
-    public ClasslistVH(@NonNull View itemView) {
+    public CourseListVH(@NonNull View itemView) {
         super(itemView);
         this.txtClassCode = itemView.findViewById(R.id.txtClassCode);
         this.txtSectionCode = itemView.findViewById(R.id.txtSectionCode);
     }
 
+
     public void setTxtClassCode(String txtClassCode) {
         this.txtClassCode.setText(txtClassCode);
     }
 
+
     public void setTxtSectionCode(String txtName) {
         this.txtSectionCode.setText(txtName);
+    }
+
+    public TextView getTxtClassCode() {
+        return txtClassCode;
+    }
+
+    public TextView getTxtSectionCode() {
+        return txtSectionCode;
     }
 }

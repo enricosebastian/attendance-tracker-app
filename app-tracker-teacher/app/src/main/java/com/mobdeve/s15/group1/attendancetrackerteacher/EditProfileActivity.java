@@ -45,23 +45,25 @@ public class EditProfileActivity extends AppCompatActivity {
     private String email;
 
     private ActivityResultLauncher<Intent> myActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK){
-                        try {
-                            if(result.getData() != null) {
-                                imageUri = result.getData().getData();
-                                Picasso.get().load(imageUri).into(img_profilePic);
-                                Log.d(TAG,"ImgUri is "+imageUri);
-                            }
-                        } catch(Exception exception){
-                            Log.d(TAG,""+exception.getLocalizedMessage());
+        new ActivityResultContracts.StartActivityForResult(),
+        new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == Activity.RESULT_OK){
+                    try {
+                        if(result.getData() != null) {
+                            imageUri = result.getData().getData();
+                            Picasso.get().load(imageUri).into(img_profilePic);
+                            Log.d(TAG,"ImgUri is "+imageUri);
+                        } else {
+                            Log.d(TAG, "NULL BITCHHHHHH");
                         }
+                    } catch(Exception exception){
+                        Log.d(TAG,""+exception.getLocalizedMessage());
                     }
                 }
-            });
+            }
+        });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +108,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 String firstName = inputFirstName.getText().toString();
                 String lastName = inputLastname.getText().toString();
                 updateAccount(firstName, lastName);
-                //finish(); //i TOLD YOU finish() doesn't work nga potangina di ka nakikinig. unless you find da solution for this, don't add finish() lmao. i need to debug everytime
                 Toast.makeText(EditProfileActivity.this, "Changes saved!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -141,6 +142,7 @@ public class EditProfileActivity extends AppCompatActivity {
             });
     }
 
+    //Updates the account
     protected void updateAccount(String firstName, String lastName) {
         Db.getDocumentsWith(Db.COLLECTION_USERS,
             Db.EMAIL_FIELD, email).
@@ -157,6 +159,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<List<Object>> task) {
                                 Log.d(TAG,"Upload was successfully added to the drive");
+                                finish();
                             }
                         });
                     }

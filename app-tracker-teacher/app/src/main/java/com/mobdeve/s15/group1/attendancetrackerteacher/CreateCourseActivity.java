@@ -62,14 +62,14 @@ public class CreateCourseActivity extends AppCompatActivity {
             }
         });
 
-        //When user edits the course
+        //When user creates the course
         this.btnCreateCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //insert logic here
                 String courseName   = etCourseName.getText().toString();
                 String courseCode   = etCourseCode.getText().toString();
-                String sectionCode  = etCourseSection.getText().toString(); //FOKEN INCONSISTENT NAMING CONVENTION LMAOOOOOOOOOOO
+                String sectionCode  = etCourseSection.getText().toString();
                 boolean isPublished = switchIsPublished.isChecked();
 
                 if(courseName.isEmpty() || courseCode.isEmpty() || sectionCode.isEmpty()) {
@@ -77,17 +77,18 @@ public class CreateCourseActivity extends AppCompatActivity {
                 } else {
                     Db.getDocumentsWith(Db.COLLECTION_COURSES,
                             Db.FIELD_COURSECODE, courseCode, Db.FIELD_SECTIONCODE, sectionCode).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            List<DocumentSnapshot> result = Db.getDocuments(task);
-                            if(result.size()==0) {
-                                addClass(courseName, courseCode, sectionCode, isPublished);
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                List<DocumentSnapshot> result = Db.getDocuments(task);
 
-                                finish();
-                            } else {
-                                Toast.makeText(getApplicationContext(), "That class already exists!", Toast.LENGTH_SHORT).show();
+                                // If course already exists
+                                if(result.size()==0) {
+                                    addClass(courseName, courseCode, sectionCode, isPublished);
+                                    finish();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "That course already exists!", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
                     });
 
                 }
@@ -109,6 +110,5 @@ public class CreateCourseActivity extends AppCompatActivity {
         Db.addDocument(Db.COLLECTION_COURSES, input);
 
         Toast.makeText(CreateCourseActivity.this, "Course successfully created", Toast.LENGTH_SHORT).show();
-
     }
 }
