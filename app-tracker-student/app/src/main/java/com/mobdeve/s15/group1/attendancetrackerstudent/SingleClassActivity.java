@@ -19,7 +19,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingleClassView extends AppCompatActivity {
+public class SingleClassActivity extends AppCompatActivity {
 
     private ArrayList<MeetingModel> meetingModels = new ArrayList<>();
 
