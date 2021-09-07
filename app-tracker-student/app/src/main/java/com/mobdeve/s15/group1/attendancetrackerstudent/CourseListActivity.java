@@ -94,7 +94,6 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         btnSearchCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(v.getContext(), "adding class...", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(CourseListActivity.this, SearchCourseActivity.class);
                 startActivity(intent);
             }
