@@ -23,7 +23,7 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SingleClassView"
+            android:name=".SingleClassActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity

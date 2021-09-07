@@ -42,13 +42,12 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(holder.itemView.getContext(), "onto singleclass", Toast.LENGTH_SHORT).show();
-//                Intent singleClassViewIntent = new Intent(holder.itemView.getContext(), SingleClassActivity.class);
-//
-//                singleClassViewIntent.putExtra(Keys.INTENT_COURSECODE, data.get(position).getCourseCode());
-//                singleClassViewIntent.putExtra(Keys.INTENT_SECTIONCODE, data.get(position).getSectionCode());
-//                singleClassViewIntent.putExtra(Keys.INTENT_COURSENAME, data.get(position).getCourseName());
-//                holder.itemView.getContext().startActivity(singleClassViewIntent);
+                Intent singleClassViewIntent = new Intent(holder.itemView.getContext(), SingleClassActivity.class);
+
+                singleClassViewIntent.putExtra(Keys.INTENT_COURSECODE, data.get(position).getCourseCode());
+                singleClassViewIntent.putExtra(Keys.INTENT_SECTIONCODE, data.get(position).getSectionCode());
+                singleClassViewIntent.putExtra(Keys.INTENT_COURSENAME, data.get(position).getCourseName());
+                holder.itemView.getContext().startActivity(singleClassViewIntent);
             }
         });
     }
