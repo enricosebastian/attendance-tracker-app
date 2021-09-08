@@ -96,38 +96,58 @@ public class SearchCourseActivity extends AppCompatActivity {
     }
 
     protected void searchQuery(String courseCode, String sectionCode) {
-        Db.getDocumentsWith(Db.COLLECTION_COURSES,
+
+
+        Db.getDocumentsWith(Db.COLLECTION_CLASSLIST,
         Db.FIELD_COURSECODE, courseCode,
         Db.FIELD_SECTIONCODE, sectionCode,
-        Db.FIELD_ISPUBLISHED, true).
-        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        Db.FIELD_EMAIL, email).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<DocumentSnapshot> result = Db.getDocuments(task);
-                if(result.size() == 0) {
-                    resultBox.setVisibility(View.GONE);
-                    Toast.makeText(getApplicationContext(), "Course does not exist!", Toast.LENGTH_SHORT).show();
-                } else {
-                    resultBox.setVisibility(View.VISIBLE);
 
-                    Db.getDocumentsWith(Db.COLLECTION_USERS,
-                    Db.FIELD_EMAIL, result.get(0).getString(Db.FIELD_HANDLEDBY)).
+                List<DocumentSnapshot> classListInfoResult = Db.getDocuments(task);
+                if(classListInfoResult.size() != 0) {
+                    Toast.makeText(getApplicationContext(), "You are already in this class", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    Db.getDocumentsWith(Db.COLLECTION_COURSES,
+                    Db.FIELD_COURSECODE, courseCode,
+                    Db.FIELD_SECTIONCODE, sectionCode,
+                    Db.FIELD_ISPUBLISHED, true).
                     addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            List<DocumentSnapshot> userResults = Db.getDocuments(task);
-                            txtCourseInfo.setText(courseCode+ " - " +sectionCode); //the easy way out. i am ashamed of myself, but fuck you still
-                            txtHandledBy.setText("Handled by "+userResults.get(0).getString(Db.FIELD_FIRSTNAME)+ " "+userResults.get(0).getString(Db.FIELD_LASTNAME));
-                            checkIfResultExists(courseCode, sectionCode);
+                            List<DocumentSnapshot> result = Db.getDocuments(task);
+                            if(result.size() == 0) {
+                                resultBox.setVisibility(View.GONE);
+                                Toast.makeText(getApplicationContext(), "Course does not exist!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                resultBox.setVisibility(View.VISIBLE);
+
+                                Db.getDocumentsWith(Db.COLLECTION_USERS,
+                                Db.FIELD_EMAIL, result.get(0).getString(Db.FIELD_HANDLEDBY)).
+                                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        List<DocumentSnapshot> userResults = Db.getDocuments(task);
+                                        txtCourseInfo.setText(courseCode+ " - " +sectionCode); //the easy way out. i am ashamed of myself, but fuck you still
+                                        txtHandledBy.setText("Handled by "+userResults.get(0).getString(Db.FIELD_FIRSTNAME)+ " "+userResults.get(0).getString(Db.FIELD_LASTNAME));
+                                        checkIfResultExists(courseCode, sectionCode);
+                                    }
+                                });
+
+                            }
                         }
                     });
+
                 }
+
             }
         });
+
     }
 
     protected void checkIfResultExists(String courseCode, String sectionCode) {
-
         Db.getDocumentsWith(Db.COLLECTION_USERS,
         Db.FIELD_EMAIL, email).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -152,6 +172,8 @@ public class SearchCourseActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+
             }
         });
     }

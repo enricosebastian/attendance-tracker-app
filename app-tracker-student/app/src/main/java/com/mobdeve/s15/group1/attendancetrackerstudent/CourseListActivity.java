@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -59,6 +60,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
     private TextView txtIdNumber;
     private FloatingActionButton btnSearchCourse;
     private ImageView imgProfilePic;
+    private SwipeRefreshLayout refreshLayout;
     ////////////
 
 
@@ -90,6 +92,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         this.txtIdNumber    = findViewById(R.id.tvIdName);
         this.btnSearchCourse = findViewById(R.id.btnSearchCourse);
         this.imgProfilePic  = findViewById(R.id.img_profilePic);
+        this.refreshLayout = findViewById(R.id.refreshLayout);
 
         //go to search course activity
         btnSearchCourse.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +100,14 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
             public void onClick(View v) {
                 Intent intent = new Intent(CourseListActivity.this, SearchCourseActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText(getApplicationContext(), "refresh bitch", Toast.LENGTH_SHORT).show();
+                refreshLayout.setRefreshing(false);
             }
         });
 
