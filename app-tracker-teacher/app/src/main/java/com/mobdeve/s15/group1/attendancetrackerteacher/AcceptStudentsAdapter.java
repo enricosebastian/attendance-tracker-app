@@ -30,7 +30,7 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
 
     public AcceptStudentsAdapter(ArrayList data) {
         this.data = data;
-        Log.d(TAG, "Adapter is initialized");
+        Log.d(TAG, "Accept students adapter is initialized");
     }
 
     @NonNull
@@ -57,6 +57,8 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
                 acceptStudentRequest(data.get(position).getIdNumber(),
                 data.get(position).getCourseCode(),
                 data.get(position).getSectionCode());
+                data.remove(holder.getBindingAdapterPosition());
+                notifyItemRemoved(holder.getBindingAdapterPosition());
             }
         });
 
@@ -88,7 +90,7 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<DocumentSnapshot> result = Db.getDocuments(task);
 
-                Log.d(TAG,"this is accept student request "+sectionCode);
+                Log.d(TAG,"this is accept student request "+  sectionCode);
 
                 Map<String, Object> input = new HashMap<>();
 
@@ -99,10 +101,12 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
 
                 Db.addDocument(Db.COLLECTION_CLASSLIST, input);
 
+                //Deletes them from the course request since they've been added
                 Db.deleteDocument(Db.COLLECTION_COURSEREQUEST,
                 Db.FIELD_COURSECODE, courseCode,
                 Db.FIELD_SECTIONCODE, sectionCode,
                 Db.FIELD_IDNUMBER, idNumber);
+
             }
         });
     }
