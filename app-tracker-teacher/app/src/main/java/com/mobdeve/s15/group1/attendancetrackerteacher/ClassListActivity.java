@@ -21,22 +21,23 @@ import java.util.List;
 
 public class ClassListActivity extends AppCompatActivity {
 
-    private static final String TAG = "StudentsListActivity.java";
+    private static final String         TAG = "StudentsListActivity.java";
 
     //shared preferences initialization
-    private SharedPreferences sp;
-    private SharedPreferences.Editor editor;
-    private String email;
+    private SharedPreferences           sp;
+    private SharedPreferences.Editor    editor;
+    private String                      email;
     ////////////
 
     //recycler view initialization
-    private ArrayList<ClassListModel> classListModels = new ArrayList<>();
-    private RecyclerView classListRecyclerView;
-    private RecyclerView.LayoutManager classListLayoutManager;
-    private ClassListAdapter classListAdapter;
+    private ArrayList<ClassListModel>   classListModels = new ArrayList<>();
+    private RecyclerView                classListRecyclerView;
+    private RecyclerView.LayoutManager  classListLayoutManager;
+    private ClassListAdapter            classListAdapter;
 
     //widget initialization
-    private String courseCode, sectionCode;
+    private String  courseCode,
+                    sectionCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

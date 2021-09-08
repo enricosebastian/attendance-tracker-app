@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.Activity;
 import android.content.Context;
@@ -36,45 +37,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourseListActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
-    private static final String TAG = "ClasslistActivity.java";
+    private static final String             TAG = "ClasslistActivity.java";
 
     //shared preferences initialization
-    private SharedPreferences sp;
-    private SharedPreferences.Editor editor;
-    private String email;
-
+    private SharedPreferences               sp;
+    private SharedPreferences.Editor        editor;
+    private String                          email;
 
     //recycler view initialization
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    private CourseListAdapter courseListAdapter;
-    private ArrayList<CourseModel> courseModels = new ArrayList<>();
-
+    private ArrayList<CourseModel>          courseModels = new ArrayList<>();
+    private RecyclerView                    courseListRecyclerView;
+    private RecyclerView.LayoutManager      courseListLayoutManager;
+    private CourseListAdapter               courseListAdapter;
 
     //widget initialization
-    private TextView txtName;
-    private TextView txtIdNumber;
-    private FloatingActionButton btnAddCourse;
-    private ImageView imgProfilePic;
-
-    private boolean hasPicture = false;
+    private TextView                txtName,
+                                    txtIdNumber;
+    private FloatingActionButton    btnAddCourse;
+    private ImageView               imgProfilePic;
+    private SwipeRefreshLayout      refreshLayout;
 
 
     // What is being returned after the adding another course
     private ActivityResultLauncher<Intent> createCourseActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if(result.getResultCode() == Activity.RESULT_OK) {
-                        Log.d(TAG, "Add success so reinitialize the views.");
-                        initializeViews();
-                    } else {
-                        Log.d(TAG, "Nothing returned");
-                    }
+        new ActivityResultContracts.StartActivityForResult(),
+        new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if(result.getResultCode() == Activity.RESULT_OK) {
+                    Log.d(TAG, "Add success so reinitialize the views.");
+                    initializeViews();
+                } else {
+                    Log.d(TAG, "Nothing returned");
                 }
             }
-
+        }
     );
 
     @Override
@@ -90,6 +87,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         this.txtIdNumber    = findViewById(R.id.tvIdName);
         this.btnAddCourse   = findViewById(R.id.btnAddCourse);
         this.imgProfilePic  = findViewById(R.id.img_profilePic);
+        this.refreshLayout  = findViewById(R.id.refreshLayout);
 
         // When user clicks on add course button
         btnAddCourse.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +95,14 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
             public void onClick(View v) {
                 Intent createCourseIntent = new Intent(CourseListActivity.this, CreateCourseActivity.class);
                 createCourseActivityResultLauncher.launch(createCourseIntent);
+            }
+        });
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initializeRecyclerView();
+                refreshLayout.setRefreshing(false);
             }
         });
     }
@@ -136,55 +142,60 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
     //Initialize views of the courses handled by the user
     protected void initializeViews() {
         Db.getDocumentsWith(Db.COLLECTION_USERS,
-                Db.FIELD_EMAIL, email).
-                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        Db.FIELD_EMAIL, email).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<DocumentSnapshot> result = Db.getDocuments(task);
+                Log.d(TAG,"result size is "+ email);
+                Log.d(TAG,"result size is "+ result.size());
+
+                String firstName = result.get(0).getString(Db.FIELD_FIRSTNAME).toUpperCase();
+                String lastName = result.get(0).getString(Db.FIELD_LASTNAME).toUpperCase();
+
+                String idNumber = result.get(0).getString(Db.FIELD_IDNUMBER);
+                txtName.setText(firstName+" "+lastName);
+                txtIdNumber.setText(idNumber);
+
+
+                String documentId = Db.getIdFromTask(task);
+                Db.getProfilePic(documentId).addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        List<DocumentSnapshot> result = Db.getDocuments(task);
-                        Log.d(TAG,"result size is "+ email);
-                        Log.d(TAG,"result size is "+ result.size());
-
-                        String firstName = result.get(0).getString(Db.FIELD_FIRSTNAME).toUpperCase();
-                        String lastName = result.get(0).getString(Db.FIELD_LASTNAME).toUpperCase();
-
-                        String idNumber = result.get(0).getString(Db.FIELD_IDNUMBER);
-                        txtName.setText(firstName+" "+lastName);
-                        txtIdNumber.setText(idNumber);
-
-
-                        String documentId = Db.getIdFromTask(task);
-                        Db.getProfilePic(documentId).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Uri> task) {
-                                if(task.isSuccessful()) {
-                                    Uri imgUri = task.getResult();
-                                    Picasso.get().load(imgUri).into(imgProfilePic);
-                                } else {
-                                    Log.d(TAG,"No profile image found. Switching to default");
-                                }
-                            }
-                        });
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if(task.isSuccessful()) {
+                            Uri imgUri = task.getResult();
+                            Picasso.get().load(imgUri).into(imgProfilePic);
+                        } else {
+                            Log.d(TAG,"No profile image found. Switching to default");
+                        }
                     }
                 });
+            }
+        });
 
+        initializeRecyclerView();
+
+    }
+
+    protected void initializeRecyclerView() {
         //Gets the courses handled by the user
         Db.getDocumentsWith(Db.COLLECTION_COURSES,
-                Db.FIELD_HANDLEDBY, email).
-                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        courseModels.clear(); //always clear when initializing
+        Db.FIELD_HANDLEDBY, email).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                courseModels.clear(); //always clear when initializing
 
-                        courseModels.addAll(Db.toClassModel(Db.getDocuments(task)));
-                        Log.d(TAG,"classModel size is "+ courseModels.size());
+                courseModels.addAll(Db.toClassModel(Db.getDocuments(task)));
+                Log.d(TAG,"classModel size is "+ courseModels.size());
 
-                        recyclerView = findViewById(R.id.recyclerView);
-                        layoutManager = new LinearLayoutManager(getApplicationContext());
-                        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
-                        courseListAdapter = new CourseListAdapter(courseModels);
-                        recyclerView.setAdapter(courseListAdapter);
-                    }
-                });
+                courseListRecyclerView = findViewById(R.id.recyclerView);
+                courseListLayoutManager = new LinearLayoutManager(getApplicationContext());
+                courseListRecyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+                courseListAdapter = new CourseListAdapter(courseModels);
+                courseListRecyclerView.setAdapter(courseListAdapter);
+            }
+        });
     }
 
     // Initializes views onResume of the app
@@ -194,14 +205,4 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         Log.d(TAG,"we are in on resume");
     }
 
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "we are in on start");
-    }
-
-    protected void onPause() {
-        super.onPause();
-        initializeViews();
-        Log.d(TAG, "we are in on pause");
-    }
 }

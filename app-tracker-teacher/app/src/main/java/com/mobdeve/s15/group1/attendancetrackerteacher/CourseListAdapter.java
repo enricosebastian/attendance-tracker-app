@@ -19,6 +19,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -111,8 +112,22 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
 
     @Override
     public void onBindViewHolder(@NonNull CourseListVH holder, @SuppressLint("RecyclerView") int position) {
+        ConstraintLayout courseConstraint = holder.itemView.findViewById(R.id.courseConstraint);
+
         holder.setTxtClassCode(data.get(position).getCourseCode());
         holder.setTxtSectionCode(data.get(position).getSectionCode());
+
+        if(data.get(position).getIsPublished()) {
+            courseConstraint.setBackgroundTintList(
+            holder.itemView.getContext().
+            getResources().
+            getColorStateList(R.color.dark_green));
+        } else {
+            courseConstraint.setBackgroundTintList(
+            holder.itemView.getContext().
+            getResources().
+            getColorStateList(R.color.gray));
+        }
 
         //When an item is clicked
         holder.itemView.setOnClickListener(new View.OnClickListener() {
