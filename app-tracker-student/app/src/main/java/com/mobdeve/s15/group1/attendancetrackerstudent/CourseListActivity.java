@@ -174,27 +174,19 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                courseModels.clear();
 
                 List<DocumentSnapshot> result = Db.getDocuments(task);
-                for(DocumentSnapshot ds:result) {
-                    Db.getDocumentsWith(Db.COLLECTION_COURSES,
-                    Db.FIELD_COURSECODE, ds.getString(Db.FIELD_COURSECODE),
-                    Db.FIELD_SECTIONCODE, ds.getString(Db.FIELD_SECTIONCODE)).
-                    addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            courseModels.addAll(Db.toCourseModel(Db.getDocuments(task)));
-                            Log.d(TAG,"Class model size should be increasing --> "+courseModels.size());
+                Log.d(TAG, ""+result.size());
 
-                            courseListRecyclerView = findViewById(R.id.recyclerView);
-                            courseListLayoutManager = new LinearLayoutManager(getApplicationContext());
-                            courseListRecyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
-                            courseListAdapter = new CourseListAdapter(courseModels);
-                            courseListRecyclerView.setAdapter(courseListAdapter);
-                        }
-                    });
-                }
+                courseModels.clear();
+                courseModels.addAll(Db.toCourseModel(Db.getDocuments(task)));
+
+                courseListRecyclerView = findViewById(R.id.recyclerView);
+                courseListLayoutManager = new LinearLayoutManager(getApplicationContext());
+                courseListRecyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+                courseListAdapter = new CourseListAdapter(courseModels);
+                courseListRecyclerView.setAdapter(courseListAdapter);
+
             }
         });
     }

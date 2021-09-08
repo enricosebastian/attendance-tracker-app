@@ -334,9 +334,6 @@ public class Db {
         for(DocumentSnapshot ds:result) {
             courseModels.add(new CourseModel(
                 ds.getString("courseCode"),
-                ds.getString("courseName"),
-                ds.getString("handledBy"),
-                ds.getBoolean("isPublished"),
                 ds.getString("sectionCode")
             ));
         }
@@ -599,34 +596,6 @@ public class Db {
                                 Log.d("main","Single student document updated successfully.");
                             }
                         });
-                }
-            });
-    }
-
-    public static void updateSingleCourse(String courseCode, String sectionCode, CourseModel initialInfo) {
-        Db.getCoursesCollectionReference()
-                .whereEqualTo(COURSECODE_FIELD, courseCode)
-                .whereEqualTo(SECTIONCODE_FIELD,sectionCode)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    DocumentSnapshot ds = getFirstResult(task);
-                    if(initialInfo.getCourseCode().equals("")) initialInfo.setCourseCode(ds.getString("courseCode"));
-                    if(initialInfo.getCourseName().equals("")) initialInfo.setCourseName(ds.getString("courseName"));
-                    if(initialInfo.getHandledBy().equals("")) initialInfo.setHandledBy(ds.getString("handledBy"));
-                    if(initialInfo.getSectionCode().equals("")) initialInfo.setSectionCode(ds.getString("sectionCode"));
-
-                    String id = Db.getIdFromTask(task);
-                    Log.d("main","id is "+id);
-                    Db.getCoursesCollectionReference()
-                    .document(id)
-                    .set(initialInfo)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Log.d("main","Single course document updated successfully.");
-                        }
-                    });
                 }
             });
     }

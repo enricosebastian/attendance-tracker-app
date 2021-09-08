@@ -29,7 +29,6 @@ public class CourseListVH extends RecyclerView.ViewHolder {
         this.txtClassCode.setText(txtClassCode);
     }
 
-
     public void setTxtSectionCode(String txtName) {
         this.txtSectionCode.setText(txtName);
     }
