@@ -43,9 +43,9 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
     private static final String TAG = "ClasslistActivity.java";
 
     //shared preferences initialization
-    private SharedPreferences sp;
-    private SharedPreferences.Editor editor;
-    private String email;
+    private SharedPreferences           sp;
+    private SharedPreferences.Editor    editor;
+    private String                      email;
     ////////////
 
     //recycler view initialization
@@ -106,7 +106,9 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(getApplicationContext(), "refresh bitch", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "refresh bitch", Toast.LENGTH_SHORT).show(); //REMOVE AFTER, YOU BASTARD LMFAO
+                initializeViews();
+//                courseListAdapter.notifyDataSetChanged();
                 refreshLayout.setRefreshing(false);
             }
         });
@@ -178,6 +180,10 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
             }
         });
 
+        initializeRecyclerView();
+    }
+
+    protected void initializeRecyclerView() {
         Db.getDocumentsWith(Db.COLLECTION_CLASSLIST,
         Db.FIELD_EMAIL, email,
         Db.FIELD_COURSECODE, Query.Direction.ASCENDING,
