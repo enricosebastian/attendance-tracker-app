@@ -61,7 +61,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
                 List<DocumentSnapshot> result = Db.getDocuments(task);
 
                 if(result.get(0).getBoolean(Db.FIELD_ISPUBLISHED)) {
-                    courseConstraint.setBackgroundTintList(holder.itemView.getContext().getResources().getColorStateList(R.color.dark_green));
+                    courseConstraint.setBackgroundTintList(holder.itemView.getContext().getResources().getColorStateList(R.color.dark_greenv2));
                 } else {
                     courseConstraint.setBackgroundTintList(holder.itemView.getContext().getResources().getColorStateList(R.color.gray));
                 }
