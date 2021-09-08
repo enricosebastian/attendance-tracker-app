@@ -56,7 +56,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             Picasso.get().load(imageUri).into(img_profilePic);
                             Log.d(TAG,"ImgUri is "+imageUri);
                         } else {
-                            Log.d(TAG, "NULL BITCHHHHHH");
+                            Log.d(TAG, "Null input");
                         }
                     } catch(Exception exception){
                         Log.d(TAG,""+exception.getLocalizedMessage());

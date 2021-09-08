@@ -109,6 +109,13 @@ public class RegistrationActivity extends AppCompatActivity {
                                                 List<DocumentSnapshot> result = Db.getDocuments(task);
                                                 if (result.size() == 0) {
                                                     createNewUser(email, firstName, idNumber, lastName, password);
+                                                    editor.putString(Keys.SP_EMAIL_KEY, email);
+                                                    editor.putString(Keys.SP_USERTYPE_KEY, "teacher");
+                                                    editor.commit();
+
+                                                    Intent intent = new Intent(RegistrationActivity.this, CourseListActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
                                                 } else {
                                                     Toast.makeText(getApplicationContext(), "Account already exists.", Toast.LENGTH_SHORT).show();
                                                 }
@@ -177,45 +184,5 @@ public class RegistrationActivity extends AppCompatActivity {
 
         //upload defautlt image
         Toast.makeText(getApplicationContext(), "Account successfully created!", Toast.LENGTH_SHORT).show();
-        uploadDefaultImageandFinishActivity(email);
-
-    }
-
-    // Uploads the default image and finishes the activity
-    protected void uploadDefaultImageandFinishActivity(String email) {
-        Db.getDocumentsWith(Db.COLLECTION_USERS,
-                Db.EMAIL_FIELD, email).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                String documentId = Db.getIdFromTask(task);
-                Uri uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
-                        + "://" + getApplicationContext().getResources().getResourcePackageName(R.drawable.img_tempimage)
-                        + "/" + getApplicationContext().getResources().getResourceTypeName(R.drawable.img_tempimage)
-                        + "/" + getApplicationContext().getResources().getResourceEntryName(R.drawable.img_tempimage));
-                Log.d(TAG, "URI in string = " + ContentResolver.SCHEME_ANDROID_RESOURCE
-                        + "://" + getApplicationContext().getResources().getResourcePackageName(R.drawable.img_tempimage)
-                        + "/" + getApplicationContext().getResources().getResourceTypeName(R.drawable.img_tempimage)
-                        + "/" + getApplicationContext().getResources().getResourceEntryName(R.drawable.img_tempimage));
-                if(uri != null) {
-                    Tasks.whenAllSuccess(Db.uploadImage(documentId, uri)).
-                            addOnCompleteListener(new OnCompleteListener<List<Object>>() {
-                                @Override
-                                public void onComplete(@NonNull Task<List<Object>> task) {
-                                    editor.putString(Keys.SP_EMAIL_KEY, email);
-                                    editor.putString(Keys.SP_USERTYPE_KEY, "teacher");
-                                    editor.commit();
-
-                                    Intent intent = new Intent(RegistrationActivity.this, CourseListActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                    Log.d(TAG, "Registration done, called finish activity");
-                                }
-                            });
-                } else {
-                    Log.d(TAG,"Something went wrong in uploading the image");
-                }
-
-            }
-        });
     }
 }
