@@ -10,14 +10,16 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnAddCourse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
-        app:fabSize="mini"
+        android:scaleType="center"
+        app:fabCustomSize="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="35sp"
         app:srcCompat="@drawable/ic_add_student_foreground" />
 
     <TextView
