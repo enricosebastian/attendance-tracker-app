@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,33 +28,37 @@ import java.util.List;
 
 public class SingleMeetingActivity extends AppCompatActivity {
 
-    private static final String TAG = "SingleMeetingActivity";
+    private static final String         TAG = "SingleMeetingActivity";
 
     //shared preferences initialization
-    private SharedPreferences sp;
-    private SharedPreferences.Editor editor;
-    private String email;
+    private SharedPreferences           sp;
+    private SharedPreferences.Editor    editor;
+    private String                      email;
     ////////////
 
     //recycler view initialization
-    private RecyclerView studentListRecyclerView;
-    private RecyclerView.LayoutManager studentListLayoutManager;
-    private SingleMeetingAdapter singleMeetingAdapter;
-    private ArrayList<StudentPresentListModel> studentPresentListModels = new ArrayList<>();
+    private RecyclerView                        studentListRecyclerView;
+    private RecyclerView.LayoutManager          studentListLayoutManager;
+    private SingleMeetingAdapter                singleMeetingAdapter;
+    private ArrayList<StudentPresentListModel>  studentPresentListModels = new ArrayList<>();
     ////////////////////
 
     //widget initialization
-    private TextView txtStatus;
-    private TextView txtDate;
-    private TextView txtClassTitle;
-    private TextView txtMeetingCode;
-    private TextView txtClassNameSubtitle;
-    private Button btnDelete;
+    private TextView            txtStatus,
+                                txtDate,
+                                txtClassTitle,
+                                txtMeetingCode,
+                                txtClassNameSubtitle;
+    private Button              btnDelete;
+    private SwipeRefreshLayout  refreshLayout;
     ////////////
 
-    private String courseCode, sectionCode, meetingCode, courseName;
-    private boolean isOpen; //suggestion: what happens if you change boolean (primitive) to Boolean instead?
-    private Date meetingStart;
+    private String              courseCode,
+                                sectionCode,
+                                meetingCode,
+                                courseName;
+    private boolean             isOpen; //suggestion: what happens if you change boolean (primitive) to Boolean instead?
+    private Date                meetingStart;
 
 
     @Override
@@ -72,7 +77,7 @@ public class SingleMeetingActivity extends AppCompatActivity {
         this.isOpen         = getIntent.getBooleanExtra(Keys.INTENT_ISOPEN, false);
         String stringDate   = getIntent.getStringExtra(Keys.INTENT_MEETINGSTART);
 
-        Log.d(TAG, meetingCode);
+        Log.d(TAG, meetingCode); //happy birthday
 
         try {
             meetingStart = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss").parse(stringDate);
@@ -87,55 +92,20 @@ public class SingleMeetingActivity extends AppCompatActivity {
         this.txtMeetingCode             = findViewById(R.id.tvMeetingCode); //LMAO THIS NAMING INCONSISTENCY SMH WHAT A DEV JESUS FOKEN CHRIST
         this.studentListRecyclerView    = findViewById(R.id.studentListRecyclerView);
         this.btnDelete                  = findViewById(R.id.btnDelete);
+        this.refreshLayout              = findViewById(R.id.refreshLayout);
 
-        initializeViews(); //move to on resume one day
-
-    }
-
-    // This method initializes the view of the activity
-    protected void initializeViews() {
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy | E");
-        txtDate.setText(dateFormat.format(meetingStart));
-
-        Db.getDocumentsWith(Db.COLLECTION_COURSES,
-        Db.FIELD_SECTIONCODE, sectionCode,
-        Db.FIELD_COURSECODE, courseCode).
-        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<DocumentSnapshot> result = Db.getDocuments(task);
-                courseName = result.get(0).getString(Db.FIELD_COURSENAME);
-                String classCodeTitle = courseCode + " - " + sectionCode;
-                String classNameSubtitle = courseName;
-                txtClassTitle.setText(classCodeTitle);
-                txtClassNameSubtitle.setText(classNameSubtitle);
-
+            public void onRefresh() {
+                initializeRecyclerView();
+                refreshLayout.setRefreshing(false);
             }
         });
-        txtMeetingCode.setText(meetingCode);
 
-        // Checks the status adjusts the background based on the current status
-        if(isOpen) {
-            txtStatus.setText("OPEN");
-            txtStatus.setBackgroundTintList(this.getResources().getColorStateList(R.color.light_green));
-        } else {
-            txtStatus.setText("CLOSED");
-            txtStatus.setBackgroundTintList(this.getResources().getColorStateList(R.color.red_light));
-        }
-
-        Db.getDocumentsWith(Db.COLLECTION_MEETINGHISTORY,
-        Db.FIELD_MEETINGCODE, meetingCode).
-        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<DocumentSnapshot> result = Db.getDocuments(task);
-                studentPresentListModels = Db.toStudentPresentListModel(result);
-
-                studentListLayoutManager = new LinearLayoutManager(getApplicationContext());
-                studentListRecyclerView.setLayoutManager(studentListLayoutManager);
-                singleMeetingAdapter = new SingleMeetingAdapter(studentPresentListModels);
-                studentListRecyclerView.setAdapter(singleMeetingAdapter);
+            public void onClick(View view) {
+                deleteMeeting(Db.COLLECTION_MEETINGS, Db.FIELD_MEETINGCODE, meetingCode);
             }
         });
 
@@ -161,10 +131,8 @@ public class SingleMeetingActivity extends AppCompatActivity {
                                     Log.d(TAG, "Successfully updated db");
                                 }
                             });
-
                         }
                     });
-
                 } else if(txtStatus.getText().toString().equals("OPEN")) {
                     txtStatus.setText("CLOSED");
                     txtStatus.setBackgroundTintList(v.getContext().getResources().getColorStateList(R.color.red_light));
@@ -184,17 +152,63 @@ public class SingleMeetingActivity extends AppCompatActivity {
                                     Log.d(TAG, "Successfully updated db");
                                 }
                             });
-
                         }
                     });
                 }
             }
         });
+    }
 
-        btnDelete.setOnClickListener(new View.OnClickListener() {
+    // This method initializes the view of the activity
+    protected void initializeViews() {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy | E");
+        txtDate.setText(dateFormat.format(meetingStart));
+
+        Db.getDocumentsWith(Db.COLLECTION_COURSES,
+        Db.FIELD_SECTIONCODE, sectionCode,
+        Db.FIELD_COURSECODE, courseCode).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onClick(View view) {
-                deleteMeeting(Db.COLLECTION_MEETINGS, Db.FIELD_MEETINGCODE, meetingCode);
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<DocumentSnapshot> result = Db.getDocuments(task);
+                courseName = result.get(0).getString(Db.FIELD_COURSENAME);
+                String classCodeTitle = courseCode + " - " + sectionCode;
+                String classNameSubtitle = courseName;
+                txtClassTitle.setText(classCodeTitle);
+                txtClassNameSubtitle.setText(classNameSubtitle);
+
+            }
+        });
+
+        txtMeetingCode.setText(meetingCode);
+
+        // Checks the status adjusts the background based on the current status
+        if(isOpen) {
+            txtStatus.setText("OPEN");
+            txtStatus.setBackgroundTintList(this.getResources().getColorStateList(R.color.light_green));
+        } else {
+            txtStatus.setText("CLOSED");
+            txtStatus.setBackgroundTintList(this.getResources().getColorStateList(R.color.red_light));
+        }
+
+        initializeRecyclerView();
+
+    }
+
+    protected void initializeRecyclerView() {
+        Db.getDocumentsWith(Db.COLLECTION_MEETINGHISTORY,
+        Db.FIELD_MEETINGCODE, meetingCode).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<DocumentSnapshot> result = Db.getDocuments(task);
+                studentPresentListModels = Db.toStudentPresentListModel(result);
+
+                studentListLayoutManager = new LinearLayoutManager(getApplicationContext());
+                studentListRecyclerView.setLayoutManager(studentListLayoutManager);
+                singleMeetingAdapter = new SingleMeetingAdapter(studentPresentListModels);
+                studentListRecyclerView.setAdapter(singleMeetingAdapter);
             }
         });
     }
@@ -222,5 +236,10 @@ public class SingleMeetingActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    protected void onResume() {
+        super.onResume();
+        initializeViews();
     }
 }
