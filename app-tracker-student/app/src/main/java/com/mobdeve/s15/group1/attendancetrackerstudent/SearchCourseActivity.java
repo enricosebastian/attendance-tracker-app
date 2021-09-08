@@ -55,8 +55,6 @@ public class SearchCourseActivity extends AppCompatActivity {
         this.sp             = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
         this.editor         = sp.edit();
         this.email          = sp.getString(Keys.SP_EMAIL_KEY,"");
-
-
         this.inputCourseCode = findViewById(R.id.inputCourseCode);
         this.inputSectionCode = findViewById(R.id.inputSectionCode);
         this.btnSearch = findViewById(R.id.btnSearch);
@@ -96,8 +94,6 @@ public class SearchCourseActivity extends AppCompatActivity {
     }
 
     protected void searchQuery(String courseCode, String sectionCode) {
-
-
         Db.getDocumentsWith(Db.COLLECTION_CLASSLIST,
         Db.FIELD_COURSECODE, courseCode,
         Db.FIELD_SECTIONCODE, sectionCode,
@@ -130,7 +126,7 @@ public class SearchCourseActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                         List<DocumentSnapshot> userResults = Db.getDocuments(task);
-                                        txtCourseInfo.setText(courseCode+ " - " +sectionCode); //the easy way out. i am ashamed of myself, but fuck you still
+                                        txtCourseInfo.setText(courseCode+ " - " +sectionCode);
                                         txtHandledBy.setText("Handled by "+userResults.get(0).getString(Db.FIELD_FIRSTNAME)+ " "+userResults.get(0).getString(Db.FIELD_LASTNAME));
                                         checkIfResultExists(courseCode, sectionCode);
                                     }
@@ -166,7 +162,7 @@ public class SearchCourseActivity extends AppCompatActivity {
                             btnRequest.setBackgroundColor(Color.LTGRAY);
                             btnRequest.setText("SENT");
                         } else {
-                            btnRequest.setBackgroundColor(Color.GREEN);
+                            btnRequest.setBackgroundColor(getResources().getColor(R.color.btn_color_green));
                             btnRequest.setText("REQUEST");
                         }
                     }

@@ -7,102 +7,117 @@
     tools:context=".SearchCourseActivity">
 
     <TextView
+        android:id="@+id/txtCourseSearcher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/roboto"
         android:text="COURSE SEARCHER"
+        android:textColor="#004D40"
+        android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textSize="30sp"
-        android:layout_marginTop="40dp"
-        android:id="@+id/txtCourseSearcher"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/inputCourseCode"
 
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="course code"
-        app:layout_constraintTop_toBottomOf="@id/txtCourseSearcher"
-        android:layout_marginTop="25dp"
         android:layout_marginStart="50dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="50dp"
-        />
+        android:hint="Course Code"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtCourseSearcher" />
 
     <EditText
         android:id="@+id/inputSectionCode"
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="section code"
-        app:layout_constraintTop_toBottomOf="@id/inputCourseCode"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
-        />
+        android:hint="Section Code"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputCourseCode" />
 
     <Button
+        android:id="@+id/btnSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="search"
-        android:id="@+id/btnSearch"
-        app:layout_constraintTop_toBottomOf="@id/inputSectionCode"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="20dp"
-        />
+        android:fontFamily="@font/roboto"
+        android:text="search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputSectionCode" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/resultBox"
-        android:layout_marginTop="20dp"
-        android:visibility="gone"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
         android:background="@drawable/template_rounded_corner"
         android:backgroundTint="@color/light_gray"
-        app:layout_constraintTop_toBottomOf="@id/btnSearch"
+        android:padding="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginEnd="30dp"
-        android:layout_marginStart="30dp"
-        android:padding="15dp">
+        app:layout_constraintTop_toBottomOf="@id/btnSearch">
 
         <Button
+            android:id="@+id/btnRequest"
+            android:layout_width="0dp"
+            android:layout_height="50sp"
+            android:fontFamily="@font/roboto"
+            android:text="request"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/guideline3"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="request"
-            android:id="@+id/btnRequest"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="218dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/txtCourseInfo"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="MOBDEVE - S69"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/roboto"
+            android:text="MOBDEVE - S15"
+            android:textColor="#00796B"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:id="@+id/txtCourseInfo"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnRequest"
-        />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/txtHandledBy"
-            app:layout_constraintTop_toBottomOf="@id/txtCourseInfo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="Handled by YOUR MOM"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/roboto"
+            android:text="Handled by TEACHER NAME"
             android:textSize="15sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnRequest"
-            />
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtCourseInfo" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
