@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,44 +28,46 @@ public class SingleClassActivity extends AppCompatActivity {
     private static final String TAG = "SingleClassActivity";
 
     //shared preferences initialization
-    private SharedPreferences sp;
-    private SharedPreferences.Editor editor;
-    private String email;
+    private SharedPreferences           sp;
+    private SharedPreferences.Editor    editor;
+    private String                      email;
     ////////////
 
     //recycler view initialization
-    private ArrayList<MeetingModel> meetingModels = new ArrayList<>();
-    private RecyclerView singleClassRecyclerView;
-    private RecyclerView.LayoutManager singleClassLayoutManager;
-    private SingleClassAdapter singleClassAdapter;
+    private ArrayList<MeetingModel>     meetingModels = new ArrayList<>();
+    private RecyclerView                singleClassRecyclerView;
+    private RecyclerView.LayoutManager  singleClassLayoutManager;
+    private SingleClassAdapter          singleClassAdapter;
 
     //widget initialization
-    TextView txtClassCodeTitle, txtClassNameSubtitle, txtCreateMeeting, txtStudentCount;
-    ImageButton btnAcceptStudents;
-    private String courseCode, sectionCode, courseName;
+    private TextView            txtClassCodeTitle,
+                                txtClassNameSubtitle,
+                                txtCreateMeeting,
+                                txtStudentCount;
+    private ImageButton         btnAcceptStudents;
+    private String              courseCode,
+                                sectionCode,
+                                courseName;
+    private SwipeRefreshLayout  refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_class);
 
-        Intent getIntent        = getIntent();
-        this.courseCode         = getIntent.getStringExtra(Keys.INTENT_COURSECODE);
-        this.sectionCode        = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
-        this.courseName         = getIntent.getStringExtra(Keys.INTENT_COURSENAME);
+        Intent getIntent            = getIntent();
+        this.courseCode             = getIntent.getStringExtra(Keys.INTENT_COURSECODE);
+        this.sectionCode            = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
+        this.courseName             = getIntent.getStringExtra(Keys.INTENT_COURSENAME);
 
         this.txtClassCodeTitle      = findViewById(R.id.txtClassCodeTitle);
         this.txtClassNameSubtitle   = findViewById(R.id.txtClassNameSubtitle);
         this.txtStudentCount        = findViewById(R.id.txtStudentCount);
         this.txtCreateMeeting       = findViewById(R.id.txtCreateMeeting);
         this.btnAcceptStudents      = findViewById(R.id.btnAcceptStudents);
+        this.refreshLayout          = findViewById(R.id.refreshLayout);
 
 
-        String classCodeTitle = courseCode + " - " + sectionCode;
-        String classNameSubtitle = courseName;
-
-        txtClassCodeTitle.setText(classCodeTitle);
-        txtClassNameSubtitle.setText(classNameSubtitle.toUpperCase());
         // Clicking the create button brings the user to the create meeting activity
         txtCreateMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,10 +98,22 @@ public class SingleClassActivity extends AppCompatActivity {
                 startActivity(getStudentsListActivity);
             }
         });
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initializeRecyclerView();
+                refreshLayout.setRefreshing(false);
+            }
+        });
     }
 
 
     protected void initializeViews() {
+
+        txtClassCodeTitle.setText(courseCode + " - " + sectionCode);
+        txtClassNameSubtitle.setText(courseName.toUpperCase());
+
         Db.getDocumentsWith(Db.COLLECTION_CLASSLIST,
         Db.FIELD_COURSECODE, courseCode,
         Db.FIELD_SECTIONCODE, sectionCode).
@@ -110,6 +125,11 @@ public class SingleClassActivity extends AppCompatActivity {
             }
         });
 
+        initializeRecyclerView();
+
+    }
+
+    protected void initializeRecyclerView() {
         Db.getDocumentsWith(Db.COLLECTION_MEETINGS,
         Db.FIELD_COURSECODE, courseCode,
         Db.FIELD_SECTIONCODE, sectionCode,
@@ -121,10 +141,12 @@ public class SingleClassActivity extends AppCompatActivity {
 
                 meetingModels.clear();
                 meetingModels.addAll(Db.toMeetingModel(results));
-                singleClassRecyclerView = findViewById(R.id.SingleClassRecyclerView);
-                singleClassLayoutManager = new LinearLayoutManager(getApplicationContext());
+
+                singleClassRecyclerView     = findViewById(R.id.SingleClassRecyclerView);
+                singleClassLayoutManager    = new LinearLayoutManager(getApplicationContext());
+                singleClassAdapter          = new SingleClassAdapter(meetingModels);
+
                 singleClassRecyclerView.setLayoutManager(singleClassLayoutManager);
-                singleClassAdapter = new SingleClassAdapter(meetingModels);
                 singleClassRecyclerView.setAdapter(singleClassAdapter);
             }
         });
@@ -136,9 +158,4 @@ public class SingleClassActivity extends AppCompatActivity {
         Log.d(TAG, "you are on resume");
     }
 
-
-//    protected void onStart() {
-//        super.onStart();
-//        initializeViews();
-//    }
 }
