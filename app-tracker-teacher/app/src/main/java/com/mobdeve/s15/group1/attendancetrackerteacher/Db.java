@@ -263,6 +263,7 @@ public class Db {
     }
 
     public static Task<Uri> getProfilePic(String documentId) {
+        Log.d(TAG, "What it returns: " + Db.getStorageReferenceInstance().child(documentId).getDownloadUrl());
         return Db.getStorageReferenceInstance().child(documentId).getDownloadUrl();
     }
 

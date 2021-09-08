@@ -41,19 +41,6 @@ public class RegistrationActivity extends AppCompatActivity {
     private Button      btnSubmit,
                         btnCancelRegistration;
 
-
-    //delete this LMFAO VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
-    //delete this LMFAO VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
-    //delete this LMFAO VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
-    //delete this LMFAO VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
-    private static String USERNAME_STATE_KEY = "USERNAME_KEY";
-    private static String EMAIL_STATE_KEY = "EMAIL_KEY";
-    //delete this ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    //delete this ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    //delete this ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    //delete this ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,8 +59,7 @@ public class RegistrationActivity extends AppCompatActivity {
         this.inputPassword = findViewById(R.id.inputPassword);
         this.inputIdNumber = findViewById(R.id.inputIdNumber);
 
-
-        // When User registers
+        // When User submits registration
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,8 +77,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     //checks id for BOTH teachers and students, just in case
 
                     // if the ID number is a number, and is 8 length
-                    if(isIDNumberValid(idNumber))
-                    {
+                    if(isIDNumberValid(idNumber)) {
                         // Check if email exists
                         Db.getDocumentsWith(Db.COLLECTION_USERS,
                                 Db.FIELD_EMAIL, email).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -109,6 +94,13 @@ public class RegistrationActivity extends AppCompatActivity {
                                                 List<DocumentSnapshot> result = Db.getDocuments(task);
                                                 if (result.size() == 0) {
                                                     createNewUser(email, firstName, idNumber, lastName, password);
+                                                    editor.putString(Keys.SP_EMAIL_KEY, email);
+                                                    editor.putString(Keys.SP_USERTYPE_KEY, "teacher");
+                                                    editor.commit();
+
+                                                    Intent intent = new Intent(RegistrationActivity.this, CourseListActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
                                                 } else {
                                                     Toast.makeText(getApplicationContext(), "Account already exists.", Toast.LENGTH_SHORT).show();
                                                 }
@@ -119,9 +111,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                     }
                                 }
                         });
-                    }
-                    else
-                    {
+                    } else {
                         Toast.makeText(getApplicationContext(), "Wrong ID number format!", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -137,8 +127,8 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isIDNumberValid(String val)
-    {
+    //This method checks the length of the id number entered by the student
+    private boolean isIDNumberValid(String val) {
         boolean isNumber = false, isLength8 = false;
 
         if(val.length() == 8)
@@ -147,15 +137,15 @@ public class RegistrationActivity extends AppCompatActivity {
         try {
             int num = Integer.parseInt(val);
             isNumber = true;
-        }
-        catch(NumberFormatException e) {
+        } catch(NumberFormatException e) {
             Log.d(TAG, "ID number field is a string, not a number");
         }
         return isNumber && isLength8;
     }
-    /*  This method was created for code readability. It checks if the fields have completely been
+
+    /**  This method was created for code readability. It checks if the fields have completely been
      *  filled up by the user
-     **/
+     */
     private boolean doAllFieldsHaveEntries() {
         return  !inputEmail.getText().toString().isEmpty() &&
                 !inputIdNumber.getText().toString().isEmpty() &&
@@ -163,6 +153,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 !inputPassword.getText().toString().isEmpty();
     }
 
+    // This method performs the db operation that adds the user to the app given their inputs
     protected void createNewUser(String email, String firstName, String idNumber, String lastName, String password) {
         Map<String, Object> input = new HashMap<>();
 
@@ -175,47 +166,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
         Db.addDocument(Db.COLLECTION_USERS, input);
 
-        //upload defautlt image
         Toast.makeText(getApplicationContext(), "Account successfully created!", Toast.LENGTH_SHORT).show();
-        uploadDefaultImageandFinishActivity(email);
-
-    }
-
-    // Uploads the default image and finishes the activity
-    protected void uploadDefaultImageandFinishActivity(String email) {
-        Db.getDocumentsWith(Db.COLLECTION_USERS,
-                Db.EMAIL_FIELD, email).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                String documentId = Db.getIdFromTask(task);
-                Uri uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
-                        + "://" + getApplicationContext().getResources().getResourcePackageName(R.drawable.img_tempimage)
-                        + "/" + getApplicationContext().getResources().getResourceTypeName(R.drawable.img_tempimage)
-                        + "/" + getApplicationContext().getResources().getResourceEntryName(R.drawable.img_tempimage));
-                Log.d(TAG, "URI in string = " + ContentResolver.SCHEME_ANDROID_RESOURCE
-                        + "://" + getApplicationContext().getResources().getResourcePackageName(R.drawable.img_tempimage)
-                        + "/" + getApplicationContext().getResources().getResourceTypeName(R.drawable.img_tempimage)
-                        + "/" + getApplicationContext().getResources().getResourceEntryName(R.drawable.img_tempimage));
-                if(uri != null) {
-                    Tasks.whenAllSuccess(Db.uploadImage(documentId, uri)).
-                            addOnCompleteListener(new OnCompleteListener<List<Object>>() {
-                                @Override
-                                public void onComplete(@NonNull Task<List<Object>> task) {
-                                    editor.putString(Keys.SP_EMAIL_KEY, email);
-                                    editor.putString(Keys.SP_USERTYPE_KEY, "teacher");
-                                    editor.commit();
-
-                                    Intent intent = new Intent(RegistrationActivity.this, CourseListActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                    Log.d(TAG, "Registration done, called finish activity");
-                                }
-                            });
-                } else {
-                    Log.d(TAG,"Something went wrong in uploading the image");
-                }
-
-            }
-        });
     }
 }

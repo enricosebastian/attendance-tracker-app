@@ -24,6 +24,8 @@ import android.widget.TextView;
 import android.view.View;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -40,22 +42,25 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
     private String email;
-    ////////////
+
 
     //recycler view initialization
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private CourseListAdapter courseListAdapter;
     private ArrayList<CourseModel> courseModels = new ArrayList<>();
-    ////////////
+
 
     //widget initialization
     private TextView txtName;
     private TextView txtIdNumber;
     private FloatingActionButton btnAddCourse;
     private ImageView imgProfilePic;
-    ////////////
 
+    private boolean hasPicture = false;
+
+
+    // What is being returned after the adding another course
     private ActivityResultLauncher<Intent> createCourseActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -96,7 +101,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         });
     }
 
-    //handles the pop up button for the profile tab
+    //Handles the pop up button for the profile tab
     public void showPopup (View v) {
         PopupMenu popup = new PopupMenu(this, v);
         popup.setOnMenuItemClickListener(this);
@@ -104,7 +109,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         popup.show();
     }
 
-    // When user clicks on one of the items
+    // When user clicks on one of the popup menu items
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()) {
@@ -128,7 +133,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         }
     }
 
-    //initializes views
+    //Initialize views of the courses handled by the user
     protected void initializeViews() {
         Db.getDocumentsWith(Db.COLLECTION_USERS,
                 Db.FIELD_EMAIL, email).
@@ -146,6 +151,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
                         txtName.setText(firstName+" "+lastName);
                         txtIdNumber.setText(idNumber);
 
+
                         String documentId = Db.getIdFromTask(task);
                         Db.getProfilePic(documentId).addOnCompleteListener(new OnCompleteListener<Uri>() {
                             @Override
@@ -161,6 +167,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
                     }
                 });
 
+        //Gets the courses handled by the user
         Db.getDocumentsWith(Db.COLLECTION_COURSES,
                 Db.FIELD_HANDLEDBY, email).
                 addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -178,8 +185,9 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
                         recyclerView.setAdapter(courseListAdapter);
                     }
                 });
-    }//initializes views
+    }
 
+    // Initializes views onResume of the app
     protected void onResume() {
         super.onResume();
         initializeViews();

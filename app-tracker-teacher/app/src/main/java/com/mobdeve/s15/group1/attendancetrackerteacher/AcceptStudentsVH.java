@@ -23,6 +23,7 @@ public class AcceptStudentsVH extends RecyclerView.ViewHolder {
     private ImageView imgProfilePic;
 
 
+    //Accept Students Constructor
     public AcceptStudentsVH(@NonNull View itemView) {
         super(itemView);
         this.txtStudentName = itemView.findViewById(R.id.txtAcceptStudentName);
@@ -32,14 +33,18 @@ public class AcceptStudentsVH extends RecyclerView.ViewHolder {
         this.imgProfilePic = itemView.findViewById(R.id.imgProfilePic);
     }
 
+    // Sets the student name to the view
     public void setTxtStudentName(String txtStudentName) {
         this.txtStudentName.setText(txtStudentName);
     }
 
+    //Sets the id number to the view
     public void setTxtIdNo(String txtIdNo) {
         this.txtIdNo.setText(txtIdNo);
     }
 
+
+    // Sets the profile picture of the students requesting to join the course
     public void setImgProfilePic(String idNumber) {
         Db.getDocumentsWith(Db.COLLECTION_USERS,
         Db.FIELD_IDNUMBER, idNumber).

@@ -45,7 +45,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
 
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Action edit course @ position: " + courseListVH.getAdapterPosition());
+
                 PopupMenu popupMenu = new PopupMenu(parent.getContext(), view);
                 popupMenu.getMenuInflater().inflate(R.menu.course_menu, popupMenu.getMenu());
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -55,6 +55,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
                         String sectionCode =  courseListVH.getTxtSectionCode().getText().toString();
                         Log.d(TAG,"course and sec: " + courseCode + " " + sectionCode);
                         switch (item.getItemId()) {
+
                             case R.id.editCourse:
                                 Log.d(TAG, "Action edit course @ position: " + courseListVH.getBindingAdapterPosition());
                                 Intent intent = new Intent(courseListVH.itemView.getContext(), EditCourseActivity.class);
@@ -62,14 +63,12 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
                                 intent.putExtra(Keys.INTENT_SECTIONCODE, sectionCode);
                                 courseListVH.itemView.getContext().startActivity(intent);
                                 return true;
+
                             case R.id.deleteCourse:
                                 Log.d(TAG, "Action delete course @ position: " + courseListVH.getBindingAdapterPosition());
                                 new AlertDialog.Builder(courseListVH.itemView.getContext())
                                         .setTitle("Delete course")
                                         .setMessage("Are you sure you want to delete this entry?")
-
-                                        // Specifying a listener allows you to take an action before dismissing the dialog.
-                                        // The dialog is automatically dismissed when a dialog button is clicked.
                                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int which) {
                                                 //deletes all info from courses
