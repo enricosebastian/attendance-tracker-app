@@ -16,7 +16,7 @@
     <string name="tvReenterPassword">Re-enter Password</string>
 
 
-    <string name="app_name">Attendance Tracker - Teacher</string>
+    <string name="app_name">Teachers - Attendance Tracker</string>
     <string name="btnCreateCourse">Create</string>
     <string name="btnCancelCreate">Cancel</string>
     <string name="btnExit">Exit</string>
