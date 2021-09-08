@@ -98,7 +98,8 @@ public class SearchCourseActivity extends AppCompatActivity {
     protected void searchQuery(String courseCode, String sectionCode) {
         Db.getDocumentsWith(Db.COLLECTION_COURSES,
         Db.FIELD_COURSECODE, courseCode,
-        Db.FIELD_SECTIONCODE, sectionCode).
+        Db.FIELD_SECTIONCODE, sectionCode,
+        Db.FIELD_ISPUBLISHED, true).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
