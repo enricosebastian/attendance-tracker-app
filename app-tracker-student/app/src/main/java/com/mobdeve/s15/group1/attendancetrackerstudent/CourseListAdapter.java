@@ -10,7 +10,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
     private static final String TAG = "ClasslistAdapter.java";
@@ -33,6 +39,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
         return courseListVH;
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull CourseListVH holder, int position) {
         Log.d(TAG, data.get(position).getCourseCode().toString());
@@ -44,15 +51,26 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent singleClassViewIntent = new Intent(holder.itemView.getContext(), SingleClassActivity.class);
 
-                singleClassViewIntent.putExtra(Keys.INTENT_COURSECODE, data.get(position).getCourseCode());
-                singleClassViewIntent.putExtra(Keys.INTENT_SECTIONCODE, data.get(position).getSectionCode());
-                singleClassViewIntent.putExtra(Keys.INTENT_COURSENAME, data.get(position).getCourseName());
-                holder.itemView.getContext().startActivity(singleClassViewIntent);
+                Db.getDocumentsWith(Db.COLLECTION_COURSES,
+                Db.FIELD_COURSECODE, data.get(position).getCourseCode(),
+                Db.FIELD_SECTIONCODE, data.get(position).getSectionCode()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<DocumentSnapshot> result = Db.getDocuments(task);
+
+                        Intent singleClassViewIntent = new Intent(holder.itemView.getContext(), SingleClassActivity.class);
+                        singleClassViewIntent.putExtra(Keys.INTENT_COURSECODE, result.get(0).getString(Db.FIELD_COURSECODE));
+                        singleClassViewIntent.putExtra(Keys.INTENT_SECTIONCODE, result.get(0).getString(Db.FIELD_SECTIONCODE));
+                        singleClassViewIntent.putExtra(Keys.INTENT_COURSENAME, result.get(0).getString(Db.FIELD_COURSENAME));
+
+                        holder.itemView.getContext().startActivity(singleClassViewIntent);
+                    }
+                });
             }
         });
     }
+
 
     @Override
     public int getItemCount() {
