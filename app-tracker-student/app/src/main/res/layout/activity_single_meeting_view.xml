@@ -4,61 +4,103 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SingleMeetingActivity">
+    tools:context=".SingleMeetingActivity"
+    tools:layout_editor_absoluteX="-25dp"
+    tools:layout_editor_absoluteY="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="5dp"
+        android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
-        android:id="@+id/topBar"
-        android:padding="5dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/txtClassTitle"
-            android:layout_width="wrap_content"
+            android:id="@+id/txtClassCodeTitle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="CLASSNAME - SECTION"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/roboto_bold"
+            android:text="COURSECODE - SECTION"
             android:textColor="#004D40"
-            android:textSize="20sp"
+            android:textSize="24sp"
             android:textStyle="bold"
-            tools:layout_editor_absoluteX="5dp"
-            tools:layout_editor_absoluteY="5dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtClassNameSubtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/roboto"
+            android:text="COURSENAME"
+            android:textColor="#00897B"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/dividerLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtClassCodeTitle" />
 
         <View
             android:id="@+id/dividerLine"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="10dp"
             android:background="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtClassTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/txtClassNameSubtitle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/txtDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:text="JULY 31, 2021 | M"
         android:textColor="#004D40"
-        android:textSize="25sp"
+        android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topBar" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <TextView
+        android:id="@+id/txtAttendanceStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/statusBar"
-        app:layout_constraintTop_toBottomOf="@id/txtDate"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/template_rounded_corner"
+        android:backgroundTint="@color/light_gray"
+        android:fontFamily="@font/roboto"
+        android:padding="5dp"
+        android:text="ATTENDANCE NOT RECORDED"
+        android:textColor="#004D40"
+        android:textStyle="bold"
+        android:textSize="16sp"
+
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="10dp"
-        >
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statusBar" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/statusBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtDate">
 
         <TextView
             android:id="@+id/txtStatusText"
@@ -66,56 +108,52 @@
             android:layout_height="wrap_content"
             android:text="STATUS: "
             android:textColor="#004D40"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="9dp" />
 
         <TextView
             android:id="@+id/txtStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:background="#66BB6A"
+            android:background="@drawable/template_rounded_corner"
             android:padding="5dp"
-            android:text="OPEN"
+            android:text="CLOSED"
             android:textColor="#FFFFFF"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/txtStatusText"
             app:layout_constraintStart_toEndOf="@id/txtStatusText"
             app:layout_constraintTop_toTopOf="@id/txtStatusText" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <EditText
-        android:id="@+id/etMeetingCode"
+        android:id="@+id/inputMeetingCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="105dp"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="97dp"
-        android:ems="10"
-        android:fontFamily="@font/roboto"
-        android:gravity="center"
-        android:inputType="textPersonName"
-        android:text="Enter meeting code"
-        android:textColor="@color/gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statusBar" />
+        android:hint="class code"
+        android:layout_marginTop="20dp"
+
+        app:layout_constraintStart_toStartOf="@id/txtAttendanceStatus"
+        app:layout_constraintEnd_toStartOf="@id/btnAttend"
+        app:layout_constraintTop_toBottomOf="@id/txtAttendanceStatus"
+        />
 
     <Button
-        android:id="@+id/btnTakeAttendance"
+        android:id="@+id/btnAttend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="162dp"
-        android:layout_marginTop="55dp"
-        android:layout_marginEnd="162dp"
-        android:fontFamily="@font/roboto"
-        android:text="Enter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etMeetingCode" />
+        android:text="attend"
+        android:layout_marginTop="20dp"
+
+        app:layout_constraintStart_toEndOf="@id/inputMeetingCode"
+        app:layout_constraintEnd_toEndOf="@id/txtAttendanceStatus"
+        app:layout_constraintTop_toBottomOf="@id/txtAttendanceStatus"
+        />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
