@@ -66,7 +66,7 @@
         android:id="@+id/txtDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="20dp"
         android:text="JULY 31, 2021 | M"
         android:textColor="#004D40"
         android:textSize="22sp"
@@ -97,7 +97,7 @@
         android:id="@+id/statusBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtDate">
@@ -134,26 +134,28 @@
         android:id="@+id/inputMeetingCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="class code"
-        android:layout_marginTop="20dp"
-
-        app:layout_constraintStart_toStartOf="@id/txtAttendanceStatus"
-        app:layout_constraintEnd_toStartOf="@id/btnAttend"
-        app:layout_constraintTop_toBottomOf="@id/txtAttendanceStatus"
-        />
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto"
+        android:hint="Meeting Code"
+        android:inputType="text"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtAttendanceStatus" />
 
     <Button
         android:id="@+id/btnAttend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:text="attend"
-        android:layout_marginTop="20dp"
-
-        app:layout_constraintStart_toEndOf="@id/inputMeetingCode"
-        app:layout_constraintEnd_toEndOf="@id/txtAttendanceStatus"
-        app:layout_constraintTop_toBottomOf="@id/txtAttendanceStatus"
-        />
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputMeetingCode"
+        app:layout_constraintVertical_bias="0.108" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

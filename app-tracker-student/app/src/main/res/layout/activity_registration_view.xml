@@ -17,6 +17,7 @@
         android:drawableStart="@drawable/ic_person"
         android:hint="first name"
         android:padding="10dp"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/techerRegistrationHeader" />
@@ -56,6 +57,7 @@
         android:drawableStart="@drawable/ic_email"
         android:hint="email"
         android:padding="10dp"
+        android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inputLastName" />
@@ -69,6 +71,7 @@
         android:drawableStart="@drawable/ic_person"
         android:hint="DLSU ID number (e.g. 11812345)"
         android:padding="10dp"
+        android:inputType="text|number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inputPassword" />
@@ -82,6 +85,7 @@
         android:drawableStart="@drawable/ic_person"
         android:hint="last name"
         android:padding="10dp"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inputFirstName" />

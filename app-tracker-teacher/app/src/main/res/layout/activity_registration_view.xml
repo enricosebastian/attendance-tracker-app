@@ -15,6 +15,7 @@
         android:layout_marginTop="40dp"
         android:background="@drawable/custom_input"
         android:drawableStart="@drawable/ic_person"
+        android:inputType="textPersonName"
         android:hint="first name"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,6 +50,7 @@
 
     <EditText
         android:id="@+id/inputEmail"
+        android:inputType="textEmailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -62,6 +64,7 @@
 
     <EditText
         android:id="@+id/inputIdNumber"
+        android:inputType="text|number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -75,6 +78,7 @@
 
     <EditText
         android:id="@+id/inputLastName"
+        android:inputType="textPersonName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"

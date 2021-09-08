@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:fontFamily="@font/roboto"
-        android:text="COURSE SEARCHER"
+        android:text="Course Searcher"
         android:textColor="#004D40"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -22,7 +22,7 @@
 
     <EditText
         android:id="@+id/inputCourseCode"
-
+        android:inputType="text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -36,7 +36,7 @@
 
     <EditText
         android:id="@+id/inputSectionCode"
-
+        android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"

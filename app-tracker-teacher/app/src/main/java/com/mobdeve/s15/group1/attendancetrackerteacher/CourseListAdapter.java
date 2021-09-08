@@ -121,7 +121,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
             courseConstraint.setBackgroundTintList(
             holder.itemView.getContext().
             getResources().
-            getColorStateList(R.color.dark_green));
+            getColorStateList(R.color.dark_greenv2));
         } else {
             courseConstraint.setBackgroundTintList(
             holder.itemView.getContext().
