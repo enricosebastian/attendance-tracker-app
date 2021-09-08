@@ -35,6 +35,8 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
 
     @Override
     public void onBindViewHolder(@NonNull CourseListVH holder, int position) {
+        Log.d(TAG, data.get(position).getCourseCode().toString());
+
         holder.setTxtClassCode(data.get(position).getCourseCode());
         holder.setTxtSectionCode(data.get(position).getSectionCode());
 

@@ -182,6 +182,28 @@ public class Db {
                 get();
     }
 
+    public static Task<QuerySnapshot> getDocumentsWith(String tableName,
+    String field, String value,
+    String sortingField, Query.Direction direction) {
+        return  getFirestoreInstance().
+                collection(tableName).
+                whereEqualTo(field,value).
+                orderBy(sortingField, direction).
+                get();
+    }
+
+    public static Task<QuerySnapshot> getDocumentsWith(String tableName,
+    String field, String value,
+    String sortingField1, Query.Direction direction1,
+    String sortingField2, Query.Direction direction2) {
+        return  getFirestoreInstance().
+                collection(tableName).
+                whereEqualTo(field,value).
+                orderBy(sortingField1, direction1).
+                orderBy(sortingField2, direction2).
+                get();
+    }
+
     public static Task<QuerySnapshot> getDocumentsWith(String tableName, String field1, String value1, String field2, String value2) {
         return  getFirestoreInstance().
                 collection(tableName).
@@ -190,7 +212,9 @@ public class Db {
                 get();
     }
 
-    public static Task<QuerySnapshot> getDocumentsWith(String tableName, String field1, String value1, String field2, Boolean value2) {
+    public static Task<QuerySnapshot> getDocumentsWith(String tableName,
+    String field1, String value1,
+    String field2, Boolean value2) {
         return  getFirestoreInstance().
                 collection(tableName).
                 whereEqualTo(field1, value1).
@@ -198,11 +222,22 @@ public class Db {
                 get();
     }
 
-    public static Task<QuerySnapshot> getDocumentsWith(
-            String tableName, String field1,
-            String value1, String field2,
-            String value2, String field3,
-            String value3) {
+    public static Task<QuerySnapshot> getDocumentsWith(String tableName,
+    String field1, String value1,
+    String field2, String value2,
+    String field3, String value3) {
+        return  getFirestoreInstance().
+                collection(tableName).
+                whereEqualTo(field1, value1).
+                whereEqualTo(field2, value2).
+                whereEqualTo(field3, value3).
+                get();
+    }
+
+    public static Task<QuerySnapshot> getDocumentsWith(String tableName,
+    String field1, String value1,
+    String field2, String value2,
+    String field3, Boolean value3) {
         return  getFirestoreInstance().
                 collection(tableName).
                 whereEqualTo(field1, value1).
@@ -226,16 +261,27 @@ public class Db {
                 get();
     }
 
-    public static Task<QuerySnapshot> getDocumentsWith(
-        String tableName, String field1,
-        String value1, String field2,
-        String value2, String sortingField,
-        Query.Direction direction) {
+    public static Task<QuerySnapshot> getDocumentsWith(String tableName,
+        String field1, String value1,
+        String field2, String value2,
+        String sortingField, Query.Direction direction) {
         return  getFirestoreInstance().
                 collection(tableName).
                 whereEqualTo(field1, value1).
                 whereEqualTo(field2, value2).
                 orderBy(sortingField, direction).
+                get();
+    }
+
+    public static Task<QuerySnapshot> getDocumentsWith(String tableName,
+    String field1, String value1, Query.Direction direction1,
+    String field2, String value2, Query.Direction direction2) {
+        return  getFirestoreInstance().
+                collection(tableName).
+                whereEqualTo(field1, value1).
+                orderBy(field1, direction1).
+                whereEqualTo(field2, value2).
+                orderBy(field2, direction2).
                 get();
     }
 
@@ -324,21 +370,21 @@ public class Db {
 //        return classListModels;
 //    }
 
-//    public static ArrayList<MeetingModel> toMeetingModel(List<DocumentSnapshot> result) {
-//        meetingModels.clear();
-//        for(DocumentSnapshot ds:result) {
-//            //(String courseCode, boolean isOpen, String meetingCode, Date meetingStart, String sectionCode, int studentCount)
-//            meetingModels.add(new MeetingModel(
-//                ds.getString(Db.FIELD_COURSECODE),
-//                ds.getBoolean(Db.FIELD_ISOPEN),
-//                ds.getString(Db.FIELD_MEETINGCODE),
-//                ds.getTimestamp(Db.FIELD_MEETINGSTART).toDate(), //this is how to convert timestamp to Date
-//                ds.getString(Db.FIELD_SECTIONCODE),
-//                Integer.parseInt(ds.get(Db.FIELD_STUDENTCOUNT).toString()))
-//            );
-//        }
-//        return meetingModels;
-//    }
+    public static ArrayList<MeetingModel> toMeetingModel(List<DocumentSnapshot> result) {
+        meetingModels.clear();
+        for(DocumentSnapshot ds:result) {
+            //(String courseCode, boolean isOpen, String meetingCode, Date meetingStart, String sectionCode, int studentCount)
+            meetingModels.add(new MeetingModel(
+                ds.getString(Db.FIELD_COURSECODE),
+                ds.getBoolean(Db.FIELD_ISOPEN),
+                ds.getString(Db.FIELD_MEETINGCODE),
+                ds.getTimestamp(Db.FIELD_MEETINGSTART).toDate(), //this is how to convert timestamp to Date
+                ds.getString(Db.FIELD_SECTIONCODE),
+                Integer.parseInt(ds.get(Db.FIELD_STUDENTCOUNT).toString()))
+            );
+        }
+        return meetingModels;
+    }
 
     public static ArrayList<StudentPresentListModel> toStudentPresentListModel(List<DocumentSnapshot> result) {
         studentPresentListModels.clear();

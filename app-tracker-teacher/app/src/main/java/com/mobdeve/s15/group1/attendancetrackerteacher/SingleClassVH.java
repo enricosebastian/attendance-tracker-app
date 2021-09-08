@@ -14,7 +14,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.List;
 
 public class SingleClassVH extends RecyclerView.ViewHolder {
-    private static final String TAG = "Class SingleClassViewHolder";
+    private static final String TAG = "SingleClassViewHolder";
     private TextView txtStudentsPresent, txtDate;
 
     public SingleClassVH(@NonNull View itemView) {

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
-    private static final String TAG = "Single Class Adapter";
+    private static final String TAG = "SingleClassAdapter";
 
     //store data here
     private ArrayList<MeetingModel> data;
@@ -42,9 +42,6 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
         View view = inflater.inflate(R.layout.layout_meeting, parent, false);
 
         SingleClassVH viewHolder = new SingleClassVH(view);
-
-        int pos = viewHolder.getAdapterPosition();
-        //if(data.get(pos).getClassKey() == data.get(pos).
 
         return viewHolder;
     }

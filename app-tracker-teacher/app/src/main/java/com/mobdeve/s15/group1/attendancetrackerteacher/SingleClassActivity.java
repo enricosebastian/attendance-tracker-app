@@ -137,8 +137,8 @@ public class SingleClassActivity extends AppCompatActivity {
     }
 
 
-    protected void onStart() {
-        super.onStart();
-        initializeViews();
-    }
+//    protected void onStart() {
+//        super.onStart();
+//        initializeViews();
+//    }
 }

@@ -19,7 +19,7 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SingleMeetingView"
+            android:name=".SingleMeetingActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
