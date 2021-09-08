@@ -94,13 +94,9 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
                             holder.itemView.getContext().startActivity(singleClassViewIntent);
                         }
                     });
-
                 }
             }
         });
-
-
-
     }
 
 
