@@ -105,7 +105,7 @@
             android:fontFamily="@font/roboto_bold"
             android:text="JOHN DOE"
             android:textColor="#004D40"
-            android:textSize="24sp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/ivProfileSettings"
             app:layout_constraintStart_toEndOf="@+id/circular"
             app:layout_constraintTop_toTopOf="parent" />
@@ -129,19 +129,19 @@
             android:id="@+id/ivProfileSettings"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="23dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="28dp"
+            android:layout_marginBottom="23dp"
             android:adjustViewBounds="true"
             android:background="@null"
+            android:onClick="showPopup"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvName"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/ic_more_settings_foreground"
-            android:onClick="showPopup"
-            />
+            app:srcCompat="@drawable/ic_more_settings_foreground" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -155,6 +155,7 @@
         tools:layout_editor_absoluteX="0dp" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="10dp"
@@ -162,16 +163,15 @@
         android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.545"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvHCoursesHeader"
-        android:id="@+id/refreshLayout">
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="0dp">
-        </androidx.recyclerview.widget.RecyclerView>
+            android:layout_height="0dp"></androidx.recyclerview.widget.RecyclerView>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
