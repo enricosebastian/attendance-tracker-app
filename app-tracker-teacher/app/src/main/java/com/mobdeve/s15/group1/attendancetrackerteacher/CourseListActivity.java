@@ -133,7 +133,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         }
     }
 
-    //Initialize views
+    //Initialize views of the courses handled by the user
     protected void initializeViews() {
         Db.getDocumentsWith(Db.COLLECTION_USERS,
                 Db.FIELD_EMAIL, email).
@@ -167,6 +167,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
                     }
                 });
 
+        //Gets the courses handled by the user
         Db.getDocumentsWith(Db.COLLECTION_COURSES,
                 Db.FIELD_HANDLEDBY, email).
                 addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -184,8 +185,9 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
                         recyclerView.setAdapter(courseListAdapter);
                     }
                 });
-    }//initializes views
+    }
 
+    // Initializes views onResume of the app
     protected void onResume() {
         super.onResume();
         initializeViews();
