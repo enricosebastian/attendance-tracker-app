@@ -139,7 +139,6 @@ public class SearchCourseActivity extends AppCompatActivity {
                             }
                         }
                     });
-
                 }
 
             }

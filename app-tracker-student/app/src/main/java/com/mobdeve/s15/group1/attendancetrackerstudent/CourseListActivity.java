@@ -106,7 +106,9 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(getApplicationContext(), "refresh bitch", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "refresh bitch", Toast.LENGTH_SHORT).show(); //REMOVE AFTER, YOU BASTARD LMFAO
+                initializeViews();
+//                courseListAdapter.notifyDataSetChanged();
                 refreshLayout.setRefreshing(false);
             }
         });
@@ -200,6 +202,10 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
 
             }
         });
+    }
+
+    protected void initializeRecyclerView() {
+
     }
 
     protected void onResume() {

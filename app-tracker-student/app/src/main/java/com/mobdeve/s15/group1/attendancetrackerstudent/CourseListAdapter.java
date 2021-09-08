@@ -1,6 +1,8 @@
 package com.mobdeve.s15.group1.attendancetrackerstudent;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -41,34 +44,63 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
 
 
     @Override
-    public void onBindViewHolder(@NonNull CourseListVH holder, int position) {
+    public void onBindViewHolder(@NonNull CourseListVH holder, @SuppressLint("RecyclerView") int position) {
         Log.d(TAG, data.get(position).getCourseCode().toString());
+
+        ConstraintLayout courseConstraint = holder.itemView.findViewById(R.id.courseConstraint);
 
         holder.setTxtClassCode(data.get(position).getCourseCode());
         holder.setTxtSectionCode(data.get(position).getSectionCode());
+
+        Db.getDocumentsWith(Db.COLLECTION_COURSES,
+        Db.FIELD_COURSECODE, data.get(position).getCourseCode(),
+        Db.FIELD_SECTIONCODE, data.get(position).getSectionCode()).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<DocumentSnapshot> result = Db.getDocuments(task);
+
+                if(result.get(0).getBoolean(Db.FIELD_ISPUBLISHED)) {
+                    courseConstraint.setBackgroundTintList(holder.itemView.getContext().getResources().getColorStateList(R.color.dark_green));
+                } else {
+                    courseConstraint.setBackgroundTintList(holder.itemView.getContext().getResources().getColorStateList(R.color.gray));
+                }
+
+            }
+        });
+
 
         //When an item is clicked
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                
+                if(courseConstraint.getBackgroundTintList().equals(holder.itemView.getContext().getResources().getColorStateList(R.color.gray))) {
+                    Toast.makeText(holder.itemView.getContext(), "Course is still unpublished", Toast.LENGTH_SHORT).show();
+                } else {
 
-                Db.getDocumentsWith(Db.COLLECTION_COURSES,
-                Db.FIELD_COURSECODE, data.get(position).getCourseCode(),
-                Db.FIELD_SECTIONCODE, data.get(position).getSectionCode()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        List<DocumentSnapshot> result = Db.getDocuments(task);
+                    Db.getDocumentsWith(Db.COLLECTION_COURSES,
+                    Db.FIELD_COURSECODE, data.get(position).getCourseCode(),
+                    Db.FIELD_SECTIONCODE, data.get(position).getSectionCode()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            List<DocumentSnapshot> result = Db.getDocuments(task);
 
-                        Intent singleClassViewIntent = new Intent(holder.itemView.getContext(), SingleClassActivity.class);
-                        singleClassViewIntent.putExtra(Keys.INTENT_COURSECODE, result.get(0).getString(Db.FIELD_COURSECODE));
-                        singleClassViewIntent.putExtra(Keys.INTENT_SECTIONCODE, result.get(0).getString(Db.FIELD_SECTIONCODE));
-                        singleClassViewIntent.putExtra(Keys.INTENT_COURSENAME, result.get(0).getString(Db.FIELD_COURSENAME));
+                            Intent singleClassViewIntent = new Intent(holder.itemView.getContext(), SingleClassActivity.class);
+                            singleClassViewIntent.putExtra(Keys.INTENT_COURSECODE, result.get(0).getString(Db.FIELD_COURSECODE));
+                            singleClassViewIntent.putExtra(Keys.INTENT_SECTIONCODE, result.get(0).getString(Db.FIELD_SECTIONCODE));
+                            singleClassViewIntent.putExtra(Keys.INTENT_COURSENAME, result.get(0).getString(Db.FIELD_COURSENAME));
 
-                        holder.itemView.getContext().startActivity(singleClassViewIntent);
-                    }
-                });
+                            holder.itemView.getContext().startActivity(singleClassViewIntent);
+                        }
+                    });
+
+                }
             }
         });
+
+
+
     }
 
 
