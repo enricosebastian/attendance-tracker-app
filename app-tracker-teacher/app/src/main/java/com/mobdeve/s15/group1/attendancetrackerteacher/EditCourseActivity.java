@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +34,7 @@ public class EditCourseActivity extends AppCompatActivity {
     private Button btnCancelEdit, btnSaveEdit;
     private TextView txtEditACourseHeader;
     private EditText etEditCourse;
+    private Switch switchIsPublished;
 
     private String courseCode, sectionCode;
 
@@ -48,6 +51,7 @@ public class EditCourseActivity extends AppCompatActivity {
         this.btnSaveEdit            = findViewById(R.id.btnSaveEdit);
         this.txtEditACourseHeader   = findViewById(R.id.txtEditACourseHeader);
         this.etEditCourse           = findViewById(R.id.etEditCourse);
+        this.switchIsPublished      = findViewById(R.id.switchIsPublished);
 
         txtEditACourseHeader.setText("EDIT "+courseCode+" - "+sectionCode);
 
@@ -76,6 +80,7 @@ public class EditCourseActivity extends AppCompatActivity {
         });
     }
 
+
     protected void updateCourseName(String courseName) {
         Db.getDocumentsWith(Db.COLLECTION_COURSES,
         Db.FIELD_COURSECODE, courseCode,
@@ -84,17 +89,19 @@ public class EditCourseActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 String documentId = Db.getIdFromTask(task);
+
                 Db.getCollection(Db.COLLECTION_COURSES).
                 document(documentId).
-                update(Db.FIELD_COURSENAME, courseName).
+                update(Db.FIELD_COURSENAME, courseName, Db.FIELD_ISPUBLISHED, switchIsPublished.isChecked()).
                 addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Log.d(TAG,"Successfully edited course name");
-                        Toast.makeText(EditCourseActivity.this, "Course name successfully edited", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG,"Successfully edited course");
+                        Toast.makeText(EditCourseActivity.this, "Course successfully edited", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 });
+
             }
         });
     }
@@ -108,6 +115,7 @@ public class EditCourseActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<DocumentSnapshot> result = Db.getDocuments(task);
                 etEditCourse.setText(result.get(0).getString(Db.FIELD_COURSENAME));
+                switchIsPublished.setChecked(result.get(0).getBoolean(Db.FIELD_ISPUBLISHED));
             }
         });
     }
