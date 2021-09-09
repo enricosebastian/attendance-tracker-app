@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,7 +42,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText inputFirstName, inputLastname;
     private Button btnSelectImage, btnSaveEditProfile, btnCancelEditProfile;
     private ImageView img_profilePic; //DAT NAMING INCONSISTENCY THO
-
+    private ProgressDialog progressDialog;
     private String email;
 
     private ActivityResultLauncher<Intent> myActivityResultLauncher = registerForActivityResult(
@@ -82,6 +83,9 @@ public class EditProfileActivity extends AppCompatActivity {
         this.btnSaveEditProfile     = findViewById(R.id.btnSaveEditProfile);
         this.btnCancelEditProfile   = findViewById(R.id.btnCancelEditProfile);
 
+        //initialize progress dialog so it can be called anywhere in the class
+        this.progressDialog = new ProgressDialog(EditProfileActivity.this);
+
         initializeViews(email);
 
         btnSelectImage.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +98,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        //When user cancels editing the profile
         btnCancelEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,19 +106,23 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        //When user saves the things
         btnSaveEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String firstName = inputFirstName.getText().toString();
                 String lastName = inputLastname.getText().toString();
                 updateAccount(firstName, lastName);
-                Toast.makeText(EditProfileActivity.this, "Changes saved!", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    //Initializes the views of the edit profile activity
     protected void initializeViews(String email) {
+        this.progressDialog.setMessage("Loading...");
+        this.progressDialog.show();
+        this.progressDialog.setCanceledOnTouchOutside(false);
+
         Db.getDocumentsWith(Db.COLLECTION_USERS,
             Db.FIELD_EMAIL, email).
             addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -133,8 +142,12 @@ public class EditProfileActivity extends AppCompatActivity {
                             if(task.isSuccessful()) {
                                 Uri imgUri = task.getResult();
                                 Picasso.get().load(imgUri).into(img_profilePic);
+                                progressDialog.setCanceledOnTouchOutside(true);
+                                progressDialog.dismiss();
                             } else {
                                 Log.d(TAG,"No profile image found. Switching to default");
+                                progressDialog.setCanceledOnTouchOutside(true);
+                                progressDialog.dismiss();
                             }
                         }
                     });
@@ -144,6 +157,9 @@ public class EditProfileActivity extends AppCompatActivity {
 
     //Updates the account
     protected void updateAccount(String firstName, String lastName) {
+        this.progressDialog.setMessage("Updating information...");
+        this.progressDialog.show();
+        this.progressDialog.setCanceledOnTouchOutside(false);
         Db.getDocumentsWith(Db.COLLECTION_USERS,
             Db.EMAIL_FIELD, email).
             addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -159,22 +175,35 @@ public class EditProfileActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<List<Object>> task) {
                                 Log.d(TAG,"Upload was successfully added to the drive");
-                                finish();
+                                Db.getCollection(Db.COLLECTION_USERS).document(documentId).
+                                        update(Db.FIELD_FIRSTNAME, firstName, Db.FIELD_LASTNAME, lastName).
+                                        addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                Log.d(TAG, "Successfully updated db");
+                                                progressDialog.setCanceledOnTouchOutside(true);
+                                                progressDialog.dismiss();
+                                                Toast.makeText(EditProfileActivity.this, "Changes saved!", Toast.LENGTH_SHORT).show();
+                                                finish();
+                                            }
+                                        });
                             }
                         });
+                    } else { //if user does not edit their profile picture
+                        Db.getCollection(Db.COLLECTION_USERS).document(documentId).
+                                update(Db.FIELD_FIRSTNAME, firstName, Db.FIELD_LASTNAME, lastName).
+                                addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        Log.d(TAG, "Successfully updated db");
+                                        progressDialog.setCanceledOnTouchOutside(true);
+                                        progressDialog.dismiss();
+                                        Toast.makeText(EditProfileActivity.this, "Changes saved!", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                });
                     }
-
-                    Db.getCollection(Db.COLLECTION_USERS).document(documentId).
-                    update(Db.FIELD_FIRSTNAME, firstName, Db.FIELD_LASTNAME, lastName).
-                    addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Log.d(TAG, "Successfully updated db");
-                        }
-                    });
-
                 }
             });
     }
-
 }

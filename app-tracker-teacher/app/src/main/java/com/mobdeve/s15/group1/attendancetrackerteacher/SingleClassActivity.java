@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -49,6 +50,7 @@ public class SingleClassActivity extends AppCompatActivity {
                                 sectionCode,
                                 courseName;
     private SwipeRefreshLayout  refreshLayout;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,8 @@ public class SingleClassActivity extends AppCompatActivity {
         this.btnAcceptStudents      = findViewById(R.id.btnAcceptStudents);
         this.refreshLayout          = findViewById(R.id.refreshLayout);
 
+        //initialize progress dialog so it can be called anywhere in the class
+        this.progressDialog = new ProgressDialog(SingleClassActivity.this);
 
         // Clicking the create button brings the user to the create meeting activity
         txtCreateMeeting.setOnClickListener(new View.OnClickListener() {
@@ -108,12 +112,15 @@ public class SingleClassActivity extends AppCompatActivity {
         });
     }
 
-
+    //Initializes the views of the courses handled by the user
     protected void initializeViews() {
+        //Show Progress bar
+        this.progressDialog.setMessage("Loading...");
+        this.progressDialog.show();
+        this.progressDialog.setCanceledOnTouchOutside(false);
 
         txtClassCodeTitle.setText(courseCode + " - " + sectionCode);
         txtClassNameSubtitle.setText(courseName.toUpperCase());
-
         Db.getDocumentsWith(Db.COLLECTION_CLASSLIST,
         Db.FIELD_COURSECODE, courseCode,
         Db.FIELD_SECTIONCODE, sectionCode).
@@ -122,13 +129,12 @@ public class SingleClassActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<DocumentSnapshot> results = Db.getDocuments(task);
                 txtStudentCount.setText(results.size()+" students");
+                initializeRecyclerView();
             }
         });
-
-        initializeRecyclerView();
-
     }
 
+    // Initializes the recycler view of the single class activity
     protected void initializeRecyclerView() {
         Db.getDocumentsWith(Db.COLLECTION_MEETINGS,
         Db.FIELD_COURSECODE, courseCode,
@@ -145,9 +151,12 @@ public class SingleClassActivity extends AppCompatActivity {
                 singleClassRecyclerView     = findViewById(R.id.SingleClassRecyclerView);
                 singleClassLayoutManager    = new LinearLayoutManager(getApplicationContext());
                 singleClassAdapter          = new SingleClassAdapter(meetingModels);
-
                 singleClassRecyclerView.setLayoutManager(singleClassLayoutManager);
                 singleClassRecyclerView.setAdapter(singleClassAdapter);
+
+                //When
+                progressDialog.setCanceledOnTouchOutside(true);
+                progressDialog.dismiss();
             }
         });
     }

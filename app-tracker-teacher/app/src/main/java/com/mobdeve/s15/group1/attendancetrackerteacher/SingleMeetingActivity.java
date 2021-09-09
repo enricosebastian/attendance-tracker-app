@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -59,7 +60,7 @@ public class SingleMeetingActivity extends AppCompatActivity {
                                 courseName;
     private boolean             isOpen; //suggestion: what happens if you change boolean (primitive) to Boolean instead?
     private Date                meetingStart;
-
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,10 @@ public class SingleMeetingActivity extends AppCompatActivity {
         this.isOpen         = getIntent.getBooleanExtra(Keys.INTENT_ISOPEN, false);
         String stringDate   = getIntent.getStringExtra(Keys.INTENT_MEETINGSTART);
 
-        Log.d(TAG, meetingCode); //happy birthday
+        Log.d(TAG, meetingCode);
+
+        //initialize progress dialog so it can be called anywhere in the class
+        this.progressDialog = new ProgressDialog(SingleMeetingActivity.this);
 
         try {
             meetingStart = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss").parse(stringDate);
@@ -94,6 +98,7 @@ public class SingleMeetingActivity extends AppCompatActivity {
         this.btnDelete                  = findViewById(R.id.btnDelete);
         this.refreshLayout              = findViewById(R.id.refreshLayout);
 
+        //When user refreshes the layout
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -102,6 +107,7 @@ public class SingleMeetingActivity extends AppCompatActivity {
             }
         });
 
+        //When the user wants to delete the meeting
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,6 +115,7 @@ public class SingleMeetingActivity extends AppCompatActivity {
             }
         });
 
+        // If the status was clicked by the user
         txtStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,6 +168,10 @@ public class SingleMeetingActivity extends AppCompatActivity {
 
     // This method initializes the view of the activity
     protected void initializeViews() {
+        //Show Progress bar
+        this.progressDialog.setMessage("Loading...");
+        this.progressDialog.show();
+        this.progressDialog.setCanceledOnTouchOutside(false);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy | E");
         txtDate.setText(dateFormat.format(meetingStart));
@@ -177,25 +188,22 @@ public class SingleMeetingActivity extends AppCompatActivity {
                 String classNameSubtitle = courseName;
                 txtClassTitle.setText(classCodeTitle);
                 txtClassNameSubtitle.setText(classNameSubtitle);
+                txtMeetingCode.setText(meetingCode);
 
+                // Checks the status adjusts the background based on the current status
+                if(isOpen) {
+                    txtStatus.setText("OPEN");
+                    txtStatus.setBackgroundTintList(getResources().getColorStateList(R.color.light_green));
+                } else {
+                    txtStatus.setText("CLOSED");
+                    txtStatus.setBackgroundTintList(getResources().getColorStateList(R.color.red_light));
+                }
+                initializeRecyclerView();
             }
         });
-
-        txtMeetingCode.setText(meetingCode);
-
-        // Checks the status adjusts the background based on the current status
-        if(isOpen) {
-            txtStatus.setText("OPEN");
-            txtStatus.setBackgroundTintList(this.getResources().getColorStateList(R.color.light_green));
-        } else {
-            txtStatus.setText("CLOSED");
-            txtStatus.setBackgroundTintList(this.getResources().getColorStateList(R.color.red_light));
-        }
-
-        initializeRecyclerView();
-
     }
 
+    // Initializes the recycler view of the single meeting activity
     protected void initializeRecyclerView() {
         Db.getDocumentsWith(Db.COLLECTION_MEETINGHISTORY,
         Db.FIELD_MEETINGCODE, meetingCode).
@@ -204,15 +212,17 @@ public class SingleMeetingActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<DocumentSnapshot> result = Db.getDocuments(task);
                 studentPresentListModels = Db.toStudentPresentListModel(result);
-
                 studentListLayoutManager = new LinearLayoutManager(getApplicationContext());
                 studentListRecyclerView.setLayoutManager(studentListLayoutManager);
                 singleMeetingAdapter = new SingleMeetingAdapter(studentPresentListModels);
                 studentListRecyclerView.setAdapter(singleMeetingAdapter);
+                progressDialog.setCanceledOnTouchOutside(true);
+                progressDialog.dismiss();
             }
         });
     }
 
+    // When user deletes a meeting
     public void deleteMeeting(String tableName, String field, String value) {
         Db.getDocumentsWith(tableName, field, value).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -238,6 +248,7 @@ public class SingleMeetingActivity extends AppCompatActivity {
         });
     }
 
+    //Initialize views on resume
     protected void onResume() {
         super.onResume();
         initializeViews();

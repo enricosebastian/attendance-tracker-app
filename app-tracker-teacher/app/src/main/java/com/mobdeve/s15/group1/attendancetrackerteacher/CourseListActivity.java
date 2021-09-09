@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -57,6 +58,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
     private ImageView               imgProfilePic;
     private SwipeRefreshLayout      refreshLayout;
 
+    private ProgressDialog progressDialog;
 
     // What is being returned after the adding another course
     private ActivityResultLauncher<Intent> createCourseActivityResultLauncher = registerForActivityResult(
@@ -89,6 +91,9 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         this.imgProfilePic  = findViewById(R.id.img_profilePic);
         this.refreshLayout  = findViewById(R.id.refreshLayout);
 
+        //initialize progress dialog so it can be called anywhere in the class
+        this.progressDialog = new ProgressDialog(CourseListActivity.this);
+
         // When user clicks on add course button
         btnAddCourse.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +103,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
             }
         });
 
+        // When user refreshes the page
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -141,6 +147,9 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
 
     //Initialize views of the courses handled by the user
     protected void initializeViews() {
+        this.progressDialog.setMessage("Loading...");
+        this.progressDialog.show();
+        this.progressDialog.setCanceledOnTouchOutside(false);
         Db.getDocumentsWith(Db.COLLECTION_USERS,
         Db.FIELD_EMAIL, email).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -157,27 +166,31 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
                 txtName.setText(firstName+" "+lastName);
                 txtIdNumber.setText(idNumber);
 
-
+                // To get user's profile picture
                 String documentId = Db.getIdFromTask(task);
                 Db.getProfilePic(documentId).addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         if(task.isSuccessful()) {
+                            Log.d(TAG, "Task successful.");
                             Uri imgUri = task.getResult();
                             Picasso.get().load(imgUri).into(imgProfilePic);
+                            initializeRecyclerView(); //recycler view gets initialized when task is complete
                         } else {
                             Log.d(TAG,"No profile image found. Switching to default");
+                            initializeRecyclerView(); //recycler view gets initialized when task is complete
                         }
                     }
                 });
+
             }
         });
-
-        initializeRecyclerView();
-
     }
 
+    // Initializes the recycler view of course list activity
     protected void initializeRecyclerView() {
+        Log.d(TAG, "Initializing recycling view.");
+
         //Gets the courses handled by the user
         Db.getDocumentsWith(Db.COLLECTION_COURSES,
         Db.FIELD_HANDLEDBY, email).
@@ -185,15 +198,17 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 courseModels.clear(); //always clear when initializing
-
                 courseModels.addAll(Db.toClassModel(Db.getDocuments(task)));
                 Log.d(TAG,"classModel size is "+ courseModels.size());
-
                 courseListRecyclerView = findViewById(R.id.recyclerView);
                 courseListLayoutManager = new LinearLayoutManager(getApplicationContext());
                 courseListRecyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
                 courseListAdapter = new CourseListAdapter(courseModels);
                 courseListRecyclerView.setAdapter(courseListAdapter);
+
+                //Dismiss the loading dialog once everything is finished
+                progressDialog.setCanceledOnTouchOutside(true);
+                progressDialog.dismiss();
             }
         });
     }
@@ -204,5 +219,4 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         initializeViews();
         Log.d(TAG,"we are in on resume");
     }
-
 }
