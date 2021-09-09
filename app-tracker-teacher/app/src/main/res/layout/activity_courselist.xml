@@ -105,7 +105,7 @@
             android:fontFamily="@font/roboto_bold"
             android:text="NAME"
             android:textColor="#004D40"
-            android:textSize="24sp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/ivProfileSettings"
             app:layout_constraintStart_toEndOf="@+id/circular"
             app:layout_constraintTop_toTopOf="parent" />
