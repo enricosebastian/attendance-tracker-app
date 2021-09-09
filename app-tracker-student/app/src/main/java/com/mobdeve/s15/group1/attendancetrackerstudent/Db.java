@@ -154,15 +154,6 @@ public class Db {
         return storageReferenceInstance;
     }
 
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////NEW AS OF 2021, 09, 04
     public static Task<QuerySnapshot> getTable(String tableName) {
         return getFirestoreInstance().collection(tableName).get();
     }
@@ -340,33 +331,6 @@ public class Db {
         return courseModels;
     }
 
-//    public static ArrayList<CourseRequestModel> toCourseRequestModel(List<DocumentSnapshot> result) {
-//        courseRequestModels.clear();
-//        for(DocumentSnapshot ds:result) {
-//            courseRequestModels.add(new CourseRequestModel(
-//                    ds.getString(Db.FIELD_COURSECODE),
-//                    ds.getString(Db.FIELD_FIRSTNAME),
-//                    ds.getString(Db.FIELD_IDNUMBER),
-//                    ds.getString(FIELD_LASTNAME),
-//                    ds.getString(FIELD_SECTIONCODE)
-//            ));
-//        }
-//        return courseRequestModels;
-//    }
-
-//    public static ArrayList<ClassListModel> toClassListModel(List<DocumentSnapshot> result) {
-//        classListModels.clear();
-//        for(DocumentSnapshot ds:result) {
-//            classListModels.add(new ClassListModel(
-//                    ds.getString(Db.FIELD_COURSECODE),
-//                    ds.getString(Db.FIELD_EMAIL),
-//                    ds.getString(Db.FIELD_IDNUMBER),
-//                    ds.getString(FIELD_SECTIONCODE)
-//            ));
-//        }
-//        return classListModels;
-//    }
-
     public static ArrayList<MeetingModel> toMeetingModel(List<DocumentSnapshot> result) {
         meetingModels.clear();
         for(DocumentSnapshot ds:result) {
@@ -480,141 +444,6 @@ public class Db {
                 }
             }
         });
-    }
-
-
-    ////////////////////NEW AS OF 2021, 09, 04/////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    //gets the entire user collection
-    public static CollectionReference getUsersCollectionReference() {
-        if(usersRef == null) {
-            usersRef = getFirestoreInstance().collection(USERS_COLLECTION);
-        }
-        return usersRef;
-    }
-
-    //gets the entire MeetingHistory collection
-    public static CollectionReference getMeetingHistoryCollection() {
-        if(meetingCollection == null) {
-            meetingCollection = getFirestoreInstance().collection(MEETINGHISTORY_COLLECTION);
-        }
-        return meetingCollection;
-    }
-
-    //gets the entire course collection
-    public static CollectionReference getCoursesCollectionReference() {
-        if(coursesRef == null) {
-            coursesRef = getFirestoreInstance().collection(COURSES_COLLECTION);
-        }
-        return coursesRef;
-    }
-
-    //gets the entire meeting collection
-    public static CollectionReference getMeetingsCollectionReference() {
-        if(meetingsRef == null) {
-            meetingsRef = getFirestoreInstance().collection(MEETINGS_COLLECTION);
-        }
-        return meetingsRef;
-    }
-
-    public static DocumentReference getDocumentReference(String stringRef) {
-        return getFirestoreInstance().document(stringRef);
-    }
-
-    //returns null as of now
-    //searches for a single user
-    public static Task<QuerySnapshot> getUserInfoFromEmail(String emailRef) {
-        return getUsersCollectionReference().whereEqualTo(EMAIL_FIELD, emailRef).get();
-    }
-
-    //returns null as of now
-    //searches for a single class
-    public static DocumentSnapshot getSingleClassData(String stringRef) {
-        getUsersCollectionReference().whereEqualTo(Db.COURSECODE_FIELD, stringRef) //this is a test
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                QuerySnapshot querySnapshot = task.getResult();
-                List<DocumentSnapshot> result = querySnapshot.getDocuments();
-                classInfo = result.get(0);
-            }
-        });
-        return classInfo; //returns null as of now
-    }
-
-    public static DocumentSnapshot getFirstResult(Task<QuerySnapshot> task) {
-        if(userInfo == null) {
-            QuerySnapshot querySnapshot = task.getResult();
-            List<DocumentSnapshot> result = querySnapshot.getDocuments();
-            userInfo = result.get(0);
-        }
-        return userInfo;
-    }
-
-    public static Task<QuerySnapshot> getStudentsInMeeting(String meetingCode) {
-        return getMeetingHistoryCollection().whereEqualTo(MEETINGCODE_FIELD, meetingCode).get();
-    }
-
-    public static List<DocumentSnapshot> toList(Task<QuerySnapshot> task) {
-        QuerySnapshot querySnapshot = task.getResult();
-        List<DocumentSnapshot> result = querySnapshot.getDocuments();
-        resultList = result;
-        return resultList;
-    }
-
-    public static void updateSingleStudent(String entry, String query, UserModel initialInfo) {
-        Db.getUsersCollectionReference()
-            .whereEqualTo(entry, query)
-            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    DocumentSnapshot ds = getFirstResult(task);
-                    if(initialInfo.getEmail().equals("")) initialInfo.setEmail(ds.getString("email"));
-                    if(initialInfo.getPassword().equals("")) initialInfo.setPassword(ds.getString("password"));
-                    if(initialInfo.getFirstName().equals("")) initialInfo.setFirstName(ds.getString("firstName"));
-                    if(initialInfo.getLastName().equals("")) initialInfo.setLastName(ds.getString("lastName"));
-                    if(initialInfo.getIdNumber().equals("")) initialInfo.setIdNumber(ds.getString("idNumber"));
-                    if(initialInfo.getUserType().equals("")) initialInfo.setUserType(ds.getString("userType"));
-
-
-                    String id = Db.getIdFromTask(task);
-                    Db.getUsersCollectionReference()
-                        .document(id)
-                        .set(initialInfo)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Log.d("main","Single student document updated successfully.");
-                            }
-                        });
-                }
-            });
-    }
-
-    public static Query findDocuments(String collection, String fieldName, String fieldValue) {
-        return getFirestoreInstance()
-                .collection(collection)
-                .whereEqualTo(fieldName,fieldValue);
-    }
-
-    public static Query findDocumentsWithTwoParameters(String collection, String fieldName1, String fieldValue1, String fieldName2, String fieldValue2) {
-        return getFirestoreInstance()
-            .collection(collection)
-            .whereEqualTo(fieldName1,fieldValue1)
-            .whereEqualTo(fieldName2, fieldValue2);
-    }
-
-    public static Task<Uri> getImageUri(String username) {
-        return getStorageReferenceInstance().child(username).getDownloadUrl();
     }
 
 }

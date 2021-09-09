@@ -45,13 +45,13 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
 
     @Override
     public void onBindViewHolder(@NonNull CourseListVH holder, @SuppressLint("RecyclerView") int position) {
-        Log.d(TAG, data.get(position).getCourseCode().toString());
 
-        ConstraintLayout courseConstraint = holder.itemView.findViewById(R.id.courseConstraint);
-
+        //sets view holder data
         holder.setTxtClassCode(data.get(position).getCourseCode());
         holder.setTxtSectionCode(data.get(position).getSectionCode());
 
+        //sets constraint layout color, depending if class is published or not
+        ConstraintLayout courseConstraint = holder.itemView.findViewById(R.id.courseConstraint);
         Db.getDocumentsWith(Db.COLLECTION_COURSES,
         Db.FIELD_COURSECODE, data.get(position).getCourseCode(),
         Db.FIELD_SECTIONCODE, data.get(position).getSectionCode()).
@@ -74,11 +74,9 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
                 if(courseConstraint.getBackgroundTintList().equals(holder.itemView.getContext().getResources().getColorStateList(R.color.gray))) {
                     Toast.makeText(holder.itemView.getContext(), "Course is still unpublished", Toast.LENGTH_SHORT).show();
                 } else {
-
                     Db.getDocumentsWith(Db.COLLECTION_COURSES,
                     Db.FIELD_COURSECODE, data.get(position).getCourseCode(),
                     Db.FIELD_SECTIONCODE, data.get(position).getSectionCode()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
