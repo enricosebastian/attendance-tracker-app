@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,7 +31,7 @@ public class AcceptStudentsActivity extends AppCompatActivity {
     private AcceptStudentsAdapter acceptStudentsAdapter;
 
     private String courseCode, sectionCode;
-
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +42,18 @@ public class AcceptStudentsActivity extends AppCompatActivity {
         this.sectionCode = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
         this.courseCode = getIntent.getStringExtra(Keys.INTENT_COURSECODE);
 
+        //initialize progress dialog so it can be called anywhere in the class
+        this.progressDialog = new ProgressDialog(AcceptStudentsActivity.this);
+
         initializeViews();
     }
 
     protected void initializeViews() {
+        //Show Progress bar
+        this.progressDialog.setMessage("Loading...");
+        this.progressDialog.show();
+        this.progressDialog.setCanceledOnTouchOutside(false);
+
         Db.getDocumentsWith(Db.COLLECTION_COURSEREQUEST,
         Db.FIELD_COURSECODE, courseCode,
         Db.FIELD_SECTIONCODE, sectionCode).
@@ -58,6 +68,10 @@ public class AcceptStudentsActivity extends AppCompatActivity {
                 acceptStudentsRecyclerView.setLayoutManager(acceptStudentsLayoutManager);
                 acceptStudentsAdapter = new AcceptStudentsAdapter(courseRequestModels);
                 acceptStudentsRecyclerView.setAdapter(acceptStudentsAdapter);
+
+                //Should be displayed after setting up recycler view
+                progressDialog.setCanceledOnTouchOutside(true);
+                progressDialog.dismiss();
             }
         });
     }
