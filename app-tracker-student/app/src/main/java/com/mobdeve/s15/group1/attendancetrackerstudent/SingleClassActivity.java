@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -41,48 +42,57 @@ public class SingleClassActivity extends AppCompatActivity {
     //widget initialization
     TextView txtClassCodeTitle, txtClassNameSubtitle;
     private String courseCode, sectionCode, courseName;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_class);
 
-        Intent getIntent        = getIntent();
-        this.courseCode         = getIntent.getStringExtra(Keys.INTENT_COURSECODE);
-        this.sectionCode        = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
-        this.courseName         = getIntent.getStringExtra(Keys.INTENT_COURSENAME);
+        Intent getIntent = getIntent();
+        this.courseCode = getIntent.getStringExtra(Keys.INTENT_COURSECODE);
+        this.sectionCode = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
+        this.courseName = getIntent.getStringExtra(Keys.INTENT_COURSENAME);
 
-        this.txtClassCodeTitle      = findViewById(R.id.txtClassCodeTitle);
-        this.txtClassNameSubtitle   = findViewById(R.id.txtClassNameSubtitle);
+        this.txtClassCodeTitle = findViewById(R.id.txtClassCodeTitle);
+        this.txtClassNameSubtitle = findViewById(R.id.txtClassNameSubtitle);
+
+        //initialize progress dialog so it can be called anywhere in the class
+        this.progressDialog = new ProgressDialog(SingleClassActivity.this);
+
         String classCodeTitle = courseCode + " - " + sectionCode;
         String classNameSubtitle = courseName;
 
         txtClassCodeTitle.setText(classCodeTitle);
         txtClassNameSubtitle.setText(classNameSubtitle.toUpperCase());
-
     }
 
-
+    //Initializes the views of the courses handled by the user
     protected void initializeViews() {
+        //Show Progress bar
+        this.progressDialog.setMessage("Loading...");
+        this.progressDialog.show();
+        this.progressDialog.setCanceledOnTouchOutside(false);
 
         Db.getDocumentsWith(Db.COLLECTION_MEETINGS,
-        Db.FIELD_COURSECODE, courseCode,
-        Db.FIELD_SECTIONCODE, sectionCode,
-        Db.FIELD_MEETINGSTART, Query.Direction.DESCENDING).
-        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<DocumentSnapshot> results = Db.getDocuments(task);
-
-                meetingModels.clear();
-                meetingModels.addAll(Db.toMeetingModel(results));
-                singleClassRecyclerView = findViewById(R.id.SingleClassRecyclerView);
-                singleClassLayoutManager = new LinearLayoutManager(getApplicationContext());
-                singleClassRecyclerView.setLayoutManager(singleClassLayoutManager);
-                singleClassAdapter = new SingleClassAdapter(meetingModels);
-                singleClassRecyclerView.setAdapter(singleClassAdapter);
-            }
-        });
+                Db.FIELD_COURSECODE, courseCode,
+                Db.FIELD_SECTIONCODE, sectionCode,
+                Db.FIELD_MEETINGSTART, Query.Direction.DESCENDING).
+                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<DocumentSnapshot> results = Db.getDocuments(task);
+                        meetingModels.clear();
+                        meetingModels.addAll(Db.toMeetingModel(results));
+                        singleClassRecyclerView = findViewById(R.id.SingleClassRecyclerView);
+                        singleClassLayoutManager = new LinearLayoutManager(getApplicationContext());
+                        singleClassRecyclerView.setLayoutManager(singleClassLayoutManager);
+                        singleClassAdapter = new SingleClassAdapter(meetingModels);
+                        singleClassRecyclerView.setAdapter(singleClassAdapter);
+                        progressDialog.setCanceledOnTouchOutside(true);
+                        progressDialog.dismiss();
+                    }
+                });
     }
 
     protected void onResume() {
@@ -90,10 +100,4 @@ public class SingleClassActivity extends AppCompatActivity {
         initializeViews();
         Log.d(TAG, "you are on resume");
     }
-
-//
-//    protected void onStart() {
-//        super.onStart();
-//        initializeViews();
-//    }
 }

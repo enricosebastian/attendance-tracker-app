@@ -88,6 +88,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         initializeViews(email);
 
+        // When user selects an image
         btnSelectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -41,8 +41,6 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.layout_meeting, parent, false);
-
-
         this.sp             = parent.getContext().getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
         this.editor         = sp.edit();
         this.email          = sp.getString(Keys.SP_EMAIL_KEY,"");
@@ -72,7 +70,7 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
                 singleMeetingActivityIntent.putExtra(Keys.INTENT_MEETINGCODE, data.get(position).getMeetingCode());
                 singleMeetingActivityIntent.putExtra(Keys.INTENT_ISOPEN, data.get(position).getIsOpen());
 
-                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss"); //for data collection -- DO NOT CHANGE, YOU BASTARDS
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss"); //for data collection
                 String stringDate = formatter.format(data.get(position).getMeetingStart());
                 singleMeetingActivityIntent.putExtra(Keys.INTENT_MEETINGSTART, stringDate);
 

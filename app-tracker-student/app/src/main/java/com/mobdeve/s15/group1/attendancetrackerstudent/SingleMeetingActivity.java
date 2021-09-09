@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -55,6 +56,7 @@ public class SingleMeetingActivity extends AppCompatActivity {
     private String courseCode, sectionCode, meetingCode, courseName;
     private boolean isOpen; //suggestion: what happens if you change boolean (primitive) to Boolean instead?
     private Date meetingStart;
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -72,6 +74,9 @@ public class SingleMeetingActivity extends AppCompatActivity {
         this.meetingCode    = getIntent.getStringExtra(Keys.INTENT_MEETINGCODE);
         this.isOpen         = getIntent.getBooleanExtra(Keys.INTENT_ISOPEN, false);
         String stringDate   = getIntent.getStringExtra(Keys.INTENT_MEETINGSTART);
+
+        //initialize progress dialog so it can be called anywhere in the class
+        this.progressDialog = new ProgressDialog(SingleMeetingActivity.this);
 
         Log.d(TAG, meetingCode);
 
@@ -111,6 +116,7 @@ public class SingleMeetingActivity extends AppCompatActivity {
 
     }
 
+    // Records the attendance of the users
     protected void recordAttendance() {
         Db.getDocumentsWith(Db.COLLECTION_USERS,
         Db.FIELD_EMAIL, email).
@@ -148,6 +154,10 @@ public class SingleMeetingActivity extends AppCompatActivity {
 
     // This method initializes the view of the activity
     protected void initializeViews() {
+        //Show Progress bar
+        this.progressDialog.setMessage("Loading...");
+        this.progressDialog.show();
+        this.progressDialog.setCanceledOnTouchOutside(false);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy | E");
         txtDate.setText(dateFormat.format(meetingStart));
@@ -164,57 +174,65 @@ public class SingleMeetingActivity extends AppCompatActivity {
                 String classNameSubtitle = courseName;
                 txtClassTitle.setText(classCodeTitle);
                 txtClassNameSubtitle.setText(classNameSubtitle);
-            }
-        });
 
-        // Checks the status adjusts the background based on the current status
-        if(isOpen) {
-            txtStatus.setText("OPEN");
-            txtStatus.setBackgroundTintList(this.getResources().getColorStateList(R.color.light_green));
-        } else {
-            txtStatus.setText("CLOSED");
-            txtStatus.setBackgroundTintList(this.getResources().getColorStateList(R.color.red_light));
-
-            btnAttend.setText("CLOSED");
-            btnAttend.setBackgroundTintList(getResources().getColorStateList(R.color.light_gray));
-            btnAttend.setTextColor(Color.BLACK);
-
-            inputMeetingCode.setEnabled(false);
-            inputMeetingCode.setFocusable(false);
-        }
-
-        Db.getDocumentsWith(Db.COLLECTION_MEETINGHISTORY,
-        Db.FIELD_MEETINGCODE, meetingCode,
-        Db.FIELD_STUDENTATTENDED, email).
-        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<DocumentSnapshot> result = Db.getDocuments(task);
-                if(result.size()==0) {
-                    txtAttendanceStatus.setText("ATTENDANCE NOT RECORDED");
+                // Checks the status adjusts the background based on the current status
+                if(isOpen) {
+                    txtStatus.setText("OPEN");
+                    txtStatus.setBackgroundTintList(getResources().getColorStateList(R.color.light_green));
                 } else {
-                    if(!result.get(0).getBoolean(Db.FIELD_ISPRESENT)) {
-                        txtAttendanceStatus.setText("ATTENDANCE NOT RECORDED");
+                    txtStatus.setText("CLOSED");
+                    txtStatus.setBackgroundTintList(getResources().getColorStateList(R.color.red_light));
 
-                        btnAttend.setText("ATTEND");
-                        btnAttend.setBackgroundTintList(getResources().getColorStateList(R.color.light_green));
-                        btnAttend.setTextColor(Color.WHITE);
+                    btnAttend.setText("CLOSED");
+                    btnAttend.setBackgroundTintList(getResources().getColorStateList(R.color.light_gray));
+                    btnAttend.setTextColor(Color.BLACK);
 
-                        inputMeetingCode.setEnabled(true);
-                        inputMeetingCode.setFocusable(true);
-                        inputMeetingCode.setText("");
-                    } else {
-                        txtAttendanceStatus.setText("ATTENDANCE RECORDED");
-
-                        btnAttend.setText("RECORDED");
-                        btnAttend.setBackgroundTintList(getResources().getColorStateList(R.color.light_gray));
-                        btnAttend.setTextColor(Color.BLACK);
-
-                        inputMeetingCode.setEnabled(false);
-                        inputMeetingCode.setFocusable(false);
-                        inputMeetingCode.setText(meetingCode);
-                    }
+                    inputMeetingCode.setEnabled(false);
+                    inputMeetingCode.setFocusable(false);
                 }
+
+                Db.getDocumentsWith(Db.COLLECTION_MEETINGHISTORY,
+                        Db.FIELD_MEETINGCODE, meetingCode,
+                        Db.FIELD_STUDENTATTENDED, email).
+                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                List<DocumentSnapshot> result = Db.getDocuments(task);
+                                if(result.size()==0) {
+                                    txtAttendanceStatus.setText("ATTENDANCE NOT RECORDED");
+                                    progressDialog.setCanceledOnTouchOutside(true);
+                                    progressDialog.dismiss();
+                                } else {
+                                    if(!result.get(0).getBoolean(Db.FIELD_ISPRESENT)) {
+                                        txtAttendanceStatus.setText("ATTENDANCE NOT RECORDED");
+
+                                        btnAttend.setText("ATTEND");
+                                        btnAttend.setBackgroundTintList(getResources().getColorStateList(R.color.light_green));
+                                        btnAttend.setTextColor(Color.WHITE);
+
+                                        inputMeetingCode.setEnabled(true);
+                                        inputMeetingCode.setFocusable(true);
+                                        inputMeetingCode.setText("");
+
+                                        progressDialog.setCanceledOnTouchOutside(true);
+                                        progressDialog.dismiss();
+                                    } else {
+                                        txtAttendanceStatus.setText("ATTENDANCE RECORDED");
+
+                                        btnAttend.setText("RECORDED");
+                                        btnAttend.setBackgroundTintList(getResources().getColorStateList(R.color.light_gray));
+                                        btnAttend.setTextColor(Color.BLACK);
+
+                                        inputMeetingCode.setEnabled(false);
+                                        inputMeetingCode.setFocusable(false);
+                                        inputMeetingCode.setText(meetingCode);
+
+                                        progressDialog.setCanceledOnTouchOutside(true);
+                                        progressDialog.dismiss();
+                                    }
+                                }
+                            }
+                        });
             }
         });
     }

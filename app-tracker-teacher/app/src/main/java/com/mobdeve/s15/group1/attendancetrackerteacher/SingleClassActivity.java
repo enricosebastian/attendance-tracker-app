@@ -154,7 +154,6 @@ public class SingleClassActivity extends AppCompatActivity {
                 singleClassRecyclerView.setLayoutManager(singleClassLayoutManager);
                 singleClassRecyclerView.setAdapter(singleClassAdapter);
 
-                //When
                 progressDialog.setCanceledOnTouchOutside(true);
                 progressDialog.dismiss();
             }

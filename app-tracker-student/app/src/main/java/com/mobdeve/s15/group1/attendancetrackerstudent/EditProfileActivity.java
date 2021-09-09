@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,6 +41,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private ImageView img_profilePic; //DAT NAMING INCONSISTENCY THO
 
     private String email;
+    private ProgressDialog progressDialog;
 
     private ActivityResultLauncher<Intent> myActivityResultLauncher = registerForActivityResult(
         new ActivityResultContracts.StartActivityForResult(),
@@ -71,14 +73,18 @@ public class EditProfileActivity extends AppCompatActivity {
 
         this.inputFirstName         = findViewById(R.id.inputFirstName);
         this.inputLastname          = findViewById(R.id.inputLastName);
-        this.img_profilePic         = findViewById(R.id.img_profilePic); //DAT NAMING INCONSISTENCY THO SMH shoulda been imgProfilePic good lawd sweet jesus
+        this.img_profilePic         = findViewById(R.id.img_profilePic);
 
         this.btnSelectImage         = findViewById(R.id.btnSelectImage);
         this.btnSaveEditProfile     = findViewById(R.id.btnSaveEditProfile);
         this.btnCancelEditProfile   = findViewById(R.id.btnCancelEditProfile);
 
+        //initialize progress dialog so it can be called anywhere in the class
+        this.progressDialog = new ProgressDialog(EditProfileActivity.this);
+
         initializeViews(email);
 
+        //When user selects an image
         btnSelectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,6 +95,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        //When user cancels editing the profile
         btnCancelEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,20 +103,21 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        //When user saves the things
         btnSaveEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String firstName = inputFirstName.getText().toString();
                 String lastName = inputLastname.getText().toString();
                 updateAccount(firstName, lastName);
-                //finish(); //i TOLD YOU finish() doesn't work nga potangina di ka nakikinig. unless you find da solution for this, don't add finish() lmao. i need to debug everytime
-                Toast.makeText(EditProfileActivity.this, "Changes saved!", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     protected void initializeViews(String email) {
+        this.progressDialog.setMessage("Loading...");
+        this.progressDialog.show();
+        this.progressDialog.setCanceledOnTouchOutside(false);
         Db.getDocumentsWith(Db.COLLECTION_USERS,
         Db.FIELD_EMAIL, email).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -129,8 +137,12 @@ public class EditProfileActivity extends AppCompatActivity {
                         if(task.isSuccessful()) {
                             Uri imgUri = task.getResult();
                             Picasso.get().load(imgUri).into(img_profilePic);
+                            progressDialog.setCanceledOnTouchOutside(true);
+                            progressDialog.dismiss();
                         } else {
                             Log.d(TAG,"No profile image found. Switching to default");
+                            progressDialog.setCanceledOnTouchOutside(true);
+                            progressDialog.dismiss();
                         }
                     }
                 });
@@ -138,13 +150,17 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
+    //Updates the account
     protected void updateAccount(String firstName, String lastName) {
+        this.progressDialog.setMessage("Updating information...");
+        this.progressDialog.show();
+        this.progressDialog.setCanceledOnTouchOutside(false);
         Db.getDocumentsWith(Db.COLLECTION_USERS,
         Db.EMAIL_FIELD, email).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                //imgUri = Uri.parse("android.resource://com.mobdeve.s15.group1.attendancetrackerteacher/"+R.id.img_profilePic);
+
                 String documentId = Db.getIdFromTask(task);
                 Log.d(TAG,"id is "+documentId);
 
@@ -154,18 +170,30 @@ public class EditProfileActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<List<Object>> task) {
                             Log.d(TAG,"Upload was successfully added to the drive");
+                            Db.getCollection(Db.COLLECTION_USERS).document(documentId).
+                                    update(Db.FIELD_FIRSTNAME, firstName, Db.FIELD_LASTNAME, lastName).
+                                    addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            Log.d(TAG, "Successfully updated db");
+                                            Toast.makeText(EditProfileActivity.this, "Changes saved!", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+                                    });
                         }
                     });
+                } else { //if user does not edit their profile picture
+                    Db.getCollection(Db.COLLECTION_USERS).document(documentId).
+                            update(Db.FIELD_FIRSTNAME, firstName, Db.FIELD_LASTNAME, lastName).
+                            addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Log.d(TAG, "Successfully updated db");
+                                    Toast.makeText(EditProfileActivity.this, "Changes saved!", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                            });
                 }
-
-                Db.getCollection(Db.COLLECTION_USERS).document(documentId).
-                update(Db.FIELD_FIRSTNAME, firstName, Db.FIELD_LASTNAME, lastName).
-                addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Log.d(TAG, "Successfully updated db");
-                    }
-                });
             }
         });
     }

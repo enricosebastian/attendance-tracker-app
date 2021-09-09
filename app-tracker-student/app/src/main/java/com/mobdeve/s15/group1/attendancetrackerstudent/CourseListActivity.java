@@ -1,6 +1,7 @@
 package com.mobdeve.s15.group1.attendancetrackerstudent;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -61,9 +62,10 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
     private FloatingActionButton btnSearchCourse;
     private ImageView imgProfilePic;
     private SwipeRefreshLayout refreshLayout;
+    private ProgressDialog progressDialog;
     ////////////
 
-
+    // What is being returned after the adding another course
     private ActivityResultLauncher<Intent> createCourseActivityResultLauncher = registerForActivityResult(
         new ActivityResultContracts.StartActivityForResult(),
         new ActivityResultCallback<ActivityResult>() {
@@ -94,6 +96,9 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         this.imgProfilePic  = findViewById(R.id.img_profilePic);
         this.refreshLayout = findViewById(R.id.refreshLayout);
 
+        //initialize progress dialog so it can be called anywhere in the class
+        this.progressDialog = new ProgressDialog(CourseListActivity.this);
+
         //go to search course activity
         btnSearchCourse.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,8 +111,8 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(getApplicationContext(), "refresh bitch", Toast.LENGTH_SHORT).show(); //REMOVE AFTER, YOU BASTARD LMFAO
                 initializeViews();
+
 //                courseListAdapter.notifyDataSetChanged();
                 refreshLayout.setRefreshing(false);
             }
@@ -146,8 +151,11 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         }
     }
 
+    //Initialize views of the courses handled by the user
     protected void initializeViews() {
-
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+        progressDialog.setCanceledOnTouchOutside(false);
         Db.getDocumentsWith(Db.COLLECTION_USERS,
         Db.FIELD_EMAIL, email).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -172,17 +180,20 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
                         if(task.isSuccessful()) {
                             Uri imgUri = task.getResult();
                             Picasso.get().load(imgUri).into(imgProfilePic);
+                            initializeRecyclerView();
                         } else {
                             Log.d(TAG,"No profile image found. Switching to default");
+                            initializeRecyclerView();
                         }
                     }
                 });
             }
         });
 
-        initializeRecyclerView();
+
     }
 
+    // Initializes the recycler view of course list activity
     protected void initializeRecyclerView() {
         Db.getDocumentsWith(Db.COLLECTION_CLASSLIST,
         Db.FIELD_EMAIL, email,
@@ -204,6 +215,9 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
                 courseListAdapter = new CourseListAdapter(courseModels);
                 courseListRecyclerView.setAdapter(courseListAdapter);
 
+                //Dismiss the loading dialog once everything is finished
+                progressDialog.setCanceledOnTouchOutside(true);
+                progressDialog.dismiss();
             }
         });
     }
