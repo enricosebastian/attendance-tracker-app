@@ -61,7 +61,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
     private ProgressDialog progressDialog;
 
     // What is being returned after the adding another course
-    private ActivityResultLauncher<Intent> createCourseActivityResultLauncher = registerForActivityResult(
+    private ActivityResultLauncher<Intent> editProfileInfoLauncher = registerForActivityResult(
         new ActivityResultContracts.StartActivityForResult(),
         new ActivityResultCallback<ActivityResult>() {
             @Override
@@ -99,7 +99,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
             @Override
             public void onClick(View v) {
                 Intent createCourseIntent = new Intent(CourseListActivity.this, CreateCourseActivity.class);
-                createCourseActivityResultLauncher.launch(createCourseIntent);
+                editProfileInfoLauncher.launch(createCourseIntent);
             }
         });
 
@@ -127,7 +127,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         switch(item.getItemId()) {
             case R.id.editProfile:
                 Intent editProfileIntent = new Intent (CourseListActivity.this, EditProfileActivity.class);
-                createCourseActivityResultLauncher.launch(editProfileIntent);
+                editProfileInfoLauncher.launch(editProfileIntent);
                 return true;
             case R.id.editAccountSecurity:
                 Intent editAccountSecurityIntent = new Intent (CourseListActivity.this, EditAccountSecurityActivity.class);
