@@ -89,7 +89,7 @@ public class SingleMeetingActivity extends AppCompatActivity {
         this.txtDate                    = findViewById(R.id.txtDate);
         this.txtClassTitle              = findViewById(R.id.txtClassCodeTitle);
         this.txtClassNameSubtitle       = findViewById(R.id.txtClassNameSubtitle);
-        this.txtMeetingCode             = findViewById(R.id.tvMeetingCode); //LMAO THIS NAMING INCONSISTENCY SMH WHAT A DEV JESUS FOKEN CHRIST
+        this.txtMeetingCode             = findViewById(R.id.tvMeetingCode);
         this.studentListRecyclerView    = findViewById(R.id.studentListRecyclerView);
         this.btnDelete                  = findViewById(R.id.btnDelete);
         this.refreshLayout              = findViewById(R.id.refreshLayout);
