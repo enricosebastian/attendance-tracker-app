@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -25,27 +26,37 @@ public class AcceptStudentsActivity extends AppCompatActivity {
 
     private static final String TAG = "SingleClassActivity";
 
-    private ArrayList<CourseRequestModel> courseRequestModels = new ArrayList<>();
-    private RecyclerView acceptStudentsRecyclerView;
-    private RecyclerView.LayoutManager acceptStudentsLayoutManager;
-    private AcceptStudentsAdapter acceptStudentsAdapter;
+    private ArrayList<CourseRequestModel>   courseRequestModels = new ArrayList<>();
+    private RecyclerView                    acceptStudentsRecyclerView;
+    private RecyclerView.LayoutManager      acceptStudentsLayoutManager;
+    private AcceptStudentsAdapter           acceptStudentsAdapter;
 
-    private String courseCode, sectionCode;
-    private ProgressDialog progressDialog;
+    private ProgressDialog      progressDialog;
+    private SwipeRefreshLayout  refreshLayout;
+    private String              courseCode,
+                                sectionCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accept_students);
 
-        Intent getIntent = getIntent();
-        this.sectionCode = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
-        this.courseCode = getIntent.getStringExtra(Keys.INTENT_COURSECODE);
+        Intent getIntent    = getIntent();
+        this.sectionCode    = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
+        this.courseCode     = getIntent.getStringExtra(Keys.INTENT_COURSECODE);
 
         //initialize progress dialog so it can be called anywhere in the class
         this.progressDialog = new ProgressDialog(AcceptStudentsActivity.this);
+        this.refreshLayout  = findViewById(R.id.refreshLayout);
 
-        initializeViews();
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initializeRecyclerView(); //can also be initializeViews() if you want, for that loading screen
+                refreshLayout.setRefreshing(false);
+            }
+        });
+
     }
 
     protected void initializeViews() {
@@ -54,12 +65,19 @@ public class AcceptStudentsActivity extends AppCompatActivity {
         this.progressDialog.show();
         this.progressDialog.setCanceledOnTouchOutside(false);
 
+        initializeRecyclerView();
+
+    }
+
+    protected void initializeRecyclerView(){
         Db.getDocumentsWith(Db.COLLECTION_COURSEREQUEST,
         Db.FIELD_COURSECODE, courseCode,
         Db.FIELD_SECTIONCODE, sectionCode).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                courseRequestModels.clear(); //always clear when initializing
+
                 List<DocumentSnapshot> result = Db.getDocuments(task);
                 courseRequestModels.addAll(Db.toCourseRequestModel(result));
 
@@ -74,5 +92,10 @@ public class AcceptStudentsActivity extends AppCompatActivity {
                 progressDialog.dismiss();
             }
         });
+    }
+
+    protected void onResume() {
+        super.onResume();
+        initializeViews();
     }
 }
