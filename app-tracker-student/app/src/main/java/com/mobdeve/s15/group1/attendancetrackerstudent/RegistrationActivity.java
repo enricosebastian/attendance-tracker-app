@@ -65,9 +65,9 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String email        = inputEmail.getText().toString().toLowerCase().trim();
-                String firstName    = inputFirstName.getText().toString();
-                String idNumber     = inputIdNumber.getText().toString();
-                String lastName     = inputLastName.getText().toString();
+                String firstName    = inputFirstName.getText().toString().trim();
+                String idNumber     = inputIdNumber.getText().toString().trim();
+                String lastName     = inputLastName.getText().toString().trim();
                 String password     = inputPassword.getText().toString();
 
                 // If not all entries are filled

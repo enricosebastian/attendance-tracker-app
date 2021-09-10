@@ -67,9 +67,9 @@ public class CreateCourseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //insert logic here
-                String courseName   = etCourseName.getText().toString();
-                String courseCode   = etCourseCode.getText().toString();
-                String sectionCode  = etCourseSection.getText().toString();
+                String courseName   = etCourseName.getText().toString().trim();
+                String courseCode   = etCourseCode.getText().toString().trim();
+                String sectionCode  = etCourseSection.getText().toString().trim();
                 boolean isPublished = switchIsPublished.isChecked();
 
                 if(courseName.isEmpty() || courseCode.isEmpty() || sectionCode.isEmpty()) {

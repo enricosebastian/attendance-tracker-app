@@ -111,8 +111,8 @@ public class EditProfileActivity extends AppCompatActivity {
         btnSaveEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String firstName = inputFirstName.getText().toString();
-                String lastName = inputLastname.getText().toString();
+                String firstName = inputFirstName.getText().toString().trim();
+                String lastName = inputLastname.getText().toString().trim();
                 updateAccount(firstName, lastName);
             }
         });
