@@ -42,11 +42,8 @@ public class SingleClassActivity extends AppCompatActivity {
     private String                      courseCode,
                                         sectionCode,
                                         courseName;
-<<<<<<< HEAD
     private SwipeRefreshLayout          refreshLayout;
-=======
-    private SwipeRefreshLayout  refreshLayout;
->>>>>>> 4c859b94674d892680ba2d0c5100e281a28ec6ce
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
