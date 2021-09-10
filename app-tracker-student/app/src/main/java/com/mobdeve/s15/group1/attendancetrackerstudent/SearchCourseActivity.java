@@ -35,40 +35,43 @@ import java.util.Locale;
 
 public class SearchCourseActivity extends AppCompatActivity {
 
-    private final static String TAG = "SearchCourseActivity";
+    private final static String         TAG = "SearchCourseActivity";
 
-    private SharedPreferences sp;
-    private SharedPreferences.Editor editor;
-    private String email;
+    private SharedPreferences           sp;
+    private String                      email;
 
-    private ConstraintLayout resultBox;
-
-    private EditText inputCourseCode, inputSectionCode;
-    private TextView txtCourseInfo, txtHandledBy;
-    private Button btnSearch, btnRequest;
+    private ConstraintLayout            resultBox;
+    private EditText                    inputCourseCode,
+                                        inputSectionCode;
+    private TextView                    txtCourseInfo,
+                                        txtHandledBy;
+    private Button                      btnSearch,
+                                        btnRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_course);
 
-        this.sp             = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
-        this.editor         = sp.edit();
-        this.email          = sp.getString(Keys.SP_EMAIL_KEY,"");
-        this.inputCourseCode = findViewById(R.id.inputCourseCode);
-        this.inputSectionCode = findViewById(R.id.inputSectionCode);
-        this.btnSearch = findViewById(R.id.btnSearch);
-        this.resultBox = findViewById(R.id.resultBox);
-        this.txtCourseInfo = findViewById(R.id.txtCourseInfo);
-        this.txtHandledBy = findViewById(R.id.txtHandledBy);
-        this.btnRequest     = findViewById(R.id.btnRequest);
+        this.sp                     = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
+        this.email                  = sp.getString(Keys.SP_EMAIL_KEY,"");
+        this.inputCourseCode        = findViewById(R.id.inputCourseCode);
+        this.inputSectionCode       = findViewById(R.id.inputSectionCode);
+        this.btnSearch              = findViewById(R.id.btnSearch);
+        this.resultBox              = findViewById(R.id.resultBox);
+        this.txtCourseInfo          = findViewById(R.id.txtCourseInfo);
+        this.txtHandledBy           = findViewById(R.id.txtHandledBy);
+        this.btnRequest             = findViewById(R.id.btnRequest);
 
 
+        //search for courses button
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String courseCode = inputCourseCode.getText().toString().toUpperCase();
-                String sectionCode = inputSectionCode.getText().toString().toUpperCase();
+                //places entries in upper case letters to ensure proper db querying
+                String courseCode   = inputCourseCode.getText().toString().toUpperCase();
+                String sectionCode  = inputSectionCode.getText().toString().toUpperCase();
+
                 if(courseCode.isEmpty() || sectionCode.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "One of the input fields is empty!", Toast.LENGTH_SHORT).show();
                 } else {
@@ -76,15 +79,17 @@ public class SearchCourseActivity extends AppCompatActivity {
                 }
             }
         });
-        
+
+        //to send a request to proctor to accept student into the course
         btnRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(btnRequest.getText().toString().equals("SENT")) {
                     Toast.makeText(getApplicationContext(), "Request already sent!", Toast.LENGTH_SHORT).show();
                 } else {
-                    String courseCode = inputCourseCode.getText().toString().toUpperCase();
-                    String sectionCode = inputSectionCode.getText().toString().toUpperCase();
+                    String courseCode   = inputCourseCode.getText().toString().toUpperCase();
+                    String sectionCode  = inputSectionCode.getText().toString().toUpperCase();
+
                     sendRequest(courseCode, sectionCode);
                     btnRequest.setText("SENT");
                     btnRequest.setBackgroundColor(Color.GRAY);
@@ -93,6 +98,7 @@ public class SearchCourseActivity extends AppCompatActivity {
         });
     }
 
+    //handles the searching of a course via course code and section code (fields must BOTH be entered)
     protected void searchQuery(String courseCode, String sectionCode) {
         Db.getDocumentsWith(Db.COLLECTION_CLASSLIST,
         Db.FIELD_COURSECODE, courseCode,
@@ -102,10 +108,11 @@ public class SearchCourseActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                 List<DocumentSnapshot> classListInfoResult = Db.getDocuments(task);
+
+                //checks first if student is already in that class to prevent spam-requesting
                 if(classListInfoResult.size() != 0) {
                     Toast.makeText(getApplicationContext(), "You are already in this class", Toast.LENGTH_SHORT).show();
                 } else {
-
                     Db.getDocumentsWith(Db.COLLECTION_COURSES,
                     Db.FIELD_COURSECODE, courseCode,
                     Db.FIELD_SECTIONCODE, sectionCode,
@@ -131,7 +138,6 @@ public class SearchCourseActivity extends AppCompatActivity {
                                         checkIfResultExists(courseCode, sectionCode);
                                     }
                                 });
-
                             }
                         }
                     });
@@ -142,6 +148,7 @@ public class SearchCourseActivity extends AppCompatActivity {
 
     }
 
+    //checks if student has already sent that request previously
     protected void checkIfResultExists(String courseCode, String sectionCode) {
         Db.getDocumentsWith(Db.COLLECTION_USERS,
         Db.FIELD_EMAIL, email).
@@ -167,12 +174,12 @@ public class SearchCourseActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-
             }
         });
     }
 
+
+    //if request is valid, update DB
     protected void sendRequest(String courseCode, String sectionCode) {
         Db.getDocumentsWith(Db.COLLECTION_USERS,
         Db.FIELD_EMAIL, email).

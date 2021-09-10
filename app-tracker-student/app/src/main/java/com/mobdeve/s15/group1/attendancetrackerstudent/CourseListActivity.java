@@ -65,14 +65,14 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
     private ProgressDialog progressDialog;
     ////////////
 
-    // What is being returned after editing profile
+    //Reinitialize views after successfully editing profile details
     private ActivityResultLauncher<Intent> editProfileInfoLauncher = registerForActivityResult(
         new ActivityResultContracts.StartActivityForResult(),
         new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if(result.getResultCode() == Activity.RESULT_OK) {
-                    Log.d(TAG, "Add success so reinitialize the views.");
+                    Log.d(TAG, "Edit profile was a success, so initialize view to see changes");
                     initializeViews();
                 } else {
                     Log.d(TAG, "Nothing returned");
@@ -179,11 +179,10 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
                         if(task.isSuccessful()) {
                             Uri imgUri = task.getResult();
                             Picasso.get().load(imgUri).into(imgProfilePic);
-                            initializeRecyclerView();
                         } else {
                             Log.d(TAG,"No profile image found. Switching to default");
-                            initializeRecyclerView();
                         }
+                        initializeRecyclerView();
                     }
                 });
             }
@@ -201,11 +200,9 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                courseModels.clear(); //always clear before initialization to prevent duplicates
 
                 List<DocumentSnapshot> result = Db.getDocuments(task);
-                Log.d(TAG, ""+result.size());
-
-                courseModels.clear();
                 courseModels.addAll(Db.toCourseModel(Db.getDocuments(task)));
 
                 courseListRecyclerView = findViewById(R.id.recyclerView);
@@ -224,7 +221,6 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
     protected void onResume() {
         super.onResume();
         initializeViews();
-        Log.d(TAG,"we are in on resume");
     }
 
 }

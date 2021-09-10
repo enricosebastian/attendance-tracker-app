@@ -31,19 +31,23 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class EditProfileActivity extends AppCompatActivity {
-    public static final String TAG = "EditProfileActivity";
+    public static final String  TAG = "EditProfileActivity";
 
-    private SharedPreferences sp;
+    private SharedPreferences   sp;
 
-    private Uri imageUri = null;
-    private EditText inputFirstName, inputLastname;
-    private Button btnSelectImage, btnSaveEditProfile, btnCancelEditProfile;
-    private ImageView img_profilePic; //DAT NAMING INCONSISTENCY THO
+    private Uri                 imageUri = null;
+    private EditText            inputFirstName,
+                                inputLastname;
+    private ImageView           img_profilePic;
+    private Button              btnSelectImage,
+                                btnSaveEditProfile,
+                                btnCancelEditProfile;
 
-    private String email;
-    private ProgressDialog progressDialog;
+    private String              email;
+    private ProgressDialog      progressDialog;
 
-    private ActivityResultLauncher<Intent> myActivityResultLauncher = registerForActivityResult(
+    //catches if user successfully uploads a new profile image
+    private ActivityResultLauncher<Intent> updateImageResultLauncher = registerForActivityResult(
         new ActivityResultContracts.StartActivityForResult(),
         new ActivityResultCallback<ActivityResult>() {
             @Override
@@ -67,22 +71,18 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        this.sp = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
-
-        this.email = sp.getString(Keys.SP_EMAIL_KEY,"");
+        this.sp     = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
+        this.email  = sp.getString(Keys.SP_EMAIL_KEY,"");
 
         this.inputFirstName         = findViewById(R.id.inputFirstName);
         this.inputLastname          = findViewById(R.id.inputLastName);
         this.img_profilePic         = findViewById(R.id.img_profilePic);
-
         this.btnSelectImage         = findViewById(R.id.btnSelectImage);
         this.btnSaveEditProfile     = findViewById(R.id.btnSaveEditProfile);
         this.btnCancelEditProfile   = findViewById(R.id.btnCancelEditProfile);
 
         //initialize progress dialog so it can be called anywhere in the class
         this.progressDialog = new ProgressDialog(EditProfileActivity.this);
-
-        initializeViews(email);
 
         //When user selects an image
         btnSelectImage.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +91,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-                myActivityResultLauncher.launch(Intent.createChooser(intent, "Select Picture"));
+                updateImageResultLauncher.launch(Intent.createChooser(intent, "Select Picture"));
             }
         });
 
@@ -107,28 +107,28 @@ public class EditProfileActivity extends AppCompatActivity {
         btnSaveEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String firstName = inputFirstName.getText().toString();
-                String lastName = inputLastname.getText().toString();
-                updateAccount(firstName, lastName);
+                updateAccount(  inputFirstName.getText().toString(),
+                                inputLastname.getText().toString()  );
             }
         });
     }
 
-    protected void initializeViews(String email) {
+    //initializes views of activity
+    protected void initializeViews() {
         this.progressDialog.setMessage("Loading...");
         this.progressDialog.show();
         this.progressDialog.setCanceledOnTouchOutside(false);
+
+        //initializes input fields & profile pic in activity by searching the user DB
         Db.getDocumentsWith(Db.COLLECTION_USERS,
         Db.FIELD_EMAIL, email).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<DocumentSnapshot> results= Db.getDocuments(task);
-                String firstName = results.get(0).getString(Db.FIELD_FIRSTNAME);
-                String lastName = results.get(0).getString(Db.FIELD_LASTNAME);
+                List<DocumentSnapshot> results = Db.getDocuments(task);
 
-                inputFirstName.setText(firstName);
-                inputLastname.setText(lastName);
+                inputFirstName.setText(results.get(0).getString(Db.FIELD_FIRSTNAME));
+                inputLastname.setText(results.get(0).getString(Db.FIELD_LASTNAME));
 
                 String documentId = Db.getIdFromTask(task);
                 Db.getProfilePic(documentId).addOnCompleteListener(new OnCompleteListener<Uri>() {
@@ -155,6 +155,8 @@ public class EditProfileActivity extends AppCompatActivity {
         this.progressDialog.setMessage("Updating information...");
         this.progressDialog.show();
         this.progressDialog.setCanceledOnTouchOutside(false);
+
+        //updates user collection by finding document ID
         Db.getDocumentsWith(Db.COLLECTION_USERS,
         Db.FIELD_EMAIL, email).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -162,14 +164,15 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                 String documentId = Db.getIdFromTask(task);
-                Log.d(TAG,"id is "+documentId);
 
+                //if user edits profile with image uploading
                 if(imageUri != null) {
                     Tasks.whenAllSuccess(Db.uploadImage(documentId, imageUri)).
                     addOnCompleteListener(new OnCompleteListener<List<Object>>() {
                         @Override
                         public void onComplete(@NonNull Task<List<Object>> task) {
                             Log.d(TAG,"Upload was successfully added to the drive");
+
                             Db.getCollection(Db.COLLECTION_USERS).document(documentId).
                             update(Db.FIELD_FIRSTNAME, firstName, Db.FIELD_LASTNAME, lastName).
                             addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -182,7 +185,8 @@ public class EditProfileActivity extends AppCompatActivity {
                             });
                         }
                     });
-                } else { //if user does not edit their profile picture
+                } else {
+                    //if user did not edit profile picture
                     Db.getCollection(Db.COLLECTION_USERS).document(documentId).
                     update(Db.FIELD_FIRSTNAME, firstName, Db.FIELD_LASTNAME, lastName).
                     addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -196,6 +200,11 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    protected void onResume() {
+        super.onResume();
+        initializeViews();
     }
 
 }

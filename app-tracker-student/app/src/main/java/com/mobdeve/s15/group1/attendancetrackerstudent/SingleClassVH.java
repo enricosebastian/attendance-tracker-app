@@ -17,21 +17,23 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.List;
 
 public class SingleClassVH extends RecyclerView.ViewHolder {
-    private static final String TAG = "SingleClassViewHolder";
-    private TextView txtIsPresent, txtDate;
-    private Drawable txtIsPresentDrawable;
+    private static final String     TAG = "SingleClassViewHolder";
+
+    private TextView                txtIsPresent,
+                                    txtDate;
+    private Drawable                txtIsPresentDrawable;
 
     public SingleClassVH(@NonNull View itemView) {
         super(itemView);
-        this.txtIsPresent = itemView.findViewById(R.id.txtIsPresent);
-        this.txtDate = itemView.findViewById(R.id.txtDate);
-        this.txtIsPresentDrawable = txtIsPresent.getBackground();
-        txtIsPresentDrawable = DrawableCompat.wrap(txtIsPresentDrawable);
+        this.txtIsPresent           = itemView.findViewById(R.id.txtIsPresent);
+        this.txtDate                = itemView.findViewById(R.id.txtDate);
+        this.txtIsPresentDrawable   = txtIsPresent.getBackground();
+        txtIsPresentDrawable        = DrawableCompat.wrap(txtIsPresentDrawable);
     }
 
     public void setTxtIsPresent(String meetingCode, String email) {
 
-
+        //sets if the student that attended was present or absent during class
         Db.getDocumentsWith(Db.COLLECTION_MEETINGHISTORY,
         Db.FIELD_MEETINGCODE, meetingCode,
         Db.FIELD_STUDENTATTENDED, email,
@@ -52,6 +54,7 @@ public class SingleClassVH extends RecyclerView.ViewHolder {
                 }
             }
         });
+
     }
 
     public void setTxtDate(String txtDate) {

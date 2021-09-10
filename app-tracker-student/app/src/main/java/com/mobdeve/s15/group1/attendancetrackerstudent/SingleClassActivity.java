@@ -25,79 +25,88 @@ import java.util.List;
 
 public class SingleClassActivity extends AppCompatActivity {
 
-    private static final String TAG = "SingleClassActivity";
+    private static final String         TAG = "SingleClassActivity";
 
-    //shared preferences initialization
-    private SharedPreferences sp;
-    private SharedPreferences.Editor editor;
-    private String email;
-    ////////////
 
     //recycler view initialization
-    private ArrayList<MeetingModel> meetingModels = new ArrayList<>();
-    private RecyclerView singleClassRecyclerView;
-    private RecyclerView.LayoutManager singleClassLayoutManager;
-    private SingleClassAdapter singleClassAdapter;
+    private ArrayList<MeetingModel>     meetingModels = new ArrayList<>();
+    private RecyclerView                singleClassRecyclerView;
+    private RecyclerView.LayoutManager  singleClassLayoutManager;
+    private SingleClassAdapter          singleClassAdapter;
 
     //widget initialization
-    TextView txtClassCodeTitle, txtClassNameSubtitle;
-    private String courseCode, sectionCode, courseName;
-    private ProgressDialog progressDialog;
+    private ProgressDialog              progressDialog;
+    private TextView                    txtClassCodeTitle,
+                                        txtClassNameSubtitle;
+    private String                      courseCode,
+                                        sectionCode,
+                                        courseName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_class);
 
-        Intent getIntent = getIntent();
-        this.courseCode = getIntent.getStringExtra(Keys.INTENT_COURSECODE);
-        this.sectionCode = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
-        this.courseName = getIntent.getStringExtra(Keys.INTENT_COURSENAME);
+        Intent getIntent            = getIntent();
+        this.courseCode             = getIntent.getStringExtra(Keys.INTENT_COURSECODE);
+        this.sectionCode            = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
+        this.courseName             = getIntent.getStringExtra(Keys.INTENT_COURSENAME);
 
-        this.txtClassCodeTitle = findViewById(R.id.txtClassCodeTitle);
-        this.txtClassNameSubtitle = findViewById(R.id.txtClassNameSubtitle);
+        this.txtClassCodeTitle      = findViewById(R.id.txtClassCodeTitle);
+        this.txtClassNameSubtitle   = findViewById(R.id.txtClassNameSubtitle);
 
         //initialize progress dialog so it can be called anywhere in the class
-        this.progressDialog = new ProgressDialog(SingleClassActivity.this);
+        this.progressDialog         = new ProgressDialog(SingleClassActivity.this);
 
-        String classCodeTitle = courseCode + " - " + sectionCode;
-        String classNameSubtitle = courseName;
-
-        txtClassCodeTitle.setText(classCodeTitle);
-        txtClassNameSubtitle.setText(classNameSubtitle.toUpperCase());
     }
 
     //Initializes the views of the courses handled by the user
     protected void initializeViews() {
-        //Show Progress bar
+        //loading screen for dramatic effect
         this.progressDialog.setMessage("Loading...");
         this.progressDialog.show();
         this.progressDialog.setCanceledOnTouchOutside(false);
 
+        String classCodeTitle       = courseCode + " - " + sectionCode;
+        String classNameSubtitle    = courseName;
+
+        //sets up course code header and class subtitle bar
+        txtClassCodeTitle.setText(classCodeTitle);
+        txtClassNameSubtitle.setText(classNameSubtitle.toUpperCase());
+
+        initializeRecyclerView();
+    }
+
+    //gathers all the existing data wherein the student is part of the classlist
+    protected void initializeRecyclerView() {
         Db.getDocumentsWith(Db.COLLECTION_MEETINGS,
-                Db.FIELD_COURSECODE, courseCode,
-                Db.FIELD_SECTIONCODE, sectionCode,
-                Db.FIELD_MEETINGSTART, Query.Direction.DESCENDING).
-                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        List<DocumentSnapshot> results = Db.getDocuments(task);
-                        meetingModels.clear();
-                        meetingModels.addAll(Db.toMeetingModel(results));
-                        singleClassRecyclerView = findViewById(R.id.SingleClassRecyclerView);
-                        singleClassLayoutManager = new LinearLayoutManager(getApplicationContext());
-                        singleClassRecyclerView.setLayoutManager(singleClassLayoutManager);
-                        singleClassAdapter = new SingleClassAdapter(meetingModels);
-                        singleClassRecyclerView.setAdapter(singleClassAdapter);
-                        progressDialog.setCanceledOnTouchOutside(true);
-                        progressDialog.dismiss();
-                    }
-                });
+        Db.FIELD_COURSECODE, courseCode,
+        Db.FIELD_SECTIONCODE, sectionCode,
+        Db.FIELD_MEETINGSTART, Query.Direction.DESCENDING).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                meetingModels.clear(); //ALWAYS clear before adding models, to prevent duplication
+
+                List<DocumentSnapshot> results = Db.getDocuments(task);
+                meetingModels.addAll(Db.toMeetingModel(results));
+
+                singleClassRecyclerView     = findViewById(R.id.SingleClassRecyclerView);
+                singleClassLayoutManager    = new LinearLayoutManager(getApplicationContext());
+                singleClassAdapter          = new SingleClassAdapter(meetingModels);
+
+                singleClassRecyclerView.setLayoutManager(singleClassLayoutManager);
+                singleClassRecyclerView.setAdapter(singleClassAdapter);
+
+                //removes loading screen after finishing
+                progressDialog.setCanceledOnTouchOutside(true);
+                progressDialog.dismiss();
+            }
+        });
     }
 
     protected void onResume() {
         super.onResume();
         initializeViews();
-        Log.d(TAG, "you are on resume");
     }
 }
