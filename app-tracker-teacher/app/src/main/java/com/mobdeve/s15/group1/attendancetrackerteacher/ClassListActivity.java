@@ -55,11 +55,11 @@ public class ClassListActivity extends AppCompatActivity {
 
         //initialize progress dialog so it can be called anywhere in the class
         this.progressDialog = new ProgressDialog(ClassListActivity.this);
-
         initializeViews();
     }
 
     protected void initializeViews() {
+
         this.progressDialog.setMessage("Loading...");
         this.progressDialog.show();
         this.progressDialog.setCanceledOnTouchOutside(false);
@@ -73,7 +73,6 @@ public class ClassListActivity extends AppCompatActivity {
                 Log.d(TAG, "inside on complete classlist");
                 List<DocumentSnapshot> result = Db.getDocuments(task);
                 classListModels.addAll(Db.toClassListModel(result));
-
                 classListRecyclerView = findViewById(R.id.classListRecyclerView);
                 classListLayoutManager = new LinearLayoutManager(getApplicationContext());
                 classListRecyclerView.setLayoutManager(classListLayoutManager);
