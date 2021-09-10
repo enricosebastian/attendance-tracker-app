@@ -53,7 +53,7 @@ public class EditCourseActivity extends AppCompatActivity {
         this.etEditCourse           = findViewById(R.id.etEditCourse);
         this.switchIsPublished      = findViewById(R.id.switchIsPublished);
 
-        txtEditACourseHeader.setText("EDIT "+courseCode+" - "+sectionCode);
+        txtEditACourseHeader.setText("Edit "+courseCode+" - "+sectionCode);
 
         initializeViews();
 
