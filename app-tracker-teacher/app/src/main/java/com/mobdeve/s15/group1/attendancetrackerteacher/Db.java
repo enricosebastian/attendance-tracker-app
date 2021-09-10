@@ -441,6 +441,62 @@ public class Db {
     }
 
 
+    public static void deleteDocuments(String tableName,
+    String field, String value) {
+        getDocumentsWith(tableName, field, value).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<DocumentSnapshot> result = getDocuments(task);
+
+                for(DocumentSnapshot ds:result) {
+                    Db.getCollection(tableName).
+                    document(ds.getId()).
+                    delete().
+                    addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()) {
+                                Log.d(TAG, "Deleted "+ds.getId());
+                            } else {
+                                Log.d(TAG,"Failed: "+task.getException());
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    public static void deleteDocuments(String tableName,
+    String field1, String value1,
+    String field2, String value2) {
+        getDocumentsWith(tableName, field1, value1, field2, value2).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<DocumentSnapshot> result = getDocuments(task);
+
+                for(DocumentSnapshot ds:result) {
+
+                    Db.getCollection(tableName).
+                    document(ds.getId()).
+                    delete().
+                    addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()) {
+                                Log.d(TAG, "Deleted "+ds.getId());
+                            } else {
+                                Log.d(TAG,"Failed: "+task.getException());
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+
     ////////////////////NEW AS OF 2021, 09, 04/////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////

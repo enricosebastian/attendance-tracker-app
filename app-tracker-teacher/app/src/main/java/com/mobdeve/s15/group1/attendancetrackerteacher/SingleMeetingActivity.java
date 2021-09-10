@@ -224,6 +224,9 @@ public class SingleMeetingActivity extends AppCompatActivity {
 
     // When user deletes a meeting
     public void deleteMeeting(String tableName, String field, String value) {
+
+        Db.deleteDocuments(Db.COLLECTION_MEETINGHISTORY, field, value);
+
         Db.getDocumentsWith(tableName, field, value).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

@@ -80,6 +80,7 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
                 data.get(position).getCourseCode(),
                 data.get(position).getSectionCode(),
                 position);
+                notifyItemRemoved(holder.getBindingAdapterPosition());
             }
         });
 

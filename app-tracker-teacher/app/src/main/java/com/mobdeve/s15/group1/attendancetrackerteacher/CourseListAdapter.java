@@ -74,32 +74,31 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
                                             public void onClick(DialogInterface dialog, int which) {
 
                                                 //deletes all info from classlist
-                                                Db.deleteDocument(Db.COLLECTION_CLASSLIST,
+                                                Db.deleteDocuments(Db.COLLECTION_CLASSLIST,
                                                         Db.FIELD_SECTIONCODE, sectionCode,
                                                         Db.FIELD_COURSECODE, courseCode);
                                                 Log.d(TAG,"deleted collection course: " + courseCode + " " + sectionCode);
 
 
-                                                //deletes all info from courses
-                                                Db.deleteDocument(Db.COLLECTION_COURSEREQUEST,
+                                                //deletes all info from course request
+                                                Db.deleteDocuments(Db.COLLECTION_COURSEREQUEST,
                                                         Db.FIELD_SECTIONCODE, sectionCode,
                                                         Db.FIELD_COURSECODE, courseCode);
-                                                Log.d(TAG,"deleted collection course: " + courseCode + " " + sectionCode);
 
-                                                //deletes all info from meetings
+                                                //deletes info from course
                                                 Db.deleteDocument(Db.COLLECTION_COURSES,
                                                         Db.FIELD_SECTIONCODE, sectionCode,
                                                         Db.FIELD_COURSECODE, courseCode);
                                                 Log.d(TAG,"deleted collection COLLECTION_COURSES");
 
-                                                //deletes all info from class list
-                                                Db.deleteDocument(Db.COLLECTION_MEETINGHISTORY,
+                                                //deletes all info from meeting history
+                                                Db.deleteDocuments(Db.COLLECTION_MEETINGHISTORY,
                                                         Db.FIELD_SECTIONCODE, sectionCode,
                                                         Db.FIELD_COURSECODE, courseCode);
                                                 Log.d(TAG,"deleted collection in COLLECTION_MEETINGHISTORY");
 
-                                                //deletes all info from meeting history
-                                                Db.deleteDocument(Db.COLLECTION_MEETINGS,
+                                                //deletes all info from meetings
+                                                Db.deleteDocuments(Db.COLLECTION_MEETINGS,
                                                         Db.FIELD_SECTIONCODE, sectionCode,
                                                         Db.FIELD_COURSECODE, courseCode);
                                                 Log.d(TAG,"deleted collection in COLLECTION_MEETINGS");
