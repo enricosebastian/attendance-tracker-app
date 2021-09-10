@@ -46,7 +46,16 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
     @Override
     public void onBindViewHolder(@NonNull AcceptStudentsVH holder, int position) {
 
-        holder.setTxtStudentName(data.get(position).getFirstName()+" "+data.get(position).getLastName());
+        Db.getDocumentsWith(Db.COLLECTION_USERS,
+        Db.FIELD_IDNUMBER, data.get(position).getIdNumber(),
+        Db.FIELD_USERTYPE, "student").addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<DocumentSnapshot> result = Db.getDocuments(task);
+                holder.setTxtStudentName(result.get(0).getString(Db.FIELD_FIRSTNAME)+" "+result.get(0).getString(Db.FIELD_LASTNAME));
+            }
+        });
+
         holder.setTxtIdNo(data.get(position).getIdNumber());
         holder.setImgProfilePic(data.get(position).getIdNumber()); //needs id number to get image\
 

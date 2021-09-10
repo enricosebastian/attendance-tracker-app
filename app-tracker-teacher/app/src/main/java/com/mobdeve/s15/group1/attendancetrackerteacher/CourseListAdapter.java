@@ -72,23 +72,38 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
                                         .setMessage("Are you sure you want to delete this entry?")
                                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int which) {
+
+                                                //deletes all info from classlist
+                                                Db.deleteDocument(Db.COLLECTION_CLASSLIST,
+                                                        Db.FIELD_SECTIONCODE, sectionCode,
+                                                        Db.FIELD_COURSECODE, courseCode);
+                                                Log.d(TAG,"deleted collection course: " + courseCode + " " + sectionCode);
+
+
                                                 //deletes all info from courses
-                                                Db.deleteDocument(Db.COLLECTION_COURSES,
+                                                Db.deleteDocument(Db.COLLECTION_COURSEREQUEST,
                                                         Db.FIELD_SECTIONCODE, sectionCode,
                                                         Db.FIELD_COURSECODE, courseCode);
                                                 Log.d(TAG,"deleted collection course: " + courseCode + " " + sectionCode);
 
                                                 //deletes all info from meetings
-                                                Db.deleteDocument(Db.COLLECTION_MEETINGS,
+                                                Db.deleteDocument(Db.COLLECTION_COURSES,
                                                         Db.FIELD_SECTIONCODE, sectionCode,
                                                         Db.FIELD_COURSECODE, courseCode);
-                                                Log.d(TAG,"deleted collection meetings");
+                                                Log.d(TAG,"deleted collection COLLECTION_COURSES");
 
-                                                //deletes all info from meeting history
+                                                //deletes all info from class list
                                                 Db.deleteDocument(Db.COLLECTION_MEETINGHISTORY,
                                                         Db.FIELD_SECTIONCODE, sectionCode,
                                                         Db.FIELD_COURSECODE, courseCode);
-                                                Log.d(TAG,"deleted collection meeting history");
+                                                Log.d(TAG,"deleted collection in COLLECTION_MEETINGHISTORY");
+
+                                                //deletes all info from meeting history
+                                                Db.deleteDocument(Db.COLLECTION_MEETINGS,
+                                                        Db.FIELD_SECTIONCODE, sectionCode,
+                                                        Db.FIELD_COURSECODE, courseCode);
+                                                Log.d(TAG,"deleted collection in COLLECTION_MEETINGS");
+
                                                 data.remove(courseListVH.getBindingAdapterPosition());
                                                 notifyItemRemoved(courseListVH.getBindingAdapterPosition());
                                                 Toast.makeText(courseListVH.itemView.getContext(), "Course has been successfully deleted", Toast.LENGTH_SHORT).show();
