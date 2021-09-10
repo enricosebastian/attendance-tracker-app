@@ -108,6 +108,7 @@ public class EditAccountSecurityActivity extends AppCompatActivity {
                         inputOldPassword.setText("");
                         inputNewPassword.setText("");
                         inputConfirmNewPassword.setText("");
+                        finish();
                     }
                 });
             }
