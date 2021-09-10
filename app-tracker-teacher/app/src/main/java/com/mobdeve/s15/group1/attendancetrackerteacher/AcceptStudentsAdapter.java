@@ -81,6 +81,7 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
         return data.size();
     }
 
+    //If the student is accepted to the course
     protected void acceptStudentRequest(String idNumber, String courseCode, String sectionCode) {
         Db.getDocumentsWith(Db.COLLECTION_USERS,
         Db.FIELD_IDNUMBER, idNumber,
@@ -111,6 +112,7 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
         });
     }
 
+    //If request to join the course is deleted
     protected void rejectStudentRequest(String idNumber, String courseCode, String sectionCode, int position) {
 
         Db.getDocumentsWith(Db.COLLECTION_COURSEREQUEST,
@@ -143,6 +145,7 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
                                         data.addAll(Db.toCourseRequestModel(result));
                                         Log.d(TAG,""+data.size());
                                         notifyDataSetChanged();
+
                                     }
                                 });
                             } else {
