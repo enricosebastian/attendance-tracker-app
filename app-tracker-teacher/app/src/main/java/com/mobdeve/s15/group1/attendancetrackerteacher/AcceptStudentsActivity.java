@@ -52,7 +52,7 @@ public class AcceptStudentsActivity extends AppCompatActivity {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                initializeRecyclerView(); //can also be initializeViews() if you want, for that loading screen
+                initializeViews(); //can also be initializeViews() if you want, for that loading screen
                 refreshLayout.setRefreshing(false);
             }
         });
