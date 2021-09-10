@@ -99,6 +99,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                                     editor.commit();
 
                                                     Intent intent = new Intent(RegistrationActivity.this, CourseListActivity.class);
+                                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                                                     startActivity(intent);
                                                     finish();
                                                 } else {

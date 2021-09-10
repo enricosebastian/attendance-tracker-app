@@ -14,9 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SingleMeetingAdapter extends RecyclerView.Adapter<SingleMeetingVH> {
 
@@ -40,10 +42,21 @@ public class SingleMeetingAdapter extends RecyclerView.Adapter<SingleMeetingVH> 
         return singleMeetingVH;
     }
 
+    //there might be a bug here, who knows lmao
     @Override
     public void onBindViewHolder(@NonNull SingleMeetingVH holder, @SuppressLint("RecyclerView") int position) {
         holder.setBtnIsPresent(data.get(position).isPresent);
-        holder.setTxtStudentName(data.get(position).getFirstName(), data.get(position).getLastName());
+
+        Db.getDocumentsWith(Db.COLLECTION_USERS,
+        Db.FIELD_EMAIL, data.get(position).
+        getStudentAttended()).
+        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<DocumentSnapshot> result = Db.getDocuments(task);
+                holder.setTxtStudentName(result.get(0).getString(Db.FIELD_FIRSTNAME), result.get(0).getString(Db.FIELD_LASTNAME));
+            }
+        });
 
         holder.getBtnIsPresent().setOnClickListener(new View.OnClickListener() {
             @Override
