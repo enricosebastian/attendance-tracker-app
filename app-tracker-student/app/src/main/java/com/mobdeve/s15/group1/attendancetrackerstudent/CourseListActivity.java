@@ -65,15 +65,15 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
     private ProgressDialog progressDialog;
     ////////////
 
-    // What is being returned after the adding another course
-    private ActivityResultLauncher<Intent> createCourseActivityResultLauncher = registerForActivityResult(
+    //Reinitialize views after successfully editing profile details
+    private ActivityResultLauncher<Intent> editProfileInfoLauncher = registerForActivityResult(
         new ActivityResultContracts.StartActivityForResult(),
         new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if(result.getResultCode() == Activity.RESULT_OK) {
-                    Log.d(TAG, "Add success so reinitialize the views.");
-                    //initializeViews();
+                    Log.d(TAG, "Edit profile was a success, so initialize view to see changes");
+                    initializeViews();
                 } else {
                     Log.d(TAG, "Nothing returned");
                 }
@@ -90,16 +90,16 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         this.editor         = sp.edit();
         this.email          = sp.getString(Keys.SP_EMAIL_KEY,"");
 
-        this.txtName        = findViewById(R.id.tvName);
-        this.txtIdNumber    = findViewById(R.id.tvIdName);
-        this.btnSearchCourse = findViewById(R.id.btnSearchCourse);
-        this.imgProfilePic  = findViewById(R.id.img_profilePic);
-        this.refreshLayout = findViewById(R.id.refreshLayout);
+        this.txtName            = findViewById(R.id.tvName);
+        this.txtIdNumber        = findViewById(R.id.tvIdName);
+        this.btnSearchCourse    = findViewById(R.id.btnSearchCourse);
+        this.imgProfilePic      = findViewById(R.id.img_profilePic);
+        this.refreshLayout      = findViewById(R.id.refreshLayout);
 
         //initialize progress dialog so it can be called anywhere in the class
         this.progressDialog = new ProgressDialog(CourseListActivity.this);
 
-        //go to search course activity
+        //open up search course activity
         btnSearchCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,12 +108,11 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
             }
         });
 
+        //swipe up to refresh function
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 initializeViews();
-
-//                courseListAdapter.notifyDataSetChanged();
                 refreshLayout.setRefreshing(false);
             }
         });
@@ -133,7 +132,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         switch(item.getItemId()) {
             case R.id.editProfile:
                 Intent editProfileIntent = new Intent (CourseListActivity.this, EditProfileActivity.class);
-                createCourseActivityResultLauncher.launch(editProfileIntent);
+                editProfileInfoLauncher.launch(editProfileIntent);
                 return true;
             case R.id.editAccountSecurity:
                 Intent editAccountSecurityIntent = new Intent (CourseListActivity.this, EditAccountSecurityActivity.class);
@@ -180,11 +179,10 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
                         if(task.isSuccessful()) {
                             Uri imgUri = task.getResult();
                             Picasso.get().load(imgUri).into(imgProfilePic);
-                            initializeRecyclerView();
                         } else {
                             Log.d(TAG,"No profile image found. Switching to default");
-                            initializeRecyclerView();
                         }
+                        initializeRecyclerView();
                     }
                 });
             }
@@ -202,11 +200,9 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                courseModels.clear(); //always clear before initialization to prevent duplicates
 
                 List<DocumentSnapshot> result = Db.getDocuments(task);
-                Log.d(TAG, ""+result.size());
-
-                courseModels.clear();
                 courseModels.addAll(Db.toCourseModel(Db.getDocuments(task)));
 
                 courseListRecyclerView = findViewById(R.id.recyclerView);
@@ -225,7 +221,6 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
     protected void onResume() {
         super.onResume();
         initializeViews();
-        Log.d(TAG,"we are in on resume");
     }
 
 }

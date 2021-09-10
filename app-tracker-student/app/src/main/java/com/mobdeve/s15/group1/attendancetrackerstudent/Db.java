@@ -23,82 +23,17 @@ import java.util.List;
 import java.util.Map;
 
 public class Db {
-    //KEEP THIS VVVVVVVVVVVVVVVVVVVVV
     public static String TAG = "Db.java";
-    //KEEP THIS ^^^^^^^^^^^^^^^^^^^^^^
 
-
-
-    private static CollectionReference usersRef = null;
-    private static CollectionReference meetingCollection = null;
-    private static CollectionReference coursesRef = null;
-    private static CollectionReference meetingsRef = null;
-    private static DocumentSnapshot userInfo = null;
-    private static DocumentSnapshot classInfo = null;
-
-    private static List<DocumentSnapshot> resultList = null;
-
-
-    //KEEP THIS HERE::::::::::::::::::::::::
-    //KEEP THIS HERE::::::::::::::::::::::::
-    //KEEP THIS HERE::::::::::::::::::::::::
-    //KEEP THIS HERE::::::::::::::::::::::::
-    //KEEP THIS HERE::::::::::::::::::::::::
     private static FirebaseFirestore firebaseFirestoreInstance                  = null;
     private static StorageReference storageReferenceInstance                    = null;
 
     private static ArrayList<CourseModel> courseModels = new ArrayList<>();
     private static ArrayList<MeetingModel> meetingModels                        = new ArrayList<>();
-    //private static ArrayList<CourseRequestModel> courseRequestModels            = new ArrayList<>();
     private static ArrayList<StudentPresentListModel> studentPresentListModels  = new ArrayList<>();
-    //private static ArrayList<ClassListModel> classListModels                    = new ArrayList<>();
 
     public static String id = null;
-    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
-    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
-    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
-    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
-    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
-    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
 
-
-
-    //DELETE SOON:::::::::::::::::::::::::::::::::::
-    //DELETE SOON:::::::::::::::::::::::::::::::::::
-    //DELETE SOON:::::::::::::::::::::::::::::::::::
-    //DELETE SOON:::::::::::::::::::::::::::::::::::
-    //DELETE SOON:::::::::::::::::::::::::::::::::::
-    //DELETE SOON:::::::::::::::::::::::::::::::::::
-    public final static String
-        USERS_COLLECTION        = "Users",
-            USERNAME_FIELD      = "username",
-            IDNUMBER_FIELD      = "idNumber",
-            EMAIL_FIELD         = "email",
-            PASSWORD_FIELD      = "password",
-            FIRSTNAME_FIELD     = "firstName",
-            LASTNAME_FIELD      = "lastName",
-            USERTYPE_FIELD      = "userType",
-        COURSES_COLLECTION      = "Courses",
-            COURSECODE_FIELD    = "courseCode",
-            COURSENAME_FIELD    = "courseName",
-            SECTIONCODE_FIELD   = "sectionCode",
-            STUDENTCOUNT_FIELD  = "studentCount",
-            ISPUBLISHED_FIELD   = "isPublished",
-            HANDLEDBY_FIELD         = "handledBy",
-        MEETINGS_COLLECTION         = "Meetings",
-            MEETINGCODE_FIELD         = "meetingCode",
-        MEETINGHISTORY_COLLECTION       = "MeetingHistory";
-    ////////////DELETE SOON////////////////////////////////////////
-    ////////////DELETE SOON////////////////////////////////////////
-    ////////////DELETE SOON////////////////////////////////////////
-    ////////////DELETE SOON////////////////////////////////////////
-    ////////////DELETE SOON////////////////////////////////////////
-    ////////////DELETE SOON////////////////////////////////////////
-    ////////////DELETE SOON////////////////////////////////////////
-
-
-
-    //new version
     public final static String
         COLLECTION_USERS        = "Users",
         FIELD_EMAIL             = "email",
@@ -127,17 +62,7 @@ public class Db {
 
         COLLECTION_COURSEREQUEST    = "CourseRequest",
 
-        COLLECTION_CLASSLIST        = "ClassList"
-
-
-
-        ; //no need for username here
-
-    //FIELD_MEETINGSTATUS     = "meetingStatus", //<-------------- lmao useless delete this later
-
-
-    ////////////////////////new version
-
+        COLLECTION_CLASSLIST        = "ClassList";
 
 
     public static FirebaseFirestore getFirestoreInstance() {
@@ -154,19 +79,6 @@ public class Db {
         return storageReferenceInstance;
     }
 
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////NEW AS OF 2021, 09, 04
-    public static Task<QuerySnapshot> getTable(String tableName) {
-        return getFirestoreInstance().collection(tableName).get();
-    }
-
     public static CollectionReference getCollection(String collectionName) {
         return getFirestoreInstance().collection(collectionName);
     }
@@ -175,6 +87,20 @@ public class Db {
         return task.getResult().getDocuments();
     }
 
+    //getting original id of a single document
+    public static String getIdFromTask(Task<QuerySnapshot> task) {
+        QuerySnapshot qs = task.getResult();
+        if(qs.isEmpty()) {
+            id = null;
+            Log.d(TAG,"getIdFromTask finds no existing ID");
+        } else {
+            id = qs.getDocuments().get(0).getId();
+            Log.d(TAG,"getIdFromTask found an ID of \""+id+"\"");
+        }
+        return id;
+    }
+
+    //get document methods VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
     public static Task<QuerySnapshot> getDocumentsWith(String tableName, String field, String value) {
         return  getFirestoreInstance().
                 collection(tableName).
@@ -284,34 +210,19 @@ public class Db {
                 orderBy(field2, direction2).
                 get();
     }
+    //get document methods ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    public static Task<QuerySnapshot> getDocumentsWithout(String tableName, String field, String value) {
-        return  getFirestoreInstance().
-                collection(tableName).
-                whereNotEqualTo(field,value).
-                get();
-    }
-
-    public static String getIdFromTask(Task<QuerySnapshot> task) {
-        QuerySnapshot qs = task.getResult();
-        if(qs.isEmpty()) {
-            id = null;
-            Log.d(TAG,"getIdFromTask finds no existing ID");
-        } else {
-            id = qs.getDocuments().get(0).getId();
-            Log.d(TAG,"getIdFromTask found an ID of \""+id+"\"");
-        }
-        return id;
-    }
-
+    //updating picture from storage
     public static Task uploadImage(String documentId, Uri imgUri) {
         return getStorageReferenceInstance().child(documentId).putFile(imgUri);
     }
 
+    //get profile pic via storage
     public static Task<Uri> getProfilePic(String documentId) {
         return Db.getStorageReferenceInstance().child(documentId).getDownloadUrl();
     }
 
+    //general document adding
     public static void addDocument(String tableName, Map<String, Object> input) {
         Db.getCollection(tableName).
         add(input).
@@ -329,6 +240,7 @@ public class Db {
         });
     }
 
+    //converting List to CourseModel objects
     public static ArrayList<CourseModel> toCourseModel(List<DocumentSnapshot> result) {
         courseModels.clear();
         for(DocumentSnapshot ds:result) {
@@ -340,37 +252,10 @@ public class Db {
         return courseModels;
     }
 
-//    public static ArrayList<CourseRequestModel> toCourseRequestModel(List<DocumentSnapshot> result) {
-//        courseRequestModels.clear();
-//        for(DocumentSnapshot ds:result) {
-//            courseRequestModels.add(new CourseRequestModel(
-//                    ds.getString(Db.FIELD_COURSECODE),
-//                    ds.getString(Db.FIELD_FIRSTNAME),
-//                    ds.getString(Db.FIELD_IDNUMBER),
-//                    ds.getString(FIELD_LASTNAME),
-//                    ds.getString(FIELD_SECTIONCODE)
-//            ));
-//        }
-//        return courseRequestModels;
-//    }
-
-//    public static ArrayList<ClassListModel> toClassListModel(List<DocumentSnapshot> result) {
-//        classListModels.clear();
-//        for(DocumentSnapshot ds:result) {
-//            classListModels.add(new ClassListModel(
-//                    ds.getString(Db.FIELD_COURSECODE),
-//                    ds.getString(Db.FIELD_EMAIL),
-//                    ds.getString(Db.FIELD_IDNUMBER),
-//                    ds.getString(FIELD_SECTIONCODE)
-//            ));
-//        }
-//        return classListModels;
-//    }
-
+    //converting List to MeetingModel object
     public static ArrayList<MeetingModel> toMeetingModel(List<DocumentSnapshot> result) {
         meetingModels.clear();
         for(DocumentSnapshot ds:result) {
-            //(String courseCode, boolean isOpen, String meetingCode, Date meetingStart, String sectionCode, int studentCount)
             meetingModels.add(new MeetingModel(
                 ds.getString(Db.FIELD_COURSECODE),
                 ds.getBoolean(Db.FIELD_ISOPEN),
@@ -383,239 +268,6 @@ public class Db {
         return meetingModels;
     }
 
-    public static ArrayList<StudentPresentListModel> toStudentPresentListModel(List<DocumentSnapshot> result) {
-        studentPresentListModels.clear();
-        for(DocumentSnapshot ds:result) {
-            studentPresentListModels.add(new StudentPresentListModel(
-                    ds.getString(FIELD_COURSECODE),
-                    ds.getString(FIELD_MEETINGCODE),
-                    ds.getString(FIELD_SECTIONCODE),
-                    ds.getString(FIELD_STUDENTATTENDED),
-                    ds.getString(FIELD_FIRSTNAME),
-                    ds.getString(FIELD_LASTNAME),
-                    ds.getBoolean(FIELD_ISPRESENT)));
-        }
-        return studentPresentListModels;
-    }
-
-    public static void deleteDocument(String tableName, String field, String value) {
-        getDocumentsWith(tableName, field, value).
-        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                String id = Db.getIdFromTask(task);
-                Db.getCollection(tableName).
-                document(id).
-                delete().
-                addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()) {
-                            Log.d(TAG,"Successfully deleted a "+tableName+" document");
-                        } else {
-                            Log.d(TAG,"Failed: "+task.getException());
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    public static void deleteDocument(String tableName,
-        String field1, String value1,
-        String field2, String value2) {
-        getDocumentsWith(tableName, field1, value1, field2, value2).
-        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                String id = Db.getIdFromTask(task);
-                Log.d(TAG,"Deleting document with an id of \""+id+"\"");
-                if(id == null) {
-                    Log.d(TAG,"Such a document in collections \""+tableName+"\" does not exist");
-                } else {
-                    Db.getCollection(tableName).
-                    document(id).
-                    delete().
-                    addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()) {
-                                Log.d(TAG,"Successfully deleted a document in \" "+tableName+"\" collection");
-                            } else {
-                                Log.d(TAG,"Failed: "+task.getException());
-                            }
-                        }
-                    });
-                }
-            }
-        });
-    }
-
-    public static void deleteDocument(String tableName,
-        String field1, String value1,
-        String field2, String value2,
-        String field3, String value3) {
-        getDocumentsWith(tableName, field1, value1, field2, value2, field3, value3).
-        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                String id = Db.getIdFromTask(task);
-                Log.d(TAG,"Deleting document with an id of \""+id+"\"");
-                if(id == null) {
-                    Log.d(TAG,"Such a document in collections \""+tableName+"\" does not exist");
-                } else {
-                    Db.getCollection(tableName).
-                    document(id).
-                    delete().
-                    addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()) {
-                                Log.d(TAG,"Successfully deleted a document in \" "+tableName+"\" collection");
-                            } else {
-                                Log.d(TAG,"Failed: "+task.getException());
-                            }
-                        }
-                    });
-                }
-            }
-        });
-    }
-
-
-    ////////////////////NEW AS OF 2021, 09, 04/////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    //gets the entire user collection
-    public static CollectionReference getUsersCollectionReference() {
-        if(usersRef == null) {
-            usersRef = getFirestoreInstance().collection(USERS_COLLECTION);
-        }
-        return usersRef;
-    }
-
-    //gets the entire MeetingHistory collection
-    public static CollectionReference getMeetingHistoryCollection() {
-        if(meetingCollection == null) {
-            meetingCollection = getFirestoreInstance().collection(MEETINGHISTORY_COLLECTION);
-        }
-        return meetingCollection;
-    }
-
-    //gets the entire course collection
-    public static CollectionReference getCoursesCollectionReference() {
-        if(coursesRef == null) {
-            coursesRef = getFirestoreInstance().collection(COURSES_COLLECTION);
-        }
-        return coursesRef;
-    }
-
-    //gets the entire meeting collection
-    public static CollectionReference getMeetingsCollectionReference() {
-        if(meetingsRef == null) {
-            meetingsRef = getFirestoreInstance().collection(MEETINGS_COLLECTION);
-        }
-        return meetingsRef;
-    }
-
-    public static DocumentReference getDocumentReference(String stringRef) {
-        return getFirestoreInstance().document(stringRef);
-    }
-
-    //returns null as of now
-    //searches for a single user
-    public static Task<QuerySnapshot> getUserInfoFromEmail(String emailRef) {
-        return getUsersCollectionReference().whereEqualTo(EMAIL_FIELD, emailRef).get();
-    }
-
-    //returns null as of now
-    //searches for a single class
-    public static DocumentSnapshot getSingleClassData(String stringRef) {
-        getUsersCollectionReference().whereEqualTo(Db.COURSECODE_FIELD, stringRef) //this is a test
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                QuerySnapshot querySnapshot = task.getResult();
-                List<DocumentSnapshot> result = querySnapshot.getDocuments();
-                classInfo = result.get(0);
-            }
-        });
-        return classInfo; //returns null as of now
-    }
-
-    public static DocumentSnapshot getFirstResult(Task<QuerySnapshot> task) {
-        if(userInfo == null) {
-            QuerySnapshot querySnapshot = task.getResult();
-            List<DocumentSnapshot> result = querySnapshot.getDocuments();
-            userInfo = result.get(0);
-        }
-        return userInfo;
-    }
-
-    public static Task<QuerySnapshot> getStudentsInMeeting(String meetingCode) {
-        return getMeetingHistoryCollection().whereEqualTo(MEETINGCODE_FIELD, meetingCode).get();
-    }
-
-    public static List<DocumentSnapshot> toList(Task<QuerySnapshot> task) {
-        QuerySnapshot querySnapshot = task.getResult();
-        List<DocumentSnapshot> result = querySnapshot.getDocuments();
-        resultList = result;
-        return resultList;
-    }
-
-    public static void updateSingleStudent(String entry, String query, UserModel initialInfo) {
-        Db.getUsersCollectionReference()
-            .whereEqualTo(entry, query)
-            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    DocumentSnapshot ds = getFirstResult(task);
-                    if(initialInfo.getEmail().equals("")) initialInfo.setEmail(ds.getString("email"));
-                    if(initialInfo.getPassword().equals("")) initialInfo.setPassword(ds.getString("password"));
-                    if(initialInfo.getFirstName().equals("")) initialInfo.setFirstName(ds.getString("firstName"));
-                    if(initialInfo.getLastName().equals("")) initialInfo.setLastName(ds.getString("lastName"));
-                    if(initialInfo.getIdNumber().equals("")) initialInfo.setIdNumber(ds.getString("idNumber"));
-                    if(initialInfo.getUserType().equals("")) initialInfo.setUserType(ds.getString("userType"));
-
-
-                    String id = Db.getIdFromTask(task);
-                    Db.getUsersCollectionReference()
-                        .document(id)
-                        .set(initialInfo)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Log.d("main","Single student document updated successfully.");
-                            }
-                        });
-                }
-            });
-    }
-
-    public static Query findDocuments(String collection, String fieldName, String fieldValue) {
-        return getFirestoreInstance()
-                .collection(collection)
-                .whereEqualTo(fieldName,fieldValue);
-    }
-
-    public static Query findDocumentsWithTwoParameters(String collection, String fieldName1, String fieldValue1, String fieldName2, String fieldValue2) {
-        return getFirestoreInstance()
-            .collection(collection)
-            .whereEqualTo(fieldName1,fieldValue1)
-            .whereEqualTo(fieldName2, fieldValue2);
-    }
-
-    public static Task<Uri> getImageUri(String username) {
-        return getStorageReferenceInstance().child(username).getDownloadUrl();
-    }
 
 }
 

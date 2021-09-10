@@ -27,11 +27,11 @@ import java.util.List;
 import java.util.Map;
 
 public class RegistrationActivity extends AppCompatActivity {
-    private static final String TAG = "RegistrationActivity";
+    private static final String         TAG = "RegistrationActivity";
 
     //shared pref initialization
-    private SharedPreferences sp;
-    private SharedPreferences.Editor editor;
+    private SharedPreferences           sp;
+    private SharedPreferences.Editor    editor;
 
     //widget initialization
     private EditText    inputFirstName,
@@ -48,10 +48,8 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_view);
 
-
         this.sp = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
         this.editor = sp.edit();
-
 
         this.btnSubmit                  = findViewById(R.id.btnSubmit);
         this.btnCancelRegistration      = findViewById(R.id.btnCancelRegistration);
@@ -95,8 +93,8 @@ public class RegistrationActivity extends AppCompatActivity {
                                     editor.putString(Keys.SP_USERTYPE_KEY, "student");
                                     editor.commit();
 
-                                    Intent intent = new Intent(RegistrationActivity.this, CourseListActivity.class);
-                                    startActivity(intent);
+                                    Intent getCourseListActivityIntent = new Intent(RegistrationActivity.this, CourseListActivity.class);
+                                    startActivity(getCourseListActivityIntent);
                                     finish();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Account exists already!", Toast.LENGTH_SHORT).show();
@@ -119,6 +117,7 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
+    //extra validation for id number
     private boolean isIDNumberValid(String val) {
         boolean isNumber = false, isLength8 = false;
 
@@ -144,6 +143,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 !inputPassword.getText().toString().isEmpty();
     }
 
+    //if entries are valid, place data into a hashmap, and send it to db
     protected void createNewUser(String email, String firstName, String idNumber, String lastName, String password) {
         Map<String, Object> input = new HashMap<>();
 

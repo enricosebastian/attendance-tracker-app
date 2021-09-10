@@ -35,28 +35,29 @@ import java.util.Map;
 
 public class SingleMeetingActivity extends AppCompatActivity {
 
-    private static final String TAG = "SingleMeetingActivity";
+    private static final String     TAG = "SingleMeetingActivity";
 
     //shared preferences initialization
-    private SharedPreferences sp;
-    private SharedPreferences.Editor editor;
-    private String email;
+    private SharedPreferences       sp;
+    private String                  email;
     ////////////
 
     //widget initialization
-    private TextView txtStatus;
-    private TextView txtDate;
-    private TextView txtClassTitle;
-    private TextView txtAttendanceStatus;
-    private TextView txtClassNameSubtitle;
-    private EditText inputMeetingCode;
-    private Button btnAttend;
-    ////////////
+    private EditText        inputMeetingCode;
+    private Button          btnAttend;
+    private TextView        txtStatus,
+                            txtDate,
+                            txtClassTitle,
+                            txtAttendanceStatus,
+                            txtClassNameSubtitle;
 
-    private String courseCode, sectionCode, meetingCode, courseName;
-    private boolean isOpen; //suggestion: what happens if you change boolean (primitive) to Boolean instead?
-    private Date meetingStart;
-    private ProgressDialog progressDialog;
+    private String          courseCode,
+                            sectionCode,
+                            meetingCode,
+                            courseName;
+    private boolean         isOpen; //something to note: what happens if you change boolean (primitive) to Boolean instead?
+    private Date            meetingStart;
+    private ProgressDialog  progressDialog;
 
 
     @Override
@@ -65,7 +66,6 @@ public class SingleMeetingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_single_meeting_view);
 
         this.sp             = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
-        this.editor         = sp.edit();
         this.email          = sp.getString(Keys.SP_EMAIL_KEY, "");
 
         Intent getIntent    = getIntent();
@@ -94,12 +94,11 @@ public class SingleMeetingActivity extends AppCompatActivity {
         this.inputMeetingCode           = findViewById(R.id.inputMeetingCode);
         this.btnAttend                  = findViewById(R.id.btnAttend);
 
-        initializeViews(); //move to on resume one day
 
+        //if student clicks button, activate attendance recording functionality
         btnAttend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG,meetingCode); //REMOVE THIS AFTER, FUCKERS. THIS IS FOR DEBUGGING ONLY
                 if(btnAttend.getText().toString().equals("RECORDED")) {
                     Toast.makeText(getApplicationContext(), "Already recorded!", Toast.LENGTH_SHORT).show();
                 } else if(btnAttend.getText().toString().equals("CLOSED")) {
@@ -116,7 +115,7 @@ public class SingleMeetingActivity extends AppCompatActivity {
 
     }
 
-    // Records the attendance of the users
+    //method to record attendance by getting email field, and validating student history
     protected void recordAttendance() {
         Db.getDocumentsWith(Db.COLLECTION_USERS,
         Db.FIELD_EMAIL, email).
@@ -192,49 +191,54 @@ public class SingleMeetingActivity extends AppCompatActivity {
                 }
 
                 Db.getDocumentsWith(Db.COLLECTION_MEETINGHISTORY,
-                        Db.FIELD_MEETINGCODE, meetingCode,
-                        Db.FIELD_STUDENTATTENDED, email).
-                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                List<DocumentSnapshot> result = Db.getDocuments(task);
-                                if(result.size()==0) {
-                                    txtAttendanceStatus.setText("ATTENDANCE NOT RECORDED");
-                                    progressDialog.setCanceledOnTouchOutside(true);
-                                    progressDialog.dismiss();
-                                } else {
-                                    if(!result.get(0).getBoolean(Db.FIELD_ISPRESENT)) {
-                                        txtAttendanceStatus.setText("ATTENDANCE NOT RECORDED");
+                Db.FIELD_MEETINGCODE, meetingCode,
+                Db.FIELD_STUDENTATTENDED, email).
+                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<DocumentSnapshot> result = Db.getDocuments(task);
+                        if(result.size()==0) {
+                            txtAttendanceStatus.setText("ATTENDANCE NOT RECORDED");
+                            progressDialog.setCanceledOnTouchOutside(true);
+                            progressDialog.dismiss();
+                        } else {
+                            if(!result.get(0).getBoolean(Db.FIELD_ISPRESENT)) {
+                                txtAttendanceStatus.setText("ATTENDANCE NOT RECORDED");
 
-                                        btnAttend.setText("ATTEND");
-                                        btnAttend.setBackgroundTintList(getResources().getColorStateList(R.color.light_green));
-                                        btnAttend.setTextColor(Color.WHITE);
+                                btnAttend.setText("ATTEND");
+                                btnAttend.setBackgroundTintList(getResources().getColorStateList(R.color.light_green));
+                                btnAttend.setTextColor(Color.WHITE);
 
-                                        inputMeetingCode.setEnabled(true);
-                                        inputMeetingCode.setFocusable(true);
-                                        inputMeetingCode.setText("");
+                                inputMeetingCode.setEnabled(true);
+                                inputMeetingCode.setFocusable(true);
+                                inputMeetingCode.setText("");
 
-                                        progressDialog.setCanceledOnTouchOutside(true);
-                                        progressDialog.dismiss();
-                                    } else {
-                                        txtAttendanceStatus.setText("ATTENDANCE RECORDED");
+                                progressDialog.setCanceledOnTouchOutside(true);
+                                progressDialog.dismiss();
+                            } else {
+                                txtAttendanceStatus.setText("ATTENDANCE RECORDED");
 
-                                        btnAttend.setText("RECORDED");
-                                        btnAttend.setBackgroundTintList(getResources().getColorStateList(R.color.light_gray));
-                                        btnAttend.setTextColor(Color.BLACK);
+                                btnAttend.setText("RECORDED");
+                                btnAttend.setBackgroundTintList(getResources().getColorStateList(R.color.light_gray));
+                                btnAttend.setTextColor(Color.BLACK);
 
-                                        inputMeetingCode.setEnabled(false);
-                                        inputMeetingCode.setFocusable(false);
-                                        inputMeetingCode.setText(meetingCode);
+                                inputMeetingCode.setEnabled(false);
+                                inputMeetingCode.setFocusable(false);
+                                inputMeetingCode.setText(meetingCode);
 
-                                        progressDialog.setCanceledOnTouchOutside(true);
-                                        progressDialog.dismiss();
-                                    }
-                                }
+                                progressDialog.setCanceledOnTouchOutside(true);
+                                progressDialog.dismiss();
                             }
-                        });
+                        }
+                    }
+                });
             }
         });
+    }
+
+    protected void onResume() {
+        super.onResume();
+        initializeViews();
     }
 
 }
