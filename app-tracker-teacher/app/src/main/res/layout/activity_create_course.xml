@@ -22,31 +22,29 @@
 
     <EditText
         android:id="@+id/etCourseName"
-        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:fontFamily="@font/roboto"
-        android:hint="Course Name"
+        android:hint="Name of Course"
         android:inputType="textPersonName"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvCreateCourseHeader"
-        />
+        app:layout_constraintTop_toBottomOf="@id/tvCreateCourseHeader" />
 
     <EditText
         android:id="@+id/etCourseCode"
-        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:fontFamily="@font/roboto"
-        android:hint="Course code"
+        android:hint="Course Code"
         android:inputType="textPersonName|textCapCharacters"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etCourseName"
-        />
+        app:layout_constraintTop_toBottomOf="@id/etCourseName" />
 
     <EditText
         android:id="@+id/etCourseSection"
