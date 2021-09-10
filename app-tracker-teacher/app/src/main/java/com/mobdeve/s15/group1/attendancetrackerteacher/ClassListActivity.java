@@ -4,13 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -37,12 +35,11 @@ public class ClassListActivity extends AppCompatActivity {
     private RecyclerView                classListRecyclerView;
     private RecyclerView.LayoutManager  classListLayoutManager;
     private ClassListAdapter            classListAdapter;
+    private SwipeRefreshLayout          refreshLayout;
 
     //widget initialization
     private String  courseCode,
                     sectionCode;
-
-    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,34 +50,40 @@ public class ClassListActivity extends AppCompatActivity {
         this.sectionCode = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
         this.courseCode = getIntent.getStringExtra(Keys.INTENT_COURSECODE);
 
-        //initialize progress dialog so it can be called anywhere in the class
-        this.progressDialog = new ProgressDialog(ClassListActivity.this);
-        initializeViews();
+        this.refreshLayout = findViewById(R.id.refreshLayout);
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initializeRecyclerView();
+                refreshLayout.setRefreshing(false);
+            }
+        });
     }
 
-    protected void initializeViews() {
-
-        this.progressDialog.setMessage("Loading...");
-        this.progressDialog.show();
-        this.progressDialog.setCanceledOnTouchOutside(false);
-
+    protected void initializeRecyclerView() {
         Db.getDocumentsWith(Db.COLLECTION_CLASSLIST,
         Db.FIELD_COURSECODE, courseCode,
         Db.FIELD_SECTIONCODE, sectionCode).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                Log.d(TAG, "inside on complete classlist");
+                classListModels.clear();    //ALWAYS clear before adding, to prevent duplications
+
                 List<DocumentSnapshot> result = Db.getDocuments(task);
                 classListModels.addAll(Db.toClassListModel(result));
+
                 classListRecyclerView = findViewById(R.id.classListRecyclerView);
                 classListLayoutManager = new LinearLayoutManager(getApplicationContext());
                 classListRecyclerView.setLayoutManager(classListLayoutManager);
                 classListAdapter = new ClassListAdapter(classListModels);
                 classListRecyclerView.setAdapter(classListAdapter);
-                progressDialog.setCanceledOnTouchOutside(true);
-                progressDialog.dismiss();
             }
         });
+    }
+
+    protected void onResume() {
+        super.onResume();
+        initializeRecyclerView();
     }
 }
