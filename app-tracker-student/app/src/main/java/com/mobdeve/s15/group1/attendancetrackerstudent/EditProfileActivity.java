@@ -47,7 +47,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private ProgressDialog      progressDialog;
 
     //catches if user successfully uploads a new profile image
-    private ActivityResultLauncher<Intent> updateImageResultLauncher = registerForActivityResult(
+    private ActivityResultLauncher<Intent> myActivityResultLauncher = registerForActivityResult(
         new ActivityResultContracts.StartActivityForResult(),
         new ActivityResultCallback<ActivityResult>() {
             @Override
@@ -55,9 +55,11 @@ public class EditProfileActivity extends AppCompatActivity {
                 if (result.getResultCode() == Activity.RESULT_OK){
                     try {
                         if(result.getData() != null) {
+                            Log.d(TAG, "hello");
                             imageUri = result.getData().getData();
                             Picasso.get().load(imageUri).into(img_profilePic);
                             Log.d(TAG,"ImgUri is "+imageUri);
+
                         }
                     } catch(Exception exception){
                         Log.d(TAG,""+exception.getLocalizedMessage());
@@ -91,7 +93,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-                updateImageResultLauncher.launch(Intent.createChooser(intent, "Select Picture"));
+                myActivityResultLauncher.launch(Intent.createChooser(intent, "Select Picture"));
             }
         });
 
@@ -111,6 +113,8 @@ public class EditProfileActivity extends AppCompatActivity {
                                 inputLastname.getText().toString()  );
             }
         });
+
+        initializeViews();
     }
 
     //initializes views of activity
@@ -200,11 +204,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    protected void onResume() {
-        super.onResume();
-        initializeViews();
     }
 
 }
