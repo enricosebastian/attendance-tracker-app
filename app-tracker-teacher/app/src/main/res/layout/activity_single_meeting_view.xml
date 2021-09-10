@@ -145,18 +145,20 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refreshLayout"
 
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="350sp"
 
         android:layout_marginTop="37dp"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/tvMeetingCode"
         app:layout_constraintBottom_toTopOf="@id/btnDelete"
-        tools:layout_editor_absoluteX="0dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvMeetingCode">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/studentListRecyclerView"
@@ -165,15 +167,16 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
     <Button
         android:id="@+id/btnDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="36dp"
         android:backgroundTint="@color/red_light"
         android:fontFamily="@font/roboto_medium"
         android:text="Delete meeting"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/refreshLayout" />
