@@ -19,6 +19,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
+import java.util.Locale;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginView.java";
@@ -58,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = inputEmail.getText().toString();
+                String email = inputEmail.getText().toString().toLowerCase().trim();
                 String password = inputPassword.getText().toString();
                 if(email.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Email field is empty!", Toast.LENGTH_SHORT).show();

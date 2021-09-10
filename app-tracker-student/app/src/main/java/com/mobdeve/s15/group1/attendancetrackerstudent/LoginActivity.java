@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = inputEmail.getText().toString();
+                String email = inputEmail.getText().toString().toLowerCase().trim();
                 String password = inputPassword.getText().toString();
                 if(email.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Email field is empty!", Toast.LENGTH_SHORT).show();
