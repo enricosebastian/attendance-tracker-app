@@ -179,6 +179,8 @@ public class EditProfileActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     Log.d(TAG, "Successfully updated db");
+                                    progressDialog.setCanceledOnTouchOutside(true);
+                                    progressDialog.dismiss();
                                     Toast.makeText(EditProfileActivity.this, "Changes saved!", Toast.LENGTH_SHORT).show();
                                     finish();
                                 }
@@ -193,6 +195,8 @@ public class EditProfileActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             Log.d(TAG, "Successfully updated db");
+                            progressDialog.setCanceledOnTouchOutside(true);
+                            progressDialog.dismiss();
                             Toast.makeText(EditProfileActivity.this, "Changes saved!", Toast.LENGTH_SHORT).show();
                             finish();
                         }
