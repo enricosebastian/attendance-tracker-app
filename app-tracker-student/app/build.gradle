@@ -32,7 +32,7 @@ android {
 apply plugin: 'com.google.gms.google-services'
 
 dependencies {
-
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation platform('com.google.firebase:firebase-bom:28.4.0')
     implementation 'com.google.firebase:firebase-analytics'
