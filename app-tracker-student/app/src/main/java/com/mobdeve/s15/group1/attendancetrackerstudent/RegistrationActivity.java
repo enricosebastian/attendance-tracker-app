@@ -80,24 +80,36 @@ public class RegistrationActivity extends AppCompatActivity {
                     // if the ID number is a number, and is 8 length
                     if(isIDNumberValid(idNumber)) {
                         Db.getDocumentsWith(Db.COLLECTION_USERS,
-                        Db.FIELD_IDNUMBER, idNumber).
-                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                Db.FIELD_EMAIL, email).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                List<DocumentSnapshot> result = Db.getDocuments(task);
-                                if(result.size()==0) {
-                                    //that means this dude is unique/no user like this exists, so they can create
-                                    createNewUser(email, firstName, idNumber, lastName, password);
+                                List<DocumentSnapshot> emailresult = Db.getDocuments(task);
 
-                                    editor.putString(Keys.SP_EMAIL_KEY, email);
-                                    editor.putString(Keys.SP_USERTYPE_KEY, "student");
-                                    editor.commit();
+                                //If the email does not exist in the db yet
+                                if(emailresult.size() == 0) {
+                                    Db.getDocumentsWith(Db.COLLECTION_USERS,
+                                            Db.FIELD_IDNUMBER, idNumber).
+                                            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    List<DocumentSnapshot> result = Db.getDocuments(task);
+                                                    if(result.size() == 0) {
+                                                        //that means this dude is unique/no user like this exists, so they can create
+                                                        createNewUser(email, firstName, idNumber, lastName, password);
+                                                        editor.putString(Keys.SP_EMAIL_KEY, email);
+                                                        editor.putString(Keys.SP_USERTYPE_KEY, "student");
+                                                        editor.commit();
 
-                                    Intent getCourseListActivityIntent = new Intent(RegistrationActivity.this, CourseListActivity.class);
-                                    startActivity(getCourseListActivityIntent);
-                                    finish();
+                                                        Intent getCourseListActivityIntent = new Intent(RegistrationActivity.this, CourseListActivity.class);
+                                                        startActivity(getCourseListActivityIntent);
+                                                        finish();
+                                                    } else {
+                                                        Toast.makeText(getApplicationContext(), "Account exists already!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Account exists already!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Account already exists! Use another email.", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
