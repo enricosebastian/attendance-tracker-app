@@ -22,7 +22,7 @@
     <string name="btnExit">Exit</string>
     <string name="btnConfirm">Confirm</string>
     <string name="btnDelete">Delete</string>
-    <string name="tvCreateCourseHeader">CREATE A COURSE</string>
+    <string name="tvCreateCourseHeader">Create a Course</string>
 
     <string name="itemEditCourse">Edit course</string>
     <string name="itemDeleteCourse">Delete course</string>

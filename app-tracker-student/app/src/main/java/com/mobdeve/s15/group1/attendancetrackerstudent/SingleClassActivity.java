@@ -42,7 +42,11 @@ public class SingleClassActivity extends AppCompatActivity {
     private String                      courseCode,
                                         sectionCode,
                                         courseName;
+<<<<<<< HEAD
     private SwipeRefreshLayout          refreshLayout;
+=======
+    private SwipeRefreshLayout  refreshLayout;
+>>>>>>> 4c859b94674d892680ba2d0c5100e281a28ec6ce
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,7 @@ public class SingleClassActivity extends AppCompatActivity {
 
         this.txtClassCodeTitle      = findViewById(R.id.txtClassCodeTitle);
         this.txtClassNameSubtitle   = findViewById(R.id.txtClassNameSubtitle);
+        //this.refreshLayout          = findViewById(R.id.refreshLayout);
 
         //initialize progress dialog so it can be called anywhere in the class
         this.progressDialog         = new ProgressDialog(SingleClassActivity.this);

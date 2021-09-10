@@ -26,7 +26,7 @@
 
     <string name="itemEditCourse">Edit course</string>
     <string name="itemDeleteCourse">Delete course</string>
-    <string name="itemEditProfile">Edit Profile</string>
+    <string name="itemEditProfile">Edit profile</string>
     <string name="itemLogout">Logout</string>
 
     <string name="accountSecurity">Account security</string>
