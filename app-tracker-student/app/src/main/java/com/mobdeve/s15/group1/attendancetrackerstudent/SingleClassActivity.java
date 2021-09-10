@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -41,6 +42,7 @@ public class SingleClassActivity extends AppCompatActivity {
     private String                      courseCode,
                                         sectionCode,
                                         courseName;
+    private SwipeRefreshLayout          refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,15 @@ public class SingleClassActivity extends AppCompatActivity {
 
         //initialize progress dialog so it can be called anywhere in the class
         this.progressDialog         = new ProgressDialog(SingleClassActivity.this);
+        this.refreshLayout          = findViewById(R.id.refreshLayout);
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initializeRecyclerView();
+                refreshLayout.setRefreshing(false);
+            }
+        });
 
     }
 
