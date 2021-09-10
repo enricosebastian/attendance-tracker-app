@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,6 +35,7 @@ public class ClassListActivity extends AppCompatActivity {
     private RecyclerView                classListRecyclerView;
     private RecyclerView.LayoutManager  classListLayoutManager;
     private ClassListAdapter            classListAdapter;
+    private SwipeRefreshLayout          refreshLayout;
 
     //widget initialization
     private String  courseCode,
@@ -48,16 +50,26 @@ public class ClassListActivity extends AppCompatActivity {
         this.sectionCode = getIntent.getStringExtra(Keys.INTENT_SECTIONCODE);
         this.courseCode = getIntent.getStringExtra(Keys.INTENT_COURSECODE);
 
-        initializeViews();
+        this.refreshLayout = findViewById(R.id.refreshLayout);
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initializeRecyclerView();
+                refreshLayout.setRefreshing(false);
+            }
+        });
     }
 
-    protected void initializeViews() {
+    protected void initializeRecyclerView() {
         Db.getDocumentsWith(Db.COLLECTION_CLASSLIST,
         Db.FIELD_COURSECODE, courseCode,
         Db.FIELD_SECTIONCODE, sectionCode).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                classListModels.clear();    //ALWAYS clear before adding, to prevent duplications
+
                 List<DocumentSnapshot> result = Db.getDocuments(task);
                 classListModels.addAll(Db.toClassListModel(result));
 
@@ -68,5 +80,10 @@ public class ClassListActivity extends AppCompatActivity {
                 classListRecyclerView.setAdapter(classListAdapter);
             }
         });
+    }
+
+    protected void onResume() {
+        super.onResume();
+        initializeRecyclerView();
     }
 }
