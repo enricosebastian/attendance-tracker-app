@@ -64,7 +64,7 @@ public class RegistrationActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email        = inputEmail.getText().toString();
+                String email        = inputEmail.getText().toString().toLowerCase();
                 String firstName    = inputFirstName.getText().toString();
                 String idNumber     = inputIdNumber.getText().toString();
                 String lastName     = inputLastName.getText().toString();
