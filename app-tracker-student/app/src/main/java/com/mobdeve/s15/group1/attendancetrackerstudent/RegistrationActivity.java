@@ -96,13 +96,11 @@ public class RegistrationActivity extends AppCompatActivity {
                                                     if(result.size() == 0) {
                                                         //that means this dude is unique/no user like this exists, so they can create
                                                         createNewUser(email, firstName, idNumber, lastName, password);
-                                                        editor.putString(Keys.SP_EMAIL_KEY, email);
-                                                        editor.putString(Keys.SP_USERTYPE_KEY, "student");
-                                                        editor.commit();
-
                                                         Intent getCourseListActivityIntent = new Intent(RegistrationActivity.this, CourseListActivity.class);
+                                                        getCourseListActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                                                         startActivity(getCourseListActivityIntent);
                                                         finish();
+
                                                     } else {
                                                         Toast.makeText(getApplicationContext(), "Account exists already!", Toast.LENGTH_SHORT).show();
                                                     }
@@ -169,5 +167,10 @@ public class RegistrationActivity extends AppCompatActivity {
         Db.addDocument(Db.COLLECTION_USERS, input);
 
         Toast.makeText(getApplicationContext(), "Account successfully created!", Toast.LENGTH_SHORT).show();
+
+        editor.putString(Keys.SP_EMAIL_KEY, email);
+        editor.putString(Keys.SP_USERTYPE_KEY, "student");
+        editor.commit();
+
     }
 }
