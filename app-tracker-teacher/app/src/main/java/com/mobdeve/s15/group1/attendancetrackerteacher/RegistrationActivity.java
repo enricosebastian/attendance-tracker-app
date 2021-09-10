@@ -107,7 +107,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                             }
                                         });
                                     } else {
-                                        Toast.makeText(getApplicationContext(), "Account already exists. Use another email.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "Account already exists! Use another email.", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                         });
