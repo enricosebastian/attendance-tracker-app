@@ -84,12 +84,18 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             List<DocumentSnapshot> result = Db.getDocuments(task);
 
-                            Intent singleClassViewIntent = new Intent(holder.itemView.getContext(), SingleClassActivity.class);
-                            singleClassViewIntent.putExtra(Keys.INTENT_COURSECODE, result.get(0).getString(Db.FIELD_COURSECODE));
-                            singleClassViewIntent.putExtra(Keys.INTENT_SECTIONCODE, result.get(0).getString(Db.FIELD_SECTIONCODE));
-                            singleClassViewIntent.putExtra(Keys.INTENT_COURSENAME, result.get(0).getString(Db.FIELD_COURSENAME));
+                            //If the course has been deleted
+                            if(!result.isEmpty()) {
+                                Intent singleClassViewIntent = new Intent(holder.itemView.getContext(), SingleClassActivity.class);
+                                singleClassViewIntent.putExtra(Keys.INTENT_COURSECODE, result.get(0).getString(Db.FIELD_COURSECODE));
+                                singleClassViewIntent.putExtra(Keys.INTENT_SECTIONCODE, result.get(0).getString(Db.FIELD_SECTIONCODE));
+                                singleClassViewIntent.putExtra(Keys.INTENT_COURSENAME, result.get(0).getString(Db.FIELD_COURSENAME));
 
-                            holder.itemView.getContext().startActivity(singleClassViewIntent);
+                                holder.itemView.getContext().startActivity(singleClassViewIntent);
+                            } else {
+                                Toast.makeText(holder.itemView.getContext(), "The course you are trying to access has already been deleted.", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                     });
                 }
