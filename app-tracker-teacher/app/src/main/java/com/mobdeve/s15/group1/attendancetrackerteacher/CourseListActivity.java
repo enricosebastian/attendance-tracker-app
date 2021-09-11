@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
@@ -194,7 +195,9 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
 
         //Gets the courses handled by the user
         Db.getDocumentsWith(Db.COLLECTION_COURSES,
-        Db.FIELD_HANDLEDBY, email).
+        Db.FIELD_HANDLEDBY, email,
+        Db.FIELD_COURSECODE, Query.Direction.ASCENDING,
+        Db.FIELD_SECTIONCODE, Query.Direction.ASCENDING).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
