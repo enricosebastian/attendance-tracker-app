@@ -93,7 +93,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
 
                                 holder.itemView.getContext().startActivity(singleClassViewIntent);
                             } else {
-                                Toast.makeText(holder.itemView.getContext(), "The course you are trying to access has already been deleted.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(holder.itemView.getContext(), "The course you are trying to access has already been deleted", Toast.LENGTH_SHORT).show();
                             }
 
                         }
