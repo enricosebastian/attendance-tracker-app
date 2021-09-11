@@ -8,9 +8,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,6 +36,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private SharedPreferences.Editor    editor;
 
     //widget initialization
+    private TextView    tvEmailFormatError;
     private EditText    inputFirstName,
                         inputLastName,
                         inputEmail,
@@ -78,7 +81,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     //checks id for BOTH teachers and students, just in case
 
                     // if the ID number is a number, and is 8 length
-                    if(isIDNumberValid(idNumber)) {
+                    if(isIDNumberValid(idNumber) && isEmailValid(email)) {
                         Db.getDocumentsWith(Db.COLLECTION_USERS,
                                 Db.FIELD_EMAIL, email).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
@@ -112,7 +115,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             }
                         });
                     } else {
-                        Toast.makeText(getApplicationContext(), "Wrong ID number format!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "One of the fields has a wrong format!", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -126,7 +129,10 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
     }
-
+    private boolean isEmailValid(CharSequence email)
+    {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
     //extra validation for id number
     private boolean isIDNumberValid(String val) {
         boolean isNumber = false, isLength8 = false;

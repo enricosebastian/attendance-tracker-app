@@ -8,6 +8,7 @@
     <string name="txtEnterIDnumber">Enter your ID number</string>
     <string name="etHintID">ID number (e.g. 11812345)</string>
     <string name="btnNext">Next</string>
+    <string name="tvEmailFormatError">Please enter a valid email.</string>
 
     <string name="tvFirstName">First Name</string>
     <string name="tvLastName">Last Name</string>

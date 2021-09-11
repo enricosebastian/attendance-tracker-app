@@ -10,9 +10,11 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,6 +35,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
 
     //widget initialization
+    private TextView    tvEmailFormatError;
     private EditText    inputFirstName,
                         inputLastName,
                         inputEmail,
@@ -50,14 +53,13 @@ public class RegistrationActivity extends AppCompatActivity {
         this.sp = getSharedPreferences(Keys.SP_FILE_NAME, Context.MODE_PRIVATE);
         this.editor = sp.edit();
 
-
-        this.btnSubmit = findViewById(R.id.btnSubmit);
-        this.btnCancelRegistration = findViewById(R.id.btnCancelRegistration);
-        this.inputFirstName = findViewById(R.id.inputFirstName);
-        this.inputLastName = findViewById(R.id.inputLastName);
-        this.inputEmail = findViewById(R.id.inputEmail);
-        this.inputPassword = findViewById(R.id.inputPassword);
-        this.inputIdNumber = findViewById(R.id.inputIdNumber);
+        this.btnSubmit                  = findViewById(R.id.btnSubmit);
+        this.btnCancelRegistration      = findViewById(R.id.btnCancelRegistration);
+        this.inputFirstName             = findViewById(R.id.inputFirstName);
+        this.inputLastName              = findViewById(R.id.inputLastName);
+        this.inputEmail                 = findViewById(R.id.inputEmail);
+        this.inputPassword              = findViewById(R.id.inputPassword);
+        this.inputIdNumber              = findViewById(R.id.inputIdNumber);
 
         // When User submits registration
         btnSubmit.setOnClickListener(new View.OnClickListener() {
@@ -69,15 +71,15 @@ public class RegistrationActivity extends AppCompatActivity {
                 String lastName     = inputLastName.getText().toString().trim();
                 String password     = inputPassword.getText().toString();
 
-                // If not all entries are filled
-                if(!doAllFieldsHaveEntries()) {
+                // "If not all entries are filled"
+                if(!doAllFieldsHaveEntries() && isEmailValid(email)) {
                     Log.d(TAG, "Not all fields have entries");
                     Toast.makeText(getApplicationContext(), "Please fill up all the fields", Toast.LENGTH_SHORT).show();
                 } else {
                     //checks id for BOTH teachers and students, just in case
-
-                    // if the ID number is a number, and is 8 length
-                    if(isIDNumberValid(idNumber)) {
+                    
+                    // if the ID number is a number, and is 8 length, and
+                    if(isIDNumberValid(idNumber) && isEmailValid(email)) {
                         // Check if email exists
                         Db.getDocumentsWith(Db.COLLECTION_USERS,
                                 Db.FIELD_EMAIL, email).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -113,7 +115,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 }
                         });
                     } else {
-                        Toast.makeText(getApplicationContext(), "Wrong ID number format!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "One of the fields has a wrong format!", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -127,8 +129,12 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
     }
-
+    private boolean isEmailValid(CharSequence email)
+    {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
     //This method checks the length of the id number entered by the student
+
     private boolean isIDNumberValid(String val) {
         boolean isNumber = false, isLength8 = false;
 
