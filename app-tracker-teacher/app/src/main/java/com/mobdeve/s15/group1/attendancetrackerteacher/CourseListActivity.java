@@ -94,6 +94,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
         //initialize progress dialog so it can be called anywhere in the class
         this.progressDialog = new ProgressDialog(CourseListActivity.this);
 
+
         // When user clicks on add course button
         btnAddCourse.setOnClickListener(new View.OnClickListener() {
             @Override

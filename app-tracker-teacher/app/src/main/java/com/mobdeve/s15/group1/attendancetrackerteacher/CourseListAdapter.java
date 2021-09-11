@@ -2,6 +2,7 @@ package com.mobdeve.s15.group1.attendancetrackerteacher;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -66,12 +68,16 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
                                 return true;
 
                             case R.id.deleteCourse:
+                                ProgressDialog progressDialog =  new ProgressDialog(parent.getContext());
                                 Log.d(TAG, "Action delete course @ position: " + courseListVH.getBindingAdapterPosition());
                                 new AlertDialog.Builder(courseListVH.itemView.getContext())
                                         .setTitle("Delete course")
                                         .setMessage("Are you sure you want to delete this entry?")
                                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int which) {
+                                                progressDialog.setMessage("Loading...");
+                                                progressDialog.show();
+                                                progressDialog.setCanceledOnTouchOutside(false);
 
                                                 //deletes all info from classlist
                                                 Db.deleteDocuments(Db.COLLECTION_CLASSLIST,
@@ -104,8 +110,12 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
                                                 Log.d(TAG,"deleted collection in COLLECTION_MEETINGS");
 
                                                 data.remove(courseListVH.getBindingAdapterPosition());
+
                                                 notifyItemRemoved(courseListVH.getBindingAdapterPosition());
+                                                notifyItemRangeChanged(courseListVH.getBindingAdapterPosition(), getItemCount() - courseListVH.getBindingAdapterPosition());
                                                 Toast.makeText(courseListVH.itemView.getContext(), "Course has been successfully deleted", Toast.LENGTH_SHORT).show();
+                                                progressDialog.setCanceledOnTouchOutside(true);
+                                                progressDialog.dismiss();
                                             }
                                         })
 
@@ -148,7 +158,8 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
             @Override
             public void onClick(View v) {
                 Intent singleClassViewIntent = new Intent(holder.itemView.getContext(), SingleClassActivity.class);
-
+                Log.d(TAG, "Course being passed: " + data.get(position).getCourseCode());
+                Log.d(TAG, "Section being passed: " + data.get(position).getSectionCode());
                 singleClassViewIntent.putExtra(Keys.INTENT_COURSECODE, data.get(position).getCourseCode());
                 singleClassViewIntent.putExtra(Keys.INTENT_SECTIONCODE, data.get(position).getSectionCode());
                 singleClassViewIntent.putExtra(Keys.INTENT_COURSENAME, data.get(position).getCourseName());

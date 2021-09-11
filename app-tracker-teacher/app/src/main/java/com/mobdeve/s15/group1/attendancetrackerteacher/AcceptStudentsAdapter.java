@@ -68,6 +68,7 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
                 data.get(position).getSectionCode());
                 data.remove(holder.getBindingAdapterPosition());
                 notifyItemRemoved(holder.getBindingAdapterPosition());
+                notifyItemRangeChanged(holder.getBindingAdapterPosition(), getItemCount() - holder.getBindingAdapterPosition());
             }
         });
 
@@ -81,6 +82,7 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
                 data.get(position).getSectionCode(),
                 position);
                 notifyItemRemoved(holder.getBindingAdapterPosition());
+                notifyItemRangeChanged(holder.getBindingAdapterPosition(), getItemCount() - holder.getBindingAdapterPosition());
             }
         });
 

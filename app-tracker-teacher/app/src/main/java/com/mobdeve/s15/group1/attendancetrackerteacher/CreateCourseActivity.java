@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,6 +39,7 @@ public class CreateCourseActivity extends AppCompatActivity {
     private Button btnCancelCreate, btnCreateCourse;
     private EditText etCourseName, etCourseCode, etCourseSection;
     private Switch switchIsPublished;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,9 @@ public class CreateCourseActivity extends AppCompatActivity {
         this.etCourseName       = findViewById(R.id.etCourseName);
         this.etCourseSection    = findViewById(R.id.etCourseSection);
         this.switchIsPublished  = findViewById(R.id.switchIsPublished);
+
+        //initialize progress dialog so it can be called anywhere in the class
+        this.progressDialog = new ProgressDialog(CreateCourseActivity.this);
 
         //When user cancels
         this.btnCancelCreate.setOnClickListener(new View.OnClickListener() {
@@ -72,8 +78,15 @@ public class CreateCourseActivity extends AppCompatActivity {
                 String sectionCode  = etCourseSection.getText().toString().trim();
                 boolean isPublished = switchIsPublished.isChecked();
 
+                progressDialog.setMessage("Loading...");
+                progressDialog.show();
+                progressDialog.setCanceledOnTouchOutside(false);
+
                 if(courseName.isEmpty() || courseCode.isEmpty() || sectionCode.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Entry field is empty", Toast.LENGTH_SHORT).show();
+                    //Dismiss the loading dialog once everything is finished
+                    progressDialog.setCanceledOnTouchOutside(true);
+                    progressDialog.dismiss();
                 } else {
                     Db.getDocumentsWith(Db.COLLECTION_COURSES,
                             Db.FIELD_COURSECODE, courseCode, Db.FIELD_SECTIONCODE, sectionCode).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -84,9 +97,15 @@ public class CreateCourseActivity extends AppCompatActivity {
                                 // If course already exists
                                 if(result.size()==0) {
                                     addClass(courseName, courseCode, sectionCode, isPublished);
+                                    //Dismiss the loading dialog once everything is finished
+                                    progressDialog.setCanceledOnTouchOutside(true);
+                                    progressDialog.dismiss();
                                     finish();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "That course already exists!", Toast.LENGTH_SHORT).show();
+                                    //Dismiss the loading dialog once everything is finished
+                                    progressDialog.setCanceledOnTouchOutside(true);
+                                    progressDialog.dismiss();
                                 }
                             }
                     });
