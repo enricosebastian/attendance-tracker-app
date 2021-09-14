@@ -49,6 +49,7 @@ public class AcceptStudentsActivity extends AppCompatActivity {
         this.progressDialog = new ProgressDialog(AcceptStudentsActivity.this);
         this.refreshLayout  = findViewById(R.id.refreshLayout);
 
+        // When user swipes down to refresh
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -59,17 +60,18 @@ public class AcceptStudentsActivity extends AppCompatActivity {
 
     }
 
+    // Initializes view which is called when the view is refreshed on resume
     protected void initializeViews() {
         //Show Progress bar
         this.progressDialog.setMessage("Loading...");
         this.progressDialog.show();
         this.progressDialog.setCanceledOnTouchOutside(false);
-
         initializeRecyclerView();
-
     }
 
-    protected void initializeRecyclerView(){
+    // Initializes recycler view
+    protected void initializeRecyclerView() {
+        //Gets the data of students who want to join the course
         Db.getDocumentsWith(Db.COLLECTION_COURSEREQUEST,
         Db.FIELD_COURSECODE, courseCode,
         Db.FIELD_SECTIONCODE, sectionCode).
@@ -94,6 +96,7 @@ public class AcceptStudentsActivity extends AppCompatActivity {
         });
     }
 
+    // Initializes view on resume
     protected void onResume() {
         super.onResume();
         initializeViews();

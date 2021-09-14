@@ -239,6 +239,17 @@ public class Db {
                 get();
     }
 
+    public static Task<QuerySnapshot> getDocumentsWith(
+            String tableName, String field1,
+            String value1, String sortingField,
+            Query.Direction direction) {
+        return  getFirestoreInstance().
+                collection(tableName).
+                whereEqualTo(field1, value1).
+                orderBy(sortingField, direction).
+                get();
+    }
+
     public static Task<QuerySnapshot> getDocumentsWith(String tableName,
        String field, String value,
        String sortingField1, Query.Direction direction1,

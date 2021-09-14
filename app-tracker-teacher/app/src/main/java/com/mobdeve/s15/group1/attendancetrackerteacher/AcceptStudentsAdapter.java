@@ -57,9 +57,11 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
         });
 
         holder.setTxtIdNo(data.get(position).getIdNumber());
-        holder.setImgProfilePic(data.get(position).getIdNumber()); //needs id number to get image\
+        holder.setImgProfilePic(data.get(position).getIdNumber());
 
         Button btnConfirm = holder.itemView.findViewById(R.id.btnConfirm);
+
+
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

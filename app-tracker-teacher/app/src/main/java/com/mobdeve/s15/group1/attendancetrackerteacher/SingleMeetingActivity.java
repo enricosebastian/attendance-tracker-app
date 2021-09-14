@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.ParseException;
@@ -206,7 +207,7 @@ public class SingleMeetingActivity extends AppCompatActivity {
     // Initializes the recycler view of the single meeting activity
     protected void initializeRecyclerView() {
         Db.getDocumentsWith(Db.COLLECTION_MEETINGHISTORY,
-        Db.FIELD_MEETINGCODE, meetingCode).
+        Db.FIELD_MEETINGCODE, meetingCode, Db.FIELD_LASTNAME, Query.Direction.ASCENDING).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {

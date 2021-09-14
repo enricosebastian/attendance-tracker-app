@@ -42,7 +42,7 @@ public class SingleMeetingAdapter extends RecyclerView.Adapter<SingleMeetingVH> 
         return singleMeetingVH;
     }
 
-    //there might be a bug here, who knows lmao
+
     @Override
     public void onBindViewHolder(@NonNull SingleMeetingVH holder, @SuppressLint("RecyclerView") int position) {
         holder.setBtnIsPresent(data.get(position).isPresent);
@@ -62,8 +62,8 @@ public class SingleMeetingAdapter extends RecyclerView.Adapter<SingleMeetingVH> 
             @Override
             public void onClick(View v) {
                 Db.getDocumentsWith(Db.COLLECTION_MEETINGHISTORY,
-                        Db.FIELD_MEETINGCODE, data.get(position).getMeetingCode(), //this fucker gets the meeting code (for querying)
-                        Db.FIELD_STUDENTATTENDED, data.get(position).getStudentAttended()). //this fucker gets the student name (for querying)
+                        Db.FIELD_MEETINGCODE, data.get(position).getMeetingCode(),
+                        Db.FIELD_STUDENTATTENDED, data.get(position).getStudentAttended()).
                         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() { //GET 'STUDENTNAME' WITH 'MEETINGCODE', SET 'ISPRESENT'
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -86,31 +86,6 @@ public class SingleMeetingAdapter extends RecyclerView.Adapter<SingleMeetingVH> 
                 });
             }
         });
-        //change this to your shit if you wanna improve that button you lil shits
-//        Switch switchIsPresent = holder.itemView.findViewById(R.id.switchIsPresent);
-//        switchIsPresent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                Db.getDocumentsWith(Db.COLLECTION_MEETINGHISTORY,
-//                Db.FIELD_MEETINGCODE, data.get(position).getMeetingCode(), //this fucker gets the meeting code (for querying)
-//                Db.FIELD_STUDENTATTENDED, data.get(position).getStudentAttended()). //this fucker gets the student name (for querying)
-//                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() { //GET 'STUDENTNAME' WITH 'MEETINGCODE', SET 'ISPRESENT'
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        String documentId = Db.getIdFromTask(task);
-//                        Db.getCollection(Db.COLLECTION_MEETINGHISTORY).
-//                        document(documentId).
-//                        update(Db.FIELD_ISPRESENT, b).
-//                        addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                Log.d(TAG, "Successfully changed status isPresent status to "+b);
-//                            }
-//                        });
-//                    }
-//                });
-//            }
-//        });
     }
 
     @Override
