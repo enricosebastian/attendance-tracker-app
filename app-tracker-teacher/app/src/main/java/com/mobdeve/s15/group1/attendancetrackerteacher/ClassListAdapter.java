@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+// This is an Adapter associated with the ClassListActivity
 public class ClassListAdapter extends RecyclerView.Adapter<ClassListVH>{
 
     private static final String TAG = "ClassListAdapter";
@@ -19,7 +20,6 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListVH>{
         this.data = data;
         Log.d(TAG, "Adapter is initialized");
     }
-
 
     @NonNull
     @Override

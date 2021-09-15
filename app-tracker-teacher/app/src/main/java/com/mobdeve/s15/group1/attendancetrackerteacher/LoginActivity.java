@@ -20,7 +20,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 import java.util.Locale;
-
+/*
+    Launching the app for the very first time OR logging out of the
+    current session will launch the Login activity. It prompts for an email
+    and a password for logging in, or a button to register a new account instead.
+ */
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginView.java";
 

@@ -1,5 +1,8 @@
 package com.mobdeve.s15.group1.attendancetrackerstudent;
-
+/*
+    This class is the representation of a Present Student. It is used when performing
+    Firetore database operations.
+ */
 public class StudentPresentListModel {
 
     String courseCode, meetingCode, sectionCode, studentAttended, firstName, lastName;

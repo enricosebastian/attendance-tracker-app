@@ -19,13 +19,17 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
-
+/*
+    This activity allows the user to update their password. They will
+    be prompted to enter an old and a new password before updating.
+ */
 public class EditAccountSecurityActivity extends AppCompatActivity {
 
     public static final String TAG = "EditAccountSecurity";
 
     private SharedPreferences sp;
 
+    // widget initialization
     private Uri         imageUri    = null;
     private EditText    inputOldPassword, inputNewPassword, inputConfirmNewPassword;
     private Button      btnSave,
@@ -47,7 +51,7 @@ public class EditAccountSecurityActivity extends AppCompatActivity {
         this.btnSave                    = findViewById(R.id.btnSave);
         this.btnCancel                  = findViewById(R.id.btnDeleteRequest);
 
-        //when user clicks save button
+        // when user clicks save button, it saves the changes made to their password.
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

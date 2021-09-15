@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+// This is a View Holder associated with the ClassListActivity
 public class ClassListVH extends RecyclerView.ViewHolder {
 
     private static final String TAG = "ClassListVH.java";

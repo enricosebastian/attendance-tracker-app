@@ -23,11 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Db {
-    //KEEP THIS VVVVVVVVVVVVVVVVVVVVV
     public static String TAG = "Db.java";
-    //KEEP THIS ^^^^^^^^^^^^^^^^^^^^^^
-
-
 
     private static CollectionReference usersRef = null;
     private static CollectionReference meetingCollection = null;
@@ -38,12 +34,6 @@ public class Db {
 
     private static List<DocumentSnapshot> resultList = null;
 
-
-    //KEEP THIS HERE::::::::::::::::::::::::
-    //KEEP THIS HERE::::::::::::::::::::::::
-    //KEEP THIS HERE::::::::::::::::::::::::
-    //KEEP THIS HERE::::::::::::::::::::::::
-    //KEEP THIS HERE::::::::::::::::::::::::
     private static FirebaseFirestore firebaseFirestoreInstance                  = null;
     private static StorageReference storageReferenceInstance                    = null;
 
@@ -54,14 +44,6 @@ public class Db {
     private static ArrayList<ClassListModel> classListModels                    = new ArrayList<>();
 
     public static String id = null;
-    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
-    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
-    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
-    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
-    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
-    ////////////////////////////////////KEEP THIS HERE::::::::::::::::::::::::
-
-
 
     //DELETE SOON:::::::::::::::::::::::::::::::::::
     //DELETE SOON:::::::::::::::::::::::::::::::::::
@@ -96,9 +78,6 @@ public class Db {
     ////////////DELETE SOON////////////////////////////////////////
     ////////////DELETE SOON////////////////////////////////////////
 
-
-
-    //new version
     public final static String
         COLLECTION_USERS        = "Users",
         FIELD_EMAIL             = "email",
@@ -127,18 +106,7 @@ public class Db {
 
         COLLECTION_COURSEREQUEST    = "CourseRequest",
 
-        COLLECTION_CLASSLIST        = "ClassList"
-
-
-
-        ; //no need for username here
-
-    //FIELD_MEETINGSTATUS     = "meetingStatus", //<-------------- lmao useless delete this later
-
-
-    ////////////////////////new version
-
-
+        COLLECTION_CLASSLIST        = "ClassList";
 
     public static FirebaseFirestore getFirestoreInstance() {
         if(firebaseFirestoreInstance == null) {
@@ -154,15 +122,6 @@ public class Db {
         return storageReferenceInstance;
     }
 
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    /////NEW AS OF 2021, 09, 04
     public static Task<QuerySnapshot> getTable(String tableName) {
         return getFirestoreInstance().collection(tableName).get();
     }
@@ -174,7 +133,10 @@ public class Db {
     public static List<DocumentSnapshot> getDocuments(Task<QuerySnapshot> task) {
         return task.getResult().getDocuments();
     }
-
+    /*
+        START OF: Get Document Methods. Multiple arguments can allow the application
+        to make queries with varying arguments such as field arguments and orderby.
+     */
     public static Task<QuerySnapshot> getDocumentsWith(String tableName, String field, String value) {
         return  getFirestoreInstance().
                 collection(tableName).
@@ -268,6 +230,7 @@ public class Db {
                 whereNotEqualTo(field,value).
                 get();
     }
+    // END OF: Get Document Methods
 
     public static String getIdFromTask(Task<QuerySnapshot> task) {
         QuerySnapshot qs = task.getResult();
@@ -281,15 +244,18 @@ public class Db {
         return id;
     }
 
+    //updating picture from storage
     public static Task uploadImage(String documentId, Uri imgUri) {
         return getStorageReferenceInstance().child(documentId).putFile(imgUri);
     }
 
+    //get profile pic via storage
     public static Task<Uri> getProfilePic(String documentId) {
         Log.d(TAG, "What it returns: " + Db.getStorageReferenceInstance().child(documentId).getDownloadUrl());
         return Db.getStorageReferenceInstance().child(documentId).getDownloadUrl();
     }
 
+    //general document adding
     public static void addDocument(String tableName, Map<String, Object> input) {
         Db.getCollection(tableName).
         add(input).
@@ -307,6 +273,7 @@ public class Db {
         });
     }
 
+    //converting List to ClassModel objects
     public static ArrayList<CourseModel> toClassModel(List<DocumentSnapshot> result) {
         courseModels.clear();
         for(DocumentSnapshot ds:result) {
@@ -321,6 +288,7 @@ public class Db {
         return courseModels;
     }
 
+    //converting List to CourseRequest objects
     public static ArrayList<CourseRequestModel> toCourseRequestModel(List<DocumentSnapshot> result) {
         courseRequestModels.clear();
         for(DocumentSnapshot ds:result) {
@@ -335,6 +303,7 @@ public class Db {
         return courseRequestModels;
     }
 
+    //converting List to ClassListModel objects
     public static ArrayList<ClassListModel> toClassListModel(List<DocumentSnapshot> result) {
         classListModels.clear();
         for(DocumentSnapshot ds:result) {
@@ -348,6 +317,7 @@ public class Db {
         return classListModels;
     }
 
+    //converting List to MeetingModel objects
     public static ArrayList<MeetingModel> toMeetingModel(List<DocumentSnapshot> result) {
         meetingModels.clear();
         for(DocumentSnapshot ds:result) {
@@ -364,6 +334,7 @@ public class Db {
         return meetingModels;
     }
 
+    //converting List to StudentPresentListModel objects
     public static ArrayList<StudentPresentListModel> toStudentPresentListModel(List<DocumentSnapshot> result) {
         studentPresentListModels.clear();
         for(DocumentSnapshot ds:result) {
@@ -378,7 +349,7 @@ public class Db {
         }
         return studentPresentListModels;
     }
-
+    // START OF: Delete Document Methods
     public static void deleteDocument(String tableName, String field, String value) {
         getDocumentsWith(tableName, field, value).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -518,18 +489,7 @@ public class Db {
             }
         });
     }
-
-
-    ////////////////////NEW AS OF 2021, 09, 04/////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
+    // END OF: Delete Document Methods
 
     //gets the entire user collection
     public static CollectionReference getUsersCollectionReference() {

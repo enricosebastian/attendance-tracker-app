@@ -1,7 +1,10 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
 
 import java.util.Date;
-
+/*
+    This class is the representation of a Meeting. It is used when performing
+    Firestore database operations.
+ */
 public class MeetingModel {
     private String courseCode, sectionCode, meetingCode;
     Date meetingStart;

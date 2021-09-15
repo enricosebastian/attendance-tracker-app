@@ -32,7 +32,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-
+/*
+    Pressing the search icon found on the Course List activity will launch
+    this activity, prompting a user to put both Course name and Section.
+    If there is a match, there is a "Request to Join" option that will notify the teacher.
+ */
 public class SearchCourseActivity extends AppCompatActivity {
 
     private final static String         TAG = "SearchCourseActivity";
@@ -40,6 +44,7 @@ public class SearchCourseActivity extends AppCompatActivity {
     private SharedPreferences           sp;
     private String                      email;
 
+    // widget initialization
     private ConstraintLayout            resultBox;
     private EditText                    inputCourseCode,
                                         inputSectionCode;

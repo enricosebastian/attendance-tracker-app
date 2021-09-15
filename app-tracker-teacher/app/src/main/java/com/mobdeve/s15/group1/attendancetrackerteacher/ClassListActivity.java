@@ -28,7 +28,6 @@ public class ClassListActivity extends AppCompatActivity {
     private SharedPreferences           sp;
     private SharedPreferences.Editor    editor;
     private String                      email;
-    ////////////
 
     //recycler view initialization
     private ArrayList<ClassListModel>   classListModels = new ArrayList<>();

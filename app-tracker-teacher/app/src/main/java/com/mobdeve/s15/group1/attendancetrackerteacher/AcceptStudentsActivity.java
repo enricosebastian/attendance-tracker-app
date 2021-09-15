@@ -21,7 +21,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+    On a particular Course and Section, the teacher can see the list of students
+    who wishes to join with an option to accept or reject.
+ */
 public class AcceptStudentsActivity extends AppCompatActivity {
 
     private static final String TAG = "SingleClassActivity";

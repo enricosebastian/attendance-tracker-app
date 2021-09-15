@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+// This is an Adapter associated with the SingleClassActivity
 public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
     private static final String TAG = "SingleClassAdapter";
 
@@ -51,6 +52,8 @@ public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
     }
 
     @Override
+
+    // binds the instruction for launching the SingleMeetingActivity view when a particular class is selected
     public void onBindViewHolder(@NonNull SingleClassVH holder, @SuppressLint("RecyclerView") int position) {
 
         SimpleDateFormat stringDate = new SimpleDateFormat("MMM dd, yyyy | E");

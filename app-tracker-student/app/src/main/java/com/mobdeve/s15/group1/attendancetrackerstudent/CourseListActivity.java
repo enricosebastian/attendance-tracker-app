@@ -39,33 +39,34 @@ import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+    This activity is launched right after a student logs in. The list of the student's
+    courses that he/she is in will be listed. On the header of the view are some credential
+    information and options to Edit profile, change Account security, and Logout.
+ */
 public class CourseListActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     private static final String TAG = "ClasslistActivity.java";
 
-    //shared preferences initialization
+    // shared preferences initialization
     private SharedPreferences           sp;
     private SharedPreferences.Editor    editor;
     private String                      email;
-    ////////////
 
-    //recycler view initialization
+    // recycler view initialization
     private RecyclerView courseListRecyclerView;
     private RecyclerView.LayoutManager courseListLayoutManager;
     private CourseListAdapter courseListAdapter;
     private ArrayList<CourseModel> courseModels = new ArrayList<>();
-    ////////////
 
-    //widget initialization
+    // widget initialization
     private TextView txtName;
     private TextView txtIdNumber;
     private FloatingActionButton btnSearchCourse;
     private ImageView imgProfilePic;
     private SwipeRefreshLayout refreshLayout;
     private ProgressDialog progressDialog;
-    ////////////
 
-    //Reinitialize views after successfully editing profile details
+    // Reinitialize views after successfully editing profile details
     private ActivityResultLauncher<Intent> editProfileInfoLauncher = registerForActivityResult(
         new ActivityResultContracts.StartActivityForResult(),
         new ActivityResultCallback<ActivityResult>() {
@@ -191,7 +192,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
 
     }
 
-    // Initializes the recycler view of course list activity
+    // Initializes the recycler view of course list activity.
     protected void initializeRecyclerView() {
         Db.getDocumentsWith(Db.COLLECTION_CLASSLIST,
         Db.FIELD_EMAIL, email,
@@ -217,7 +218,7 @@ public class CourseListActivity extends AppCompatActivity implements PopupMenu.O
             }
         });
     }
-
+    // When coming from another app or activity, the course list refreshes for any updates, if any.
     protected void onResume() {
         super.onResume();
         initializeViews();

@@ -32,12 +32,16 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
+/*
+    This activity allows the user to change their First and Last name as well
+    as their display picture.
+ */
 public class EditProfileActivity extends AppCompatActivity {
     public static final String TAG = "EditProfileActivity";
 
     private SharedPreferences sp;
 
+    // widget initialization
     private Uri imageUri = null;
     private EditText inputFirstName, inputLastname;
     private Button btnSelectImage, btnSaveEditProfile, btnCancelEditProfile;
@@ -45,6 +49,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private String email;
 
+    //catches if user successfully uploads a new profile image
     private ActivityResultLauncher<Intent> myActivityResultLauncher = registerForActivityResult(
         new ActivityResultContracts.StartActivityForResult(),
         new ActivityResultCallback<ActivityResult>() {

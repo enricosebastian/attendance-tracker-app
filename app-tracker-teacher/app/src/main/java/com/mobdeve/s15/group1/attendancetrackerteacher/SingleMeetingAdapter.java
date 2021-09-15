@@ -20,6 +20,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+// This is an Adapter associated with the SingleMeetingActivity
 public class SingleMeetingAdapter extends RecyclerView.Adapter<SingleMeetingVH> {
 
     private static final String TAG = "In SingleMeetingAdapter";
@@ -41,8 +42,7 @@ public class SingleMeetingAdapter extends RecyclerView.Adapter<SingleMeetingVH> 
 
         return singleMeetingVH;
     }
-
-
+    
     @Override
     public void onBindViewHolder(@NonNull SingleMeetingVH holder, @SuppressLint("RecyclerView") int position) {
         holder.setBtnIsPresent(data.get(position).isPresent);
@@ -64,7 +64,7 @@ public class SingleMeetingAdapter extends RecyclerView.Adapter<SingleMeetingVH> 
                 Db.getDocumentsWith(Db.COLLECTION_MEETINGHISTORY,
                         Db.FIELD_MEETINGCODE, data.get(position).getMeetingCode(),
                         Db.FIELD_STUDENTATTENDED, data.get(position).getStudentAttended()).
-                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() { //GET 'STUDENTNAME' WITH 'MEETINGCODE', SET 'ISPRESENT'
+                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         boolean isPresent = holder.getIsPresent();

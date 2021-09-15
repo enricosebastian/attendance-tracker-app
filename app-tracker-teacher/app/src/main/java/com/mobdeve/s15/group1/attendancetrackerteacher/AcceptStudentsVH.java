@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
+// This is a View Holder associated with the AcceptStudentsActivity
 public class AcceptStudentsVH extends RecyclerView.ViewHolder {
 
     private static final String TAG = "AcceptStudentsVH.java";

@@ -37,7 +37,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+    This activity is launched right after a teacher logs in. All of the teacher's course
+    has an option for it to be Edited or Deleted. There is also a button for adding a new
+    course. On the header of the view are some credential information and options to
+    Edit profile, change Account security, and Logout.
+ */
 public class CourseListActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     private static final String             TAG = "ClasslistActivity.java";
 

@@ -27,7 +27,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+/*
+    Register requires a First name, Last name, valid email, a password, and an ID number.
+    All of these fields must be filled up, and the ID number must be of 8-length numerical value.
+ */
 public class RegistrationActivity extends AppCompatActivity {
     private static final String         TAG = "RegistrationActivity";
 
@@ -35,7 +38,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private SharedPreferences           sp;
     private SharedPreferences.Editor    editor;
 
-    //widget initialization
+    // widget initialization
     private TextView    tvEmailFormatError;
     private EditText    inputFirstName,
                         inputLastName,
@@ -129,11 +132,12 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
     }
+    // makes use of an Android API to check for valid email format
     private boolean isEmailValid(CharSequence email)
     {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
-    //extra validation for id number
+    // extra validation for id number
     private boolean isIDNumberValid(String val) {
         boolean isNumber = false, isLength8 = false;
 

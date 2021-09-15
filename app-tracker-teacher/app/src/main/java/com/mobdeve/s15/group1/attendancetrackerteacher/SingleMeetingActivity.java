@@ -27,7 +27,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+/*
+    Displays the list of students who successfully attended the class with the code displayed
+    in the middle of the view. A class can be set to Open or Closed to allow/prevent students
+    from attending. Finally, there is an option at the bottom to delete the meeting.
 
+ */
 public class SingleMeetingActivity extends AppCompatActivity {
 
     private static final String         TAG = "SingleMeetingActivity";
@@ -36,14 +41,12 @@ public class SingleMeetingActivity extends AppCompatActivity {
     private SharedPreferences           sp;
     private SharedPreferences.Editor    editor;
     private String                      email;
-    ////////////
 
     //recycler view initialization
     private RecyclerView                        studentListRecyclerView;
     private RecyclerView.LayoutManager          studentListLayoutManager;
     private SingleMeetingAdapter                singleMeetingAdapter;
     private ArrayList<StudentPresentListModel>  studentPresentListModels = new ArrayList<>();
-    ////////////////////
 
     //widget initialization
     private TextView            txtStatus,
@@ -53,7 +56,6 @@ public class SingleMeetingActivity extends AppCompatActivity {
                                 txtClassNameSubtitle;
     private Button              btnDelete;
     private SwipeRefreshLayout  refreshLayout;
-    ////////////
 
     private String              courseCode,
                                 sectionCode,

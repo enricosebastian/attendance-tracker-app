@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+// This is a View Holder associated with the CourseListActivity
 public class CourseListVH extends RecyclerView.ViewHolder {
     private static final String TAG = "ClasslistVH.java";
     private TextView txtClassCode, txtSectionCode;

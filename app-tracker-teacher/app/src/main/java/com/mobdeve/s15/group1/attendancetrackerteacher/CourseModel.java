@@ -1,5 +1,8 @@
 package com.mobdeve.s15.group1.attendancetrackerteacher;
-
+/*
+    This class is the representation of a Course. It is used when performing
+    Firetore database operations.
+ */
 public class CourseModel {
 
     private String courseCode, courseName, handledBy, sectionCode;

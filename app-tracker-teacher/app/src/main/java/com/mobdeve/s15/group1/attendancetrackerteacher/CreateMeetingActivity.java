@@ -24,17 +24,22 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
+/*
+    Creating a meeting needs a date to be selected. The date cannot be a
+    date before the current date.
+ */
 public class CreateMeetingActivity extends AppCompatActivity {
     private static final String TAG = "CreateMeetingActivity";
 
     private String courseCode, sectionCode;
-    private TextView tvDisplayDate;
-    private DatePickerDialog.OnDateSetListener dsl;
-
     private int meetingMonth, meetingDay, meetingYear, meetingHour, meetingMinute;
     private boolean isDateSet = false;
+
+    // widget initialization
+    private TextView tvDisplayDate;
     private Button btnCancel, btnCreate;
+
+    private DatePickerDialog.OnDateSetListener dsl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +53,6 @@ public class CreateMeetingActivity extends AppCompatActivity {
         this.courseCode = intent.getStringExtra(Keys.INTENT_COURSECODE);
         this.sectionCode = intent.getStringExtra(Keys.INTENT_SECTIONCODE);
 
-        //clean this lmao
         dsl = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
@@ -65,7 +69,7 @@ public class CreateMeetingActivity extends AppCompatActivity {
             }
         };
 
-        //clean this too lmao
+        // displays the Date Picker
         this.tvDisplayDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,6 +85,7 @@ public class CreateMeetingActivity extends AppCompatActivity {
                         year, month, day
                 );
                 Log.d(TAG, "system time: " + System.currentTimeMillis() + ", cal time: " + cal.getTimeInMillis());
+                // prevents selecting a date previous from the current date
                 dialog.getDatePicker().setMinDate(Calendar.getInstance().getTimeInMillis() - 2000);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
@@ -94,14 +99,14 @@ public class CreateMeetingActivity extends AppCompatActivity {
             }
         });
 
+        // transforms the selected date into a Timestamp and adds it to the database
         this.btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //future feature
                 if (isDateSet)
                 {
-                    meetingHour = 12; //to be dynamic if we have time
-                    meetingMinute = 45; //to be dynamic if we have time
+                    meetingHour = 12;
+                    meetingMinute = 45;
 
                     String dateString = (meetingMonth+1)+"."+meetingDay+"."+meetingYear+"-"+meetingHour+"."+meetingMinute;
 
@@ -125,7 +130,7 @@ public class CreateMeetingActivity extends AppCompatActivity {
         });
     }
 
-    //This calls the firebase function to create the meeting
+    // This calls the firebase function to create the meeting
     protected void createNewMeeting(Timestamp timestamp, String dateString) {
         Map<String, Object> input = new HashMap<>();
 

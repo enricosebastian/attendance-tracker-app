@@ -23,7 +23,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+/*
 
+ */
 public class SingleClassActivity extends AppCompatActivity {
 
     private static final String TAG = "SingleClassActivity";
@@ -32,7 +34,6 @@ public class SingleClassActivity extends AppCompatActivity {
     private SharedPreferences           sp;
     private SharedPreferences.Editor    editor;
     private String                      email;
-    ////////////
 
     //recycler view initialization
     private ArrayList<MeetingModel>     meetingModels = new ArrayList<>();

@@ -19,13 +19,17 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
-
+/*
+    This activity allows the user to update their password. They will
+    be prompted to enter an old and a new password before updating.
+ */
 public class EditAccountSecurityActivity extends AppCompatActivity {
 
     public static final String TAG = "EditAccountSecurity";
 
     private SharedPreferences sp;
 
+    // widget initialization
     private Uri imageUri = null;
     private EditText inputOldPassword, inputNewPassword, inputConfirmNewPassword;
     private Button btnSave, btnCancel;
@@ -46,7 +50,7 @@ public class EditAccountSecurityActivity extends AppCompatActivity {
         this.btnSave                    = findViewById(R.id.btnSave);
         this.btnCancel                  = findViewById(R.id.btnDeleteRequest);
 
-
+        // when user clicks save button, it saves the changes made to their password.
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +67,7 @@ public class EditAccountSecurityActivity extends AppCompatActivity {
             }
         });
 
+        //if user decides to cancel editing
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,6 +76,7 @@ public class EditAccountSecurityActivity extends AppCompatActivity {
         });
     }
 
+    //checks if entries are valid before saving data
     protected void verifyLoginCredentials(String oldPassword, String newPassword, String confirmNewPassword) {
         Db.getDocumentsWith(Db.COLLECTION_USERS,
             Db.FIELD_EMAIL, email,
@@ -92,6 +98,7 @@ public class EditAccountSecurityActivity extends AppCompatActivity {
             });
     }
 
+    //if user entries are valid, update database with new entries
     protected void updateLoginCredentials(String newPassword) {
         Db.getDocumentsWith(Db.COLLECTION_USERS, Db.FIELD_EMAIL, email).
         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

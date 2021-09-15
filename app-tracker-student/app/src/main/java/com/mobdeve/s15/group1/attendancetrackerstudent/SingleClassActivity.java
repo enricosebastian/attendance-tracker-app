@@ -23,11 +23,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+    Selecting a course from the course list will display all the list
+    of upcoming classes. Pressing any meeting will launch the SingeMeetingActivity.
+ */
 public class SingleClassActivity extends AppCompatActivity {
 
     private static final String         TAG = "SingleClassActivity";
-
 
     //recycler view initialization
     private ArrayList<MeetingModel>     meetingModels = new ArrayList<>();

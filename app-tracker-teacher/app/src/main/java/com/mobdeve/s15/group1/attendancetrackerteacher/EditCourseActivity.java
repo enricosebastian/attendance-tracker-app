@@ -26,7 +26,9 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import javax.xml.transform.Result;
-
+/*
+    Allows a teacher to change the name and Publish/Unpublish of a particular Course.
+ */
 public class EditCourseActivity extends AppCompatActivity {
     private static final String TAG = "EditCourseActivity.java";
 
@@ -80,7 +82,7 @@ public class EditCourseActivity extends AppCompatActivity {
         });
     }
 
-
+    //Updates the course
     protected void updateCourseName(String courseName) {
         Db.getDocumentsWith(Db.COLLECTION_COURSES,
         Db.FIELD_COURSECODE, courseCode,
@@ -106,6 +108,7 @@ public class EditCourseActivity extends AppCompatActivity {
         });
     }
 
+    //initializes views of activity
     protected void initializeViews() {
         Db.getDocumentsWith(Db.COLLECTION_COURSES,
         Db.FIELD_COURSECODE, courseCode,

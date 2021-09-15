@@ -25,7 +25,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+/*
+    This activity is launched when a teacher wants to create a new Course. The fields required
+    are, 1.) Course Name, 2.) Course Code, and 3.) Section. The teacher also has an option
+    to determine if the new course should be published right away or not.
+ */
 public class CreateCourseActivity extends AppCompatActivity {
     private static final String TAG = "CreateCourseActivity.java";
 
@@ -33,9 +37,8 @@ public class CreateCourseActivity extends AppCompatActivity {
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
     private String email;
-    ////////////
 
-    // From Views
+    //widget initialization
     private Button btnCancelCreate, btnCreateCourse;
     private EditText etCourseName, etCourseCode, etCourseSection;
     private Switch switchIsPublished;
@@ -116,6 +119,7 @@ public class CreateCourseActivity extends AppCompatActivity {
 
     }
 
+    // Creates a new Course
     protected void addClass(String courseName, String courseCode, String sectionCode, boolean isPublished) {
         Map<String, Object> input = new HashMap<>();
 

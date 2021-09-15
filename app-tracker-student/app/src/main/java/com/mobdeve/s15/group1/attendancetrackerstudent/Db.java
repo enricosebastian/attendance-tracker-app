@@ -100,7 +100,10 @@ public class Db {
         return id;
     }
 
-    //get document methods VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+    /*
+        START OF: Get Document Methods. Multiple arguments can allow the application
+        to make queries with varying arguments such as field arguments and orderby.
+     */
     public static Task<QuerySnapshot> getDocumentsWith(String tableName, String field, String value) {
         return  getFirestoreInstance().
                 collection(tableName).
@@ -210,7 +213,7 @@ public class Db {
                 orderBy(field2, direction2).
                 get();
     }
-    //get document methods ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    // END OF: Get Document Methods
 
     //updating picture from storage
     public static Task uploadImage(String documentId, Uri imgUri) {

@@ -32,7 +32,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+/*
+    Selecting a particular meeting for a course will launch this activity and allow the student
+    to enter the meeting code for attendance tracking.
+ */
 public class SingleMeetingActivity extends AppCompatActivity {
 
     private static final String     TAG = "SingleMeetingActivity";
@@ -40,7 +43,6 @@ public class SingleMeetingActivity extends AppCompatActivity {
     //shared preferences initialization
     private SharedPreferences       sp;
     private String                  email;
-    ////////////
 
     //widget initialization
     private EditText        inputMeetingCode;
@@ -55,7 +57,7 @@ public class SingleMeetingActivity extends AppCompatActivity {
                             sectionCode,
                             meetingCode,
                             courseName;
-    private boolean         isOpen; //something to note: what happens if you change boolean (primitive) to Boolean instead?
+    private boolean         isOpen;
     private Date            meetingStart;
     private ProgressDialog  progressDialog;
 

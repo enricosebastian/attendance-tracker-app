@@ -22,7 +22,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+/*
+    This is an Adapter associated with the AcceptStudentsActivity
 
+    The operations that happens in this Adapter are:
+        1. Accept student
+        2. Reject student
+    Database operations are performed to update the list of student requesting
+    to join the class and admits the one that are accepted.
+ */
 public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH> {
 
     private static final String TAG = "AcceptStudentsAdapter";
@@ -61,7 +69,7 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
 
         Button btnConfirm = holder.itemView.findViewById(R.id.btnConfirm);
 
-
+        // notifies the database that a student is accepted into a class, and finally updates the Adapter
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,7 +81,7 @@ public class AcceptStudentsAdapter extends RecyclerView.Adapter<AcceptStudentsVH
                 notifyItemRangeChanged(holder.getBindingAdapterPosition(), getItemCount() - holder.getBindingAdapterPosition());
             }
         });
-
+        // notifies the database that a student is not accepted into a class, and finally updates the Adapter
         Button btnCancel = holder.itemView.findViewById(R.id.btnDeleteRequest);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override

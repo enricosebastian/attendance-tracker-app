@@ -16,6 +16,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
+// This is a View Holder associated with the SingleClassActivity
 public class SingleClassVH extends RecyclerView.ViewHolder {
     private static final String     TAG = "SingleClassViewHolder";
 

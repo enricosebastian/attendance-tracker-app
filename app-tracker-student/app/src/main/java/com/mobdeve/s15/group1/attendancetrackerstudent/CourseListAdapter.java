@@ -21,6 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+// This is an Adapter associated with the CourseListActivity
 public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
     private static final String TAG = "ClasslistAdapter.java";
 
@@ -70,10 +71,14 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
         });
 
 
-        //When an item is clicked
+        /*
+            The instructions when a Course item is pressed. It checks to see if the course is published first.
+            If it is, launch the SingleClassActivity which displays all the classes created in the course.
+         */
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // if a Course has yet to be published, it should not have any functionalities yet.
                 if(courseConstraint.getBackgroundTintList().equals(holder.itemView.getContext().getResources().getColorStateList(R.color.gray))) {
                     Toast.makeText(holder.itemView.getContext(), "Course is still unpublished", Toast.LENGTH_SHORT).show();
                 } else {
@@ -84,7 +89,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             List<DocumentSnapshot> result = Db.getDocuments(task);
 
-                            //If the course has been deleted
+                            // When a particular Course is clicked, display all the list of Meetings for that class.
                             if(!result.isEmpty()) {
                                 Intent singleClassViewIntent = new Intent(holder.itemView.getContext(), SingleClassActivity.class);
                                 singleClassViewIntent.putExtra(Keys.INTENT_COURSECODE, result.get(0).getString(Db.FIELD_COURSECODE));

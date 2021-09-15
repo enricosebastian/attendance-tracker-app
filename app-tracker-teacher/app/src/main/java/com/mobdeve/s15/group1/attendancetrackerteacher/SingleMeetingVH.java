@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+// This is a View Holder associated with the SingleMeetingActivity
 public class SingleMeetingVH extends RecyclerView.ViewHolder{
 
     private static final String TAG = "You are in SingleMeetingVH";

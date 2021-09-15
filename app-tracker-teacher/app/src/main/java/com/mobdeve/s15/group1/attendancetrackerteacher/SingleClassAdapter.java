@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+// This is an Adapter associated with the SingleClassActivity
 public class SingleClassAdapter extends RecyclerView.Adapter<SingleClassVH> {
     private static final String TAG = "SingleClassAdapter";
 

@@ -1,6 +1,10 @@
 package com.mobdeve.s15.group1.attendancetrackerstudent;
 
 public class CourseModel {
+    /*
+        This class is the representation of a Course. It is used when performing
+        Firestore database operations.
+     */
 
     private String courseCode, sectionCode;
 

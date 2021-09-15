@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+// This is an Adapter associated with the CourseListActivity
 public class CourseListAdapter extends RecyclerView.Adapter<CourseListVH> {
     private static final String TAG = "ClasslistAdapter.java";
 
