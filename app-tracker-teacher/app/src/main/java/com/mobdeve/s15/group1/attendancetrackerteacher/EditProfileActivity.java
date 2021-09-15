@@ -167,7 +167,7 @@ public class EditProfileActivity extends AppCompatActivity {
         this.progressDialog.show();
         this.progressDialog.setCanceledOnTouchOutside(false);
         Db.getDocumentsWith(Db.COLLECTION_USERS,
-            Db.EMAIL_FIELD, email).
+            Db.FIELD_EMAIL, email).
             addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
